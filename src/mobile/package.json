@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@ant-design/react-native": "^4.2.0",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
     "react": "17.0.1",
