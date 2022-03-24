@@ -1,6 +1,6 @@
 # O.LaF (Open platform for Lost and Found)
 
-팀페이지 주소: https://kookmin-sw.github.io/capstone-2022-01/
+GitHub 주소: https://github.com/kookmin-sw/capstone-2022-01
 <br/><br/>
 
 ## 1. 프로젝트 소개
