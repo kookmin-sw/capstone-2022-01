@@ -39,7 +39,7 @@
 
 * 김진우
 
-<img src="https://user-images.githubusercontent.com/28584063/159915056-9732a9e7-44e2-452a-9f84-bc121c45a1ad.jpeg" alt="drawing" width="250" style="float: left"/>
+<img src="https://user-images.githubusercontent.com/28584063/159915056-9732a9e7-44e2-452a-9f84-bc121c45a1ad.jpeg" alt="drawing" width="250" />
 
 ```
 E-mail: acasia@kookmin.ac.kr
@@ -49,7 +49,7 @@ Role: Back-end engineer
 
 * 김성식
 
-<img src="https://user-images.githubusercontent.com/28584063/159914926-2b897660-a59b-4b65-ab30-110665e17ab1.JPG" alt="drawing" width="250" style="float: left"/>
+<img src="https://user-images.githubusercontent.com/28584063/159914926-2b897660-a59b-4b65-ab30-110665e17ab1.JPG" alt="drawing" width="250" />
 
 ```markdown
 E-mail: sskim0126@kookmin.ac.kr 
