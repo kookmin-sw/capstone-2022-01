@@ -9,7 +9,11 @@
   },
   "dependencies": {
     "@ant-design/react-native": "^4.2.0",
+    "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/segmented-control": "^2.2.2",
+    "@react-native-community/slider": "^4.2.1",
+    "@react-native-picker/picker": "^2.4.0",
     "@react-navigation/native": "^6.0.8",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
@@ -17,9 +21,11 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-gesture-handler": "~2.1.0",
+    "react-native-pager-view": "^5.4.15",
     "react-native-reanimated": "~2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
+    "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
     "react-navigation": "^4.4.4"
   },
