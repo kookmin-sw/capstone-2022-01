@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import Header from "../Component/Header";
 
 export default class MainView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>O.LaF</Text>
+        <Header />
         <Text>MainView</Text>
       </View>
     );

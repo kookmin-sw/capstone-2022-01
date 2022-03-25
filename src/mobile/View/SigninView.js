@@ -7,12 +7,12 @@ export default class SigninView extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.main_logo}>O.LaF</Text>
-        <WhiteSpace style={{ height: "15%" }} />
+        <WhiteSpace style={{ height: "17%" }} />
         <List style={styles.input_list}>
           <InputItem clear placeholder="ID" />
           <InputItem clear placeholder="PW" />
         </List>
-        <WhiteSpace style={{ height: "4%" }} />
+        <WhiteSpace style={{ height: "8%" }} />
         <Button style={styles.button}>Sign in</Button>
         <WhiteSpace style={{ height: "2%" }} />
         <Button style={styles.button}>Sign up</Button>
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   main_logo: {
     alignSelf: "center",
     fontSize: 70,
-    marginTop: "40%",
+    marginTop: "45%",
     color: "#4080FF",
   },
   input_list: {
