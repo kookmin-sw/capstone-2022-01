@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Header from "../Component/Header";
+import Footer from "../Component/Footer";
 
 export default class MainView extends React.Component {
   render() {
@@ -8,6 +9,7 @@ export default class MainView extends React.Component {
       <View style={styles.container}>
         <Header />
         <Text>MainView</Text>
+        <Footer />
       </View>
     );
   }
@@ -16,11 +18,6 @@ export default class MainView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-  },
-  logo: {
-    alignSelf: "center",
-    fontSize: 24,
-    marginTop: 24,
-    color: "#4080FF",
+    height: "100%",
   },
 });
