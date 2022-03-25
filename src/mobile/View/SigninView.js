@@ -1,12 +1,21 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { Button, InputItem, List, WhiteSpace } from "@ant-design/react-native";
 
 export default class SigninView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>O.LaF</Text>
-        <Text>SigninView</Text>
+        <Text style={styles.main_logo}>O.LaF</Text>
+        <WhiteSpace style={{ height: "15%" }} />
+        <List style={styles.input_list}>
+          <InputItem clear placeholder="ID" />
+          <InputItem clear placeholder="PW" />
+        </List>
+        <WhiteSpace style={{ height: "4%" }} />
+        <Button style={styles.button}>Sign in</Button>
+        <WhiteSpace style={{ height: "2%" }} />
+        <Button style={styles.button}>Sign up</Button>
       </View>
     );
   }
@@ -15,11 +24,19 @@ export default class SigninView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
+    alignItems: "center",
   },
-  logo: {
+  main_logo: {
     alignSelf: "center",
-    fontSize: 24,
-    marginTop: 24,
+    fontSize: 70,
+    marginTop: "40%",
     color: "#4080FF",
+  },
+  input_list: {
+    width: "75%",
+  },
+  button: {
+    borderWidth: 0,
+    borderBottomWidth: 1,
   },
 });
