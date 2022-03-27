@@ -14,7 +14,7 @@ export default class Footer extends React.Component {
             icon={
               <Button
                 style={styles.button}
-                onPress={() => this.props.navigation.navigate("Home")}
+                onPress={() => this.props.navigation.navigate("Main")}
               >
                 <Icon name="home-outline" size={20} />
               </Button>
