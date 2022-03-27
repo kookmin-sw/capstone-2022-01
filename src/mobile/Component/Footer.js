@@ -25,7 +25,7 @@ export default class Footer extends React.Component {
             icon={
               <Button
                 style={styles.button}
-                onPress={() => this.props.navigation.navigate("Stuff")}
+                onPress={() => this.props.navigation.navigate("Item")}
               >
                 <Icon name="file-tray-full-outline" size={20} />
               </Button>

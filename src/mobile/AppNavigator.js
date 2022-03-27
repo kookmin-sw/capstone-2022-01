@@ -1,7 +1,7 @@
 import { createSwitchNavigator, createAppContainer } from "react-navigation";
 
 import MainView from "./View/MainView";
-import StuffView from "./View/StuffView";
+import ItemView from "./View/ItemView";
 import ChatlistView from "./View/ChatlistView";
 import ProfileView from "./View/ProfileView";
 import AlarmView from "./View/AlarmView";
@@ -15,8 +15,8 @@ const Nav = createSwitchNavigator({
       header: null,
     },
   },
-  Stuff: {
-    screen: StuffView,
+  Item: {
+    screen: ItemView,
     navigateOptions: {
       header: null,
     },
