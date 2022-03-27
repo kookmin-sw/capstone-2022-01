@@ -6,6 +6,7 @@ import ItemCard from "../Component/ItemCard";
 
 export default class MainView extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       items: [
@@ -40,7 +41,7 @@ export default class MainView extends React.Component {
             return <ItemCard item={item} key={index} />;
           })}
         </ScrollView>
-        <Footer />
+        <Footer navigation={this.props.navigation} />
       </View>
     );
   }
