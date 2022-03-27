@@ -57,7 +57,10 @@ export default class ItemView extends React.Component {
             return <OwnedItemCard item={item} key={index} />;
           })}
         </ScrollView>
-        <Button style={styles.registrationButton}>
+        <Button
+          style={styles.registrationButton}
+          onPress={() => this.props.navigation.navigate("Registration")}
+        >
           <Text style={{ color: "white", fontSize: 30 }}>+</Text>
         </Button>
         <Footer navigation={this.props.navigation} />
