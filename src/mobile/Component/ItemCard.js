@@ -13,7 +13,7 @@ export default class ItemCard extends React.Component {
   render() {
     return (
       <Card style={styles.itemCard}>
-        <Card.Body>
+        <Card.Body style={styles.itemCardContent}>
           <Flex>
             <Flex.Item flex={1}>
               <Image source={this.props.item.image} style={styles.itemImage} />
@@ -57,12 +57,15 @@ const styles = StyleSheet.create({
   },
   itemCard: {
     borderWidth: 0,
-    borderBottomWidth: 0.1,
+  },
+  itemCardContent: {
+    borderTopWidth: 0,
+    borderBottomWidth: 0.5,
   },
   itemImage: {
     width: 100,
     height: 100,
-    borderRadius: 3,
+    borderRadius: 7,
     overflow: "hidden",
     marginTop: 5,
     marginLeft: 10,
