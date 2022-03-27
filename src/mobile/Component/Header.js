@@ -1,12 +1,27 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Icon name="map-outline" size={30} />
+        {this.props.isHome ? (
+          <Icon name="map-outline" size={30} />
+        ) : (
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate(this.props.destination)
+            }
+          >
+            <Icon name="arrow-back-outline" size={30} />
+          </TouchableOpacity>
+        )}
+
         <Text style={styles.logo}>O.LaF</Text>
         <Icon name="notifications-outline" size={30} />
       </View>

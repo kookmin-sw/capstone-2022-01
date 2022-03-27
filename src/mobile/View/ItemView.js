@@ -42,7 +42,7 @@ export default class ItemView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header />
+        <Header isHome={true} />
         <ScrollView>
           <Text style={styles.categoryText}>소통 중</Text>
           {this.state.items.communicating.map((item, index) => {

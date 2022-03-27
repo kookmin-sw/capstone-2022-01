@@ -34,7 +34,7 @@ export default class MainView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header />
+        <Header isHome={true} />
         <ScrollView>
           {this.state.items.map((item, index) => {
             return <ItemCard item={item} key={index} />;
