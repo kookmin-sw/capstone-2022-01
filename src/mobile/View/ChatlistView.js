@@ -1,25 +1,27 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React from 'react'
+import { StyleSheet, View, Text } from 'react-native'
+import Header from '../Component/Header'
+import Footer from '../Component/Footer'
 
 export default class ChatlistView extends React.Component {
-  render() {
+  constructor (props) {
+    super(props)
+  }
+
+  render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>O.LaF</Text>
+        <Header/>
         <Text>ChatlistView</Text>
+        <Footer navigation={this.props.navigation}/>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-  },
-  logo: {
-    alignSelf: "center",
-    fontSize: 24,
-    marginTop: 24,
-    color: "#4080FF",
-  },
-});
+    display: 'flex',
+    height: '100%'
+  }
+})
