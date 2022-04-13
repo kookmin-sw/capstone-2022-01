@@ -12,22 +12,46 @@ export default class Footer extends React.Component {
           <TabBar.Item
             title=""
             onPress={() => this.props.navigation.navigate("Main")}
-            icon={<Icon name="home-outline" size={20} />}
+            icon={
+              this.props.navigation.state.routeName === "Main" ? (
+                <Icon name="home" size={20} />
+              ) : (
+                <Icon name="home-outline" size={20} />
+              )
+            }
           />
           <TabBar.Item
             title=""
             onPress={() => this.props.navigation.navigate("Item")}
-            icon={<Icon name="file-tray-full-outline" size={20} />}
+            icon={
+              this.props.navigation.state.routeName === "Item" ? (
+                <Icon name="file-tray-full" size={20} />
+              ) : (
+                <Icon name="file-tray-full-outline" size={20} />
+              )
+            }
           />
           <TabBar.Item
             title=""
             onPress={() => this.props.navigation.navigate("Chatlist")}
-            icon={<Icon name="chatbubble-outline" size={20} />}
+            icon={
+              this.props.navigation.state.routeName === "Chatlist" ? (
+                <Icon name="chatbubble" size={20} />
+              ) : (
+                <Icon name="chatbubble-outline" size={20} />
+              )
+            }
           />
           <TabBar.Item
             title=""
             onPress={() => this.props.navigation.navigate("Profile")}
-            icon={<Icon name="person-outline" size={20} />}
+            icon={
+              this.props.navigation.state.routeName === "Profile" ? (
+                <Icon name="person" size={20} />
+              ) : (
+                <Icon name="person-outline" size={20} />
+              )
+            }
           />
         </TabBar>
       </View>
