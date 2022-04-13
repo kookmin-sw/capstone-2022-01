@@ -99,6 +99,9 @@ export default class RegistrationView extends React.Component {
               style={{ width: 200, height: 200 }}
             />
           </Button>
+          <Button style={styles.registrationButton}>
+            <Text style={{ color: "white" }}>등록하기</Text>
+          </Button>
         </ScrollView>
       </View>
     );
@@ -124,5 +127,12 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginRight: 20,
     fontSize: 15,
+  },
+  registrationButton: {
+    marginTop: 40,
+    width: "30%",
+    borderWidth: 0,
+    alignSelf: "center",
+    backgroundColor: "#4080FF",
   },
 });
