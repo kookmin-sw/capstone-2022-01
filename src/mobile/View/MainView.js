@@ -1,54 +1,48 @@
-import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
-import Header from "../Component/Header";
-import Footer from "../Component/Footer";
-import ItemCard from "../Component/ItemCard";
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import Header from '../Component/Header'
+import Footer from '../Component/Footer'
+import MainViewComponents from '../Component/MainViewComponents'
+import ItemViewComponents from '../Component/ItemViewComponents'
+import ChatlistViewComponents from '../Component/ChatlistViewComponents'
+import ProfileViewComponents from '../Component/ProfileViewComponents'
 
 export default class MainView extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      items: [
-        {
-          image: require("../assets/dummy_data/macbook.png"),
-          itemName: "맥북 프로 15인치",
-          location: "길음동",
-          reward: 150000,
-        },
-        {
-          image: require("../assets/dummy_data/airpods.png"),
-          itemName: "에어팟 프로",
-          location: "정릉동",
-          reward: 20000,
-        },
-        {
-          image: require("../assets/dummy_data/g102.png"),
-          itemName: "로지텍 G102 마우스",
-          location: "정릉동",
-          reward: 10000,
-        },
-      ],
-    };
+      selectedTab: 'Main'
+    }
+    this.onChangeTab = this.onChangeTab.bind(this)
   }
 
-  render() {
+  onChangeTab (tabName) {
+    this.setState({
+      selectedTab: tabName
+    })
+  }
+
+  render () {
     return (
       <View style={styles.container}>
-        <Header isHome={true} />
-        <ScrollView>
-          {this.state.items.map((item, index) => {
-            return <ItemCard item={item} key={index} />;
-          })}
-        </ScrollView>
-        <Footer navigation={this.props.navigation} />
+        <Header navigation={this.props.navigation} isMain={true}/>
+        {
+          {
+            'Main': <MainViewComponents navigation={this.props.navigation} />,
+            'Item': <ItemViewComponents navigation={this.props.navigation} />,
+            'Chatlist': <ChatlistViewComponents navigation={this.props.navigation} />,
+            'Profile': <ProfileViewComponents navigation={this.props.navigation} />
+          }[this.state.selectedTab]
+        }
+        <Footer selectedTab={this.state.selectedTab} onChangeTab={this.onChangeTab}/>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    height: "100%",
+    display: 'flex',
+    height: '100%',
   },
-});
+})

@@ -1,13 +1,11 @@
 import React from "react";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
-import Header from "../Component/Header";
-import Footer from "../Component/Footer";
 import CommunicatingItemCard from "../Component/CommunicatingItemCard";
 import FindingItemCard from "../Component/FindingItemCard";
 import OwnedItemCard from "../Component/OwnedItemCard";
 import { Button } from "@ant-design/react-native";
 
-export default class ItemView extends React.Component {
+export default class ItemViewComponents extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +40,6 @@ export default class ItemView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header isHome={true} />
         <ScrollView>
           <Text style={styles.categoryText}>소통 중</Text>
           {this.state.items.communicating.map((item, index) => {
@@ -63,7 +60,6 @@ export default class ItemView extends React.Component {
         >
           <Text style={{ color: "white", fontSize: 30 }}>+</Text>
         </Button>
-        <Footer navigation={this.props.navigation} />
       </View>
     );
   }

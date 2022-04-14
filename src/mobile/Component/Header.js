@@ -10,18 +10,23 @@ export default class Header extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.props.isHome ? (
-          <Icon name="map-outline" size={30} />
+        {this.props.isMain ? (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("Location")
+              }
+            >
+              <Icon name="map-outline" size={30} />
+            </TouchableOpacity>
         ) : (
           <TouchableOpacity
             onPress={() =>
-              this.props.navigation.navigate(this.props.destination)
+              this.props.navigation.goBack()
             }
           >
             <Icon name="arrow-back-outline" size={30} />
           </TouchableOpacity>
         )}
-
         <Text style={styles.logo}>O.LaF</Text>
         <Icon name="notifications-outline" size={30} />
       </View>

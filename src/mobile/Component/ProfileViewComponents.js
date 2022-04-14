@@ -1,11 +1,9 @@
 import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
-import Header from "../Component/Header";
-import Footer from "../Component/Footer";
 import { Flex } from "@ant-design/react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default class ProfileView extends React.Component {
+export default class ProfileViewComponents extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,7 +16,6 @@ export default class ProfileView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header isHome={true} />
         <Flex style={{ height: "20%" }}>
           <Flex.Item flex={1}>
             {this.state.profileImage == null ? (
@@ -36,15 +33,14 @@ export default class ProfileView extends React.Component {
               <Text style={styles.name}>{this.state.name}</Text>
               <Text style={styles.pointAmount}>
                 {"보상금 " +
-                  this.state.pointAmount
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                  " 원"}
+                this.state.pointAmount
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                " 원"}
               </Text>
             </View>
           </Flex.Item>
         </Flex>
-        <Footer navigation={this.props.navigation} />
       </View>
     );
   }

@@ -1,57 +1,59 @@
-import { createSwitchNavigator, createAppContainer } from "react-navigation";
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 
-import MainView from "./View/MainView";
-import ItemView from "./View/ItemView";
-import ChatlistView from "./View/ChatlistView";
-import ProfileView from "./View/ProfileView";
-import AlarmView from "./View/AlarmView";
-import RegistrationView from "./View/RegistrationView";
-import ChattingView from "./View/ChattingView";
+import MainView from './View/MainView'
+import AlarmView from './View/AlarmView'
+import RegistrationView from './View/RegistrationView'
+import ChattingView from './View/ChattingView'
+import LocationView from './View/LocationView'
 
-const Nav = createSwitchNavigator({
-  Main: {
-    screen: MainView,
-    navigateOptions: {
-      header: null,
+const Nav = createStackNavigator({
+    Main: {
+      screen: MainView,
+      navigationOptions: {
+        cardStyle: {
+          backgroundColor: 'white'
+        }
+      }
     },
-  },
-  Item: {
-    screen: ItemView,
-    navigateOptions: {
-      header: null,
+    Alarm: {
+      screen: AlarmView,
+      navigationOptions: {
+        cardStyle: {
+          backgroundColor: 'white'
+        }
+      }
     },
-  },
-  Chatlist: {
-    screen: ChatlistView,
-    navigateOptions: {
-      header: null,
+    Registration: {
+      screen: RegistrationView,
+      navigationOptions: {
+        cardStyle: {
+          backgroundColor: 'white'
+        }
+      }
     },
-  },
-  Profile: {
-    screen: ProfileView,
-    navigateOptions: {
-      header: null,
+    Chatting: {
+      screen: ChattingView,
+      navigationOptions: {
+        cardStyle: {
+          backgroundColor: 'white'
+        }
+      }
     },
+    Location: {
+      screen: LocationView,
+      navigationOptions: {
+        cardStyle: {
+          backgroundColor: 'white'
+        }
+      }
+    }
   },
-  Alarm: {
-    screen: AlarmView,
-    navigateOptions: {
-      header: null,
-    },
-  },
-  Registration: {
-    screen: RegistrationView,
-    navigateOptions: {
-      header: null,
-    },
-  },
-  Chatting: {
-    screen: ChattingView,
-    navigateOptions: {
-      header: null,
-    },
-  },
-});
+  {
+    initialRouteName: 'Main',
+    headerMode: 'none'
+  }
+)
 
-const AppNavigator = createAppContainer(Nav);
-export default AppNavigator;
+const AppNavigator = createAppContainer(Nav)
+export default AppNavigator
