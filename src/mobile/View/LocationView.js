@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import ModalDropdown from 'react-native-modal-dropdown'
 import Header from '../Component/Header'
-import Footer from '../Component/Footer'
 import location from '../assets/location.json'
 import { Button } from '@ant-design/react-native'
 
@@ -142,7 +141,6 @@ export default class LocationView extends React.Component {
         <Button style={styles.setButton}>
           <Text style={{ color: "white" }}>설정하기</Text>
         </Button>
-        <Footer navigation={this.props.navigation}/>
       </View>
     )
   }
