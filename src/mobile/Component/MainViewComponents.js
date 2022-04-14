@@ -1,11 +1,12 @@
 import React from 'react'
-import { ScrollView } from 'react-native'
+import { StyleSheet, ScrollView, View, Text } from 'react-native'
 import ItemCard from './ItemCard'
 
 export default class MainViewComponents extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      location: '정릉제3동',
       items: [
         {
           image: require('../assets/dummy_data/macbook.png'),
@@ -31,11 +32,29 @@ export default class MainViewComponents extends React.Component {
 
   render () {
     return (
-      <ScrollView>
-        {this.state.items.map((item, index) => {
-          return <ItemCard item={item} key={index} />;
-        })}
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={{ display: "flex", flexDirection: "row", paddingTop: 20, paddingLeft: 20, paddingBottom: 10 }}>
+            <Text style={{ color: "#4080FF", fontSize: 20 }}>
+              {this.state.location}
+            </Text>
+            <Text style={{ fontSize: 20 }}>
+              {" 주변의 분실물"}
+            </Text>
+          </View>
+          {this.state.items.map((item, index) => {
+            return <ItemCard item={item} key={index}/>
+          })}
+        </ScrollView>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    height: "100%",
+  },
+})
+
