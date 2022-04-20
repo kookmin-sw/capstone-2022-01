@@ -1,18 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// 1
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
-// 2
 generator client {
   provider = "prisma-client-js"
 }
 
-// 3
 // model Link {
 //   id          Int      @id @default(autoincrement())
 //   createdAt   DateTime @default(now())
@@ -29,5 +23,4 @@ model User {
   password  String
   location  String @default("서울")
   point     Int @default(10000)
-//  links     Link[]
 }

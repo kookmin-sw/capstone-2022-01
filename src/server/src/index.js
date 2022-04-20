@@ -11,7 +11,6 @@ const path = require('path');
 const prisma = new PrismaClient()
 
 
-// 1
 const resolvers = {
     // Query,
     Mutation,
@@ -32,7 +31,9 @@ const server = new ApolloServer({
             userId:
                 req && req.headers.authorization
                     ? getUserId(req)
-                    : null
+                    : null,
+            token:
+                req.headers.authorization
         };
     }
 })

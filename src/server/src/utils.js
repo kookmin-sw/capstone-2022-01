@@ -1,6 +1,16 @@
 const jwt = require('jsonwebtoken');
 const APP_SECRET = 'TEMP_SECRET_CODE';
 
+
+function getUserIdByToken(bearer_token) {
+    const token = bearer_token.replace("Bearer ", "");
+    const { userId } = jwt.verify(token, APP_SECRET);
+    if (!userId) {
+        throw new Error("Not authenticated");
+    }
+    return userId
+}
+
 function getTokenPayload(token) {
     return jwt.verify(token, APP_SECRET);
 }
@@ -26,5 +36,6 @@ function getUserId(req, authToken) {
 
 module.exports = {
     APP_SECRET,
-    getUserId
+    getUserId,
+    getUserIdByToken
 };
