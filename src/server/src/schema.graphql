@@ -1,5 +1,6 @@
 type Query {
-  info: String!
+  getMyProfile: User
+  getUserProfile(userid: Int!): User
 }
 
 type Mutation {

@@ -1,7 +1,7 @@
 const { ApolloServer } = require('apollo-server');
 const { PrismaClient } = require('@prisma/client')
 const { getUserId } = require('./utils');
-// const Query = require('./resolvers/Query')
+const Query = require('./resolvers/Query')
 const Mutation = require('./resolvers/Mutation')
 // const User = require('./resolvers/User')
 
@@ -12,7 +12,7 @@ const prisma = new PrismaClient()
 
 
 const resolvers = {
-    // Query,
+    Query,
     Mutation,
     // User,
 }
