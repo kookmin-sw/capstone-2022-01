@@ -49,9 +49,21 @@ async function getMyStuffStatus(parent, args, context) {
 }
 
 
+async function getStuffByLocation(parent, args, context) {
+    const stuffByLocation = await context.prisma.stuff.findMany({
+        where: {
+            location: args.location,
+        }
+    })
+
+    console.log(stuffByLocation);
+    return stuffByLocation
+}
+
 module.exports = {
     getMyProfile,
     getUserProfile,
     getMyStuff,
-    getMyStuffStatus
+    getMyStuffStatus,
+    getStuffByLocation
 }
