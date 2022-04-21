@@ -7,19 +7,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// model Link {
-//   id          Int      @id @default(autoincrement())
-//   createdAt   DateTime @default(now())
-//   description String
-//   url         String
-//   postedBy    User?    @relation(fields: [postedById], references: [id])
-//   postedById  Int?
-// }
-
 model Stuff {
   id         Int      @id @default(autoincrement())
   title      String
   status     String   @default("내물건")
+  location  String @default("서울")
   reward     Int      @default(0)
   createdAt  DateTime @default(now())
   postedBy   User?    @relation(fields: [postedById], references: [id])

@@ -12,6 +12,7 @@ type Mutation {
   uploadStuff(title: String!): Stuff
   updateStuffStatus(id: Int!, status: String!): Stuff
   updateStuffReward(id: Int!, reward: Int!): Stuff
+  updateStuffLocation(id: Int!, location: String!): Stuff
 }
 
 type AuthPayload {
@@ -31,6 +32,7 @@ type Stuff {
   id: ID!
   title: String!
   status: String
+  location: String
   reward: Int
   createdAt: DateTime!
   postedBy: User!

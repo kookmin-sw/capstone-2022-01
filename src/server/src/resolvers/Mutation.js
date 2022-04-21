@@ -62,7 +62,7 @@ async function uploadStuff(parent, args, context, info) {
 }
 
 async function updateStuffStatus(parent, args, context, info) {
-    const updatedStuff = await context.prisma.stuff.update({
+    const updatedStuffStatus = await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -70,7 +70,19 @@ async function updateStuffStatus(parent, args, context, info) {
             status: args.status
         },
     })
-    return updatedStuff
+    return updatedStuffStatus
+}
+
+async function updateStuffLocation(parent, args, context, info) {
+    const updatedStuffLocation = await context.prisma.stuff.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            location: args.location
+        },
+    })
+    return updatedStuffLocation
 }
 
 async function updateStuffReward(parent, args, context, info) {
@@ -91,5 +103,6 @@ module.exports = {
     updateUserLocation,
     uploadStuff,
     updateStuffStatus,
-    updateStuffReward
+    updateStuffReward,
+    updateStuffLocation
 }
