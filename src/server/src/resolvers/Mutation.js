@@ -49,9 +49,47 @@ async function updateUserLocation(parent, args, context, info) {
     return updateUser
 }
 
+async function uploadStuff(parent, args, context, info) {
+    const userId = getUserIdByToken(context.token)
+    const newStuff = await context.prisma.stuff.create({
+        data: {
+            title: args.title,
+            postedBy: { connect: {id:userId} }
+        }
+    })
+
+    return newStuff
+}
+
+async function updateStuffStatus(parent, args, context, info) {
+    const updatedStuff = await context.prisma.stuff.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            status: args.status
+        },
+    })
+    return updatedStuff
+}
+
+async function updateStuffReward(parent, args, context, info) {
+    const updatedStuff = await context.prisma.stuff.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            reward: args.reward
+        },
+    })
+    return updatedStuff
+}
 
 module.exports = {
     signup,
     login,
     updateUserLocation,
+    uploadStuff,
+    updateStuffStatus,
+    updateStuffReward
 }
