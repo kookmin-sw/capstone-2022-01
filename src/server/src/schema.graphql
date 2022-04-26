@@ -3,7 +3,7 @@ scalar Upload
 
 
 type Query {
-  getFile(id: ID!): File
+  getFile(id: Int!): File
   getFiles: [File]
 
   getMyProfile: User

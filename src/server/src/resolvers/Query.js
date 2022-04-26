@@ -94,18 +94,22 @@ async function getStuffByLocation(parent, args, context) {
 
 async function getFile(parent, args, context){
     const files = await context.prisma.file.findUnique({
-        where: {
-            id: args.id,
-        }
+        where: { id: args.id }
     })
-    return files.map(elm => elm.uploadedBy =
-        context.prisma.user.findUnique({ where: { id: elm.uploadedById } }))
+
+    files.uploadedBy = context.prisma.user.findUnique({ where: { id: files.uploadedById } })
+
+    return files;
 }
 
 async function getFiles(parent, args, context){
     const files = await context.prisma.file.findMany({})
-    return files.map(elm => elm.uploadedBy =
-        context.prisma.user.findUnique({ where: { id: elm.uploadedById } }))
+    for (var i = 0; i < files.length; i++) {
+        files[i]["uploadedBy"] = context.prisma.user.findUnique({
+            where: { id: files[i].uploadedById }
+        })
+    }
+    return files;
 }
 
 module.exports = {
