@@ -1,0 +1,57 @@
+scalar DateTime
+scalar Upload
+
+
+type Query {
+  getFile(id: Int!): File
+  getFiles: [File]
+
+  getMyProfile: User
+  getUserProfile(userid: Int!): User
+  getMyStuff: [Stuff]
+  getMyStuffStatus(status: String!): [Stuff]
+  getStuffByLocation(location: String!): [Stuff]
+}
+
+type Mutation {
+  singleUpload(file: Upload!): File!
+  signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+  updateUserLocation(location: String!): User
+  uploadStuff(title: String!): Stuff
+  updateStuffStatus(id: Int!, status: String!): Stuff
+  updateStuffReward(id: Int!, reward: Int!): Stuff
+  updateStuffLocation(id: Int!, location: String!): Stuff
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  location:  String!
+  point: Int
+}
+
+type Stuff {
+  id: ID!
+  title: String!
+  status: String
+  location: String
+  reward: Int
+  createdAt: DateTime!
+  postedBy: User
+}
+
+type File {
+  id: ID!
+  name: String!
+  mimetype: String!
+  encoding: String!
+  createdAt: DateTime!
+  uploadedBy: User
+}

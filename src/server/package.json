@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^3.12.0",
+    "apollo-server": "^2.25.3",
+    "apollo-server-express": "^3.6.7",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.0",
+    "graphql": "^15.3.0",
+    "graphql-upload": "^13.0.0",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "prisma": "^3.12.0"
+  }
+}
