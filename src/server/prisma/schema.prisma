@@ -11,19 +11,31 @@ model Stuff {
   id         Int      @id @default(autoincrement())
   title      String
   status     String   @default("내물건")
-  location  String @default("서울")
+  location   String @default("서울")
   reward     Int      @default(0)
   createdAt  DateTime @default(now())
-  postedBy   User?    @relation(fields: [postedById], references: [id])
+  postedBy   User?    @relation(name: "UploadedStuff", fields: [postedById], references: [id])
   postedById Int?
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  name     String
-  email    String  @unique
-  password String
-  location String  @default("서울")
-  point    Int     @default(10000)
-  stuffs    Stuff[]
+model File {
+  id           Int     @id @default(autoincrement())
+  name         String
+  mimetype     String
+  encoding     String
+  createdAt    DateTime @default(now())
+  uploadedBy   User?    @relation(name: "UploadedFile",fields: [uploadedById], references: [id])
+  uploadedById Int?
 }
+
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String  @unique
+  password  String
+  location  String  @default("서울")
+  point     Int     @default(10000)
+  stuffs    Stuff[] @relation("UploadedStuff")
+  files     File[]  @relation("UploadedFile")
+}
+

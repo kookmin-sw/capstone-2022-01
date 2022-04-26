@@ -40,7 +40,13 @@ async function getMyStuff(parent, args, context) {
             stuffs: true, // All posts where authorId == 20
         },
     }).stuffs()
-    return getMyStuff
+
+    for (var i = 0; i < getMyStuff.length; i++) {
+        getMyStuff[i]["postedBy"] = context.prisma.user.findUnique({
+                where: { id: getMyStuff[i].postedById }
+            })
+    }
+    return getMyStuff;
 }
 
 async function getMyStuffStatus(parent, args, context) {
@@ -59,7 +65,12 @@ async function getMyStuffStatus(parent, args, context) {
         },
     }).stuffs();
 
-    return getMyStuff.map(elm => elm.status === args.status? elm : '').filter(String);
+    for (var i = 0; i < getMyStuff.length; i++) {
+        getMyStuff[i]["postedBy"] = context.prisma.user.findUnique({
+            where: { id: getMyStuff[i].postedById }
+        })
+    }
+    return getMyStuff;
 }
 
 
@@ -73,9 +84,28 @@ async function getStuffByLocation(parent, args, context) {
             location: args.location,
         }
     })
+    for (var i = 0; i < stuffByLocation.length; i++) {
+        stuffByLocation[i]["postedBy"] = context.prisma.user.findUnique({
+            where: { id: stuffByLocation[i].postedById }
+        })
+    }
+    return stuffByLocation;
+}
 
-    console.log(stuffByLocation);
-    return stuffByLocation
+async function getFile(parent, args, context){
+    const files = await context.prisma.file.findUnique({
+        where: {
+            id: args.id,
+        }
+    })
+    return files.map(elm => elm.uploadedBy =
+        context.prisma.user.findUnique({ where: { id: elm.uploadedById } }))
+}
+
+async function getFiles(parent, args, context){
+    const files = await context.prisma.file.findMany({})
+    return files.map(elm => elm.uploadedBy =
+        context.prisma.user.findUnique({ where: { id: elm.uploadedById } }))
 }
 
 module.exports = {
@@ -83,5 +113,7 @@ module.exports = {
     getUserProfile,
     getMyStuff,
     getMyStuffStatus,
-    getStuffByLocation
+    getStuffByLocation,
+    getFile,
+    getFiles
 }

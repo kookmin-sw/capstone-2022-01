@@ -1,4 +1,11 @@
+scalar DateTime
+scalar Upload
+
+
 type Query {
+  getFile(id: ID!): File
+  getFiles: [File]
+
   getMyProfile: User
   getUserProfile(userid: Int!): User
   getMyStuff: [Stuff]
@@ -7,6 +14,7 @@ type Query {
 }
 
 type Mutation {
+  singleUpload(file: Upload!): File!
   signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   updateUserLocation(location: String!): User
@@ -36,7 +44,14 @@ type Stuff {
   location: String
   reward: Int
   createdAt: DateTime!
-  postedBy: User!
+  postedBy: User
 }
 
-scalar DateTime
+type File {
+  id: ID!
+  name: String!
+  mimetype: String!
+  encoding: String!
+  createdAt: DateTime!
+  uploadedBy: User
+}

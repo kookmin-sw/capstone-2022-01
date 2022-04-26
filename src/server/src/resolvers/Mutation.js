@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserIdByToken } = require('../utils')
 
+const path = require("path");
+const { createWriteStream } = require("fs");
 
 async function signup(parent, args, context, info) {
     const password = await bcrypt.hash(args.password, 10)
@@ -65,7 +67,7 @@ async function uploadStuff(parent, args, context, info) {
             postedBy: { connect: {id:userId} }
         }
     })
-
+    newStuff.postedBy = context.prisma.user.findUnique({ where: { id: newStuff.postedById } })
     return newStuff
 }
 
@@ -83,6 +85,8 @@ async function updateStuffStatus(parent, args, context, info) {
             status: args.status
         },
     })
+
+    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
     return updatedStuffStatus
 }
 
@@ -100,6 +104,7 @@ async function updateStuffLocation(parent, args, context, info) {
             location: args.location
         },
     })
+    updatedStuffLocation.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffLocation.postedById } })
     return updatedStuffLocation
 }
 
@@ -117,8 +122,42 @@ async function updateStuffReward(parent, args, context, info) {
             reward: args.reward
         },
     })
+    updatedStuff.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuff.postedById } })
     return updatedStuff
 }
+
+
+async function singleUpload (parent, args, context) {
+    /**
+     * Image Upload 함수
+     * @param args.file
+     */
+    const userId = getUserIdByToken(context.token)
+
+    const { createReadStream, filename, mimetype, encoding } = await args.file;
+
+    const newfile = await context.prisma.file.create({
+        data: {
+            name: filename,
+            mimetype: mimetype,
+            encoding: encoding,
+            uploadedBy: { connect: { id:userId } }
+        }
+    })
+
+    await new Promise((res) =>
+        createReadStream()
+            .pipe(
+                createWriteStream(
+                    path.join(__dirname, "../../prisma/uploads/images", filename)
+                )
+            )
+            .on("close", res)
+    );
+
+    return newfile;
+}
+
 
 module.exports = {
     signup,
@@ -127,5 +166,6 @@ module.exports = {
     uploadStuff,
     updateStuffStatus,
     updateStuffReward,
-    updateStuffLocation
+    updateStuffLocation,
+    singleUpload
 }
