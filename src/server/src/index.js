@@ -31,6 +31,7 @@ async function startServer() {
         ),
         resolvers,
         uploads: false, // add this
+        introspection: true,  // if false, not working on AWS Playground.
         context: ({ req }) => {
             return {
                 ...req,
