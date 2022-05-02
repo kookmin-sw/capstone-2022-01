@@ -14,7 +14,11 @@ export default class LocationView extends React.Component {
       group3: [],
       selected1: null,
       selected2: null,
-      selected3: null
+      selected3: null,
+      name: this.props.navigation.getParam('name', ''),
+      ID: this.props.navigation.getParam('ID', ''),
+      PW: this.props.navigation.getParam('PW', ''),
+      isSignup: this.props.navigation.getParam('isSignup', false),
     }
     this.onChangeGroup1 = this.onChangeGroup1.bind(this)
     this.onChangeGroup2 = this.onChangeGroup2.bind(this)
@@ -139,7 +143,11 @@ export default class LocationView extends React.Component {
           </View>
         </ModalDropdown>
         <Button style={styles.setButton}>
-          <Text style={{ color: "white" }}>설정하기</Text>
+          <Text style={{color: 'white'}}>
+            {
+              this.state.isSignup ? '회원가입' : '설정하기'
+            }
+          </Text>
         </Button>
       </View>
     )
@@ -169,9 +177,9 @@ const styles = StyleSheet.create({
   },
   setButton: {
     marginTop: 40,
-    width: "30%",
+    width: '30%',
     borderWidth: 0,
-    alignSelf: "center",
-    backgroundColor: "#4080FF",
+    alignSelf: 'center',
+    backgroundColor: '#4080FF',
   }
 })

@@ -15,7 +15,9 @@ export default class SigninView extends React.Component {
         <WhiteSpace style={{ height: "8%" }} />
         <Button style={styles.button}>Sign in</Button>
         <WhiteSpace style={{ height: "2%" }} />
-        <Button style={styles.button}>Sign up</Button>
+        <Button style={styles.button} onPress={() => {
+          this.props.navigation.navigate("Signup")
+        }}>Sign up</Button>
       </View>
     );
   }
