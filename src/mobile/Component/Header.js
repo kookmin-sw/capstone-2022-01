@@ -27,7 +27,14 @@ export default class Header extends React.Component {
             <Icon name="arrow-back-outline" size={30}/>
           </TouchableOpacity>
         )}
-        <Text style={styles.logo}>O.LaF</Text>
+        {
+          this.props.title ? (
+            <Text style={styles.title}>{this.props.title}</Text>
+          ) : (
+            <Text style={styles.logo}>O.LaF</Text>
+          )
+        }
+
         {
           this.props.isMain ? (
             <TouchableOpacity
@@ -36,7 +43,7 @@ export default class Header extends React.Component {
               }}>
               <Icon name="notifications-outline" size={30}/>
             </TouchableOpacity>
-          ) : <View/>
+          ) : <View style={{width: 30}}/>
         }
       </View>
     )
@@ -61,4 +68,9 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: '#4080FF',
   },
+  title: {
+    alignSelf: 'center',
+    fontSize: 25,
+    fontWeight: "200"
+  }
 })
