@@ -18,6 +18,7 @@ type Mutation {
   singleUpload(file: Upload!): File!
   signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  tradingReward(userid: Int!, amount: Int!): User
   updateUserLocation(location: String!): User
   uploadStuff(title: String!): Stuff
   updateStuffStatus(id: Int!, status: String!): Stuff

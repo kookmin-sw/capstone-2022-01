@@ -37,6 +37,46 @@ async function login(parent, args, context, info) {
     }
 }
 
+async function tradingReward(parent, args, context, info) {
+    /**
+     * 사례금을 전달하는 함수
+     * @param args.userid (Int!) 상대 유저의 id
+     * @param args.amount (Int!) 상대에게 전달할 금액
+     * return 상대 user의 profile
+     * */
+    if (args.amount <= 0) {
+        throw new Error("The amount must be greater than zero")
+    }
+    const targetProfile = await context.prisma.user.findUnique({ where: { id: args.userid} })
+    const myProfile = await context.prisma.user.findUnique({ where: { id: context.userId } })
+
+    if (!myProfile || !targetProfile) {
+        throw new Error('No such user found')
+    }
+
+    if (myProfile.point < args.amount) {
+        throw new Error('Not have enough money')
+    }
+
+    const updatedTargetPoint = await context.prisma.user.update({
+        where: {
+            id: args.userid
+        },
+        data: {
+            point: targetProfile.point + args.amount
+        },
+    })
+    const updatedMyPoint = await context.prisma.user.update({
+        where: {
+            id: context.userId
+        },
+        data: {
+            point: myProfile.point - args.amount
+        },
+    })
+    return updatedTargetPoint
+}
+
 async function updateUserLocation(parent, args, context, info) {
     /**
      * 입력한 token으로 user_id를 받아오고, 내 location을 수정하는 함수
@@ -126,7 +166,6 @@ async function updateStuffReward(parent, args, context, info) {
     return updatedStuff
 }
 
-
 async function singleUpload (parent, args, context) {
     /**
      * Image Upload 함수
@@ -162,6 +201,7 @@ async function singleUpload (parent, args, context) {
 module.exports = {
     signup,
     login,
+    tradingReward,
     updateUserLocation,
     uploadStuff,
     updateStuffStatus,
