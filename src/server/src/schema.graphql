@@ -8,6 +8,7 @@ type Query {
 
   getMyProfile: User
   getUserProfile(userid: Int!): User
+  getMyAlarms: [Alarm]
   getMyStuff: [Stuff]
   getMyStuffStatus(status: String!): [Stuff]
   getStuffByLocation(location: String!): [Stuff]
@@ -18,6 +19,8 @@ type Mutation {
   singleUpload(file: Upload!): File!
   signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  putAlarms(text: String!): Alarm
+  readAlarm(id: Int!): Alarm
   tradingReward(userid: Int!, amount: Int!): User
   updateUserLocation(location: String!): User
   uploadStuff(title: String!): Stuff
@@ -56,4 +59,12 @@ type File {
   encoding: String!
   createdAt: DateTime!
   uploadedBy: User
+}
+
+type Alarm {
+  id: ID!
+  text: String!
+  read: Boolean!
+  createdAt: DateTime!
+  owner: User
 }

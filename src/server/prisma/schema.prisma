@@ -37,5 +37,14 @@ model User {
   point     Int     @default(10000)
   stuffs    Stuff[] @relation("UploadedStuff")
   files     File[]  @relation("UploadedFile")
+  alarms    Alarm[] @relation(name: "alarm")
 }
 
+model Alarm {
+  id        Int      @id @default(autoincrement())
+  text      String
+  read      Boolean
+  createdAt DateTime @default(now())
+  owner     User?    @relation(name: "alarm",fields: [ownerId], references: [id])
+  ownerId   Int?
+}

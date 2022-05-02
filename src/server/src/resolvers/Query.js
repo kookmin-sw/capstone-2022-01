@@ -26,6 +26,27 @@ async function getUserProfile(parent, args, context) {
     return user
 }
 
+async function getMyAlarms(parent, args, context) {
+    /**
+     * 내 alarms를 모두 return하는 함수
+     */
+    const myAlarms = await context.prisma.user.findUnique({
+        where: {
+            id: context.userId,
+        },
+        select: {
+            alarms: true, // All alarms
+        },
+    }).alarms()
+
+    for (var i = 0; i < myAlarms.length; i++) {
+        myAlarms[i]["owner"] = context.prisma.user.findUnique({
+            where: { id: myAlarms[i].ownerId }
+        })
+    }
+    return myAlarms
+}
+
 async function getMyStuff(parent, args, context) {
     /**
      * 내가 등록한 물건을 return하는 함수
@@ -138,6 +159,7 @@ async function getFiles(parent, args, context){
 module.exports = {
     getMyProfile,
     getUserProfile,
+    getMyAlarms,
     getMyStuff,
     getMyStuffStatus,
     getStuffByLocation,

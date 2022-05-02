@@ -197,12 +197,49 @@ async function singleUpload (parent, args, context) {
     return newfile;
 }
 
+async function putAlarms (parent, args, context) {
+    /**
+     * Alarm을 생성하는 함수
+     * @param args.text
+     */
+    const alarms = await context.prisma.alarm.create({
+        data: {
+            text: args.text,
+            read: false,
+            owner: { connect: { id:context.userId } }
+        }
+    })
+    alarms.owner = context.prisma.user.findUnique({ where: { id: context.userId } })
+
+    return alarms
+}
+
+async function readAlarm (parent, args, context) {
+    /**
+     * Alarm을 읽음 처리하는 함수
+     * @param args.id
+     */
+    const alarms = await context.prisma.alarm.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            read: true
+        },
+    })
+    alarms.owner = context.prisma.user.findUnique({ where: { id: context.userId } })
+
+    return alarms
+}
+
 
 module.exports = {
     signup,
     login,
     tradingReward,
     updateUserLocation,
+    putAlarms,
+    readAlarm,
     uploadStuff,
     updateStuffStatus,
     updateStuffReward,
