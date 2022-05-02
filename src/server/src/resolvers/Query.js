@@ -92,7 +92,27 @@ async function getStuffByLocation(parent, args, context) {
     return stuffByLocation;
 }
 
+async function getStuffById(parent, args, context) {
+    /**
+     * 해당 id의 물건을 return하는 함수
+     * @param args.id (Int!)
+     */
+    const stuffById = await context.prisma.stuff.findUnique({
+        where: {
+            id: args.id,
+        }
+    })
+    stuffById["postedBy"] = context.prisma.user.findUnique({
+        where: { id: stuffById.postedById }
+    })
+    return stuffById;
+}
+
 async function getFile(parent, args, context){
+    /**
+     * 해당 id의 File을 return하는 함수
+     * @param args.id (Int!)
+     */
     const files = await context.prisma.file.findUnique({
         where: { id: args.id }
     })
@@ -103,6 +123,9 @@ async function getFile(parent, args, context){
 }
 
 async function getFiles(parent, args, context){
+    /**
+     * 모든 Files을 return하는 함수
+     */
     const files = await context.prisma.file.findMany({})
     for (var i = 0; i < files.length; i++) {
         files[i]["uploadedBy"] = context.prisma.user.findUnique({
@@ -118,6 +141,7 @@ module.exports = {
     getMyStuff,
     getMyStuffStatus,
     getStuffByLocation,
+    getStuffById,
     getFile,
     getFiles
 }
