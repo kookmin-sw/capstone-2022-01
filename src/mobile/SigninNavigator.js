@@ -7,7 +7,7 @@ import LocationView from './View/LocationView'
 
 const Nav = createStackNavigator({
     Signin: {
-      screen: SigninView,
+      screen: props => <SigninView {...props} onSignin={props.screenProps.onSignin} />,
       navigationOptions: {
         cardStyle: {
           backgroundColor: 'white'
@@ -16,19 +16,21 @@ const Nav = createStackNavigator({
     },
     Signup: {
       screen: SignupView,
-      navigationOptions: {
-        cardStyle: {
-          backgroundColor: 'white'
+      navigationOptions:
+        {
+          cardStyle: {
+            backgroundColor: 'white'
+          }
         }
-      }
     },
     Location: {
       screen: LocationView,
-      navigationOptions: {
-        cardStyle: {
-          backgroundColor: 'white'
+      navigationOptions:
+        {
+          cardStyle: {
+            backgroundColor: 'white'
+          }
         }
-      }
     }
   },
   {
