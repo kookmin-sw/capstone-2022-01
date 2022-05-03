@@ -4,7 +4,10 @@ async function getMyProfile(parent, args, context) {
     /**
      * 내 user profile을 return하는 함수
      */
-    const user = await context.prisma.user.findUnique({ where: { id: context.userId } })
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
+    const user = await context.prisma.user.findUnique({where: {id: userId}})
 
     if (!user) {
         throw new Error('No such user found')
