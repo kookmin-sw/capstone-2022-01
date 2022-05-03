@@ -29,11 +29,18 @@
 type Query {
     getMyProfile: User
     getUserProfile(userid: Int!): User
+    
+    
 }
 
 type Mutation {
     signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
+    
     updateUserLocation(location: String!): User
-}
+    
+    uploadStuff(title: String!): Stuff
+    updateStuffStatus(id: Int!, status: String!): Stuff
+    updateStuffReward(id: Int!, reward: Int!): Stuff
+    updateStuffLocation(id: Int!, location: String!): Stuff
 ```

@@ -101,7 +101,8 @@ async function uploadStuff(parent, args, context, info) {
      * title의 물건을 생성하는 함수
      * @param args.title (String!)
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
     const newStuff = await context.prisma.stuff.create({
         data: {
             title: args.title,
