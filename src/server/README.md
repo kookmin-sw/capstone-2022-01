@@ -62,6 +62,6 @@ type Mutation {
     updateStuffReward(id: Int!, reward: Int!): Stuff                                          # 물건사례금 변경
     updateStuffLocation(id: Int!, location: String!): Stuff                                   # 물건 분실위치 변경
     
-    singleUpload(file: Upload!): File!
+    singleUpload(file: Upload!): File!                                                        # 이미지 업로드
 }
 ```
