@@ -208,14 +208,17 @@ async function putAlarms (parent, args, context) {
      * Alarm을 생성하는 함수
      * @param args.text
      */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
     const alarms = await context.prisma.alarm.create({
         data: {
             text: args.text,
             read: false,
-            owner: { connect: { id:context.userId } }
+            owner: { connect: { id: userId } }
         }
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: context.userId } })
+    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
 
     return alarms
 }
@@ -225,6 +228,9 @@ async function readAlarm (parent, args, context) {
      * Alarm을 읽음 처리하는 함수
      * @param args.id
      */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
     const alarms = await context.prisma.alarm.update({
         where: {
             id: args.id
@@ -233,7 +239,7 @@ async function readAlarm (parent, args, context) {
             read: true
         },
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: context.userId } })
+    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
 
     return alarms
 }

@@ -33,9 +33,11 @@ async function getMyAlarms(parent, args, context) {
     /**
      * 내 alarms를 모두 return하는 함수
      */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
     const myAlarms = await context.prisma.user.findUnique({
         where: {
-            id: context.userId,
+            id: userId,
         },
         select: {
             alarms: true, // All alarms

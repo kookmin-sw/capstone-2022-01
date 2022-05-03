@@ -30,6 +30,8 @@ type Query {
     getMyProfile: User                                                                        # 내 프로필
     getUserProfile(userid: Int!): User                                                        # 특정 유저의 프로필
     
+    getMyAlarms: [Alarm]                                                                      # 나에게 등록된 알림들
+    
     getMyStuff: [Stuff]                                                                       # 내가 등록한 물건들
     getMyStuffByStatus(status: String!): [Stuff]                                              # 내가 등록한 상태별 물건들
     getStuffByLocation(location: String!): [Stuff]                                            # 지역별 분실물들
@@ -40,6 +42,9 @@ type Mutation {
     signup(email: String!, password: String!, name: String!, location: String!): AuthPayload  # 회원가입
     login(email: String!, password: String!): AuthPayload                                     # 로그인
     
+    putAlarms(text: String!): Alarm                                                           # 알림 등록
+    readAlarm(id: Int!): Alarm                                                                # 알림 읽음 처리
+  
     tradingReward(userid: Int!, amount: Int!): User                                           # 사례금 전달
     updateUserLocation(location: String!): User                                               # 유저 위치 수정
     
