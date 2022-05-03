@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserIdByToken } = require('../utils')
-
 const path = require("path");
 const { createWriteStream } = require("fs");
+const shortId = require("shortid");
 
 async function signup(parent, args, context, info) {
     const password = await bcrypt.hash(args.password, 10)
@@ -177,29 +177,31 @@ async function singleUpload (parent, args, context) {
      * Image Upload 함수
      * @param args.file
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
 
-    const { createReadStream, filename, mimetype, encoding } = await args.file;
+    const { stream, filename, mimetype, encoding } = await args.file;
+
+    const id = shortId.generate();
+    const img_path = `${path.join(__dirname, "../../prisma/uploads/images")}/${id}-${filename}`;
+
+    await new Promise((resolve, reject) =>
+        stream
+            .pipe(createWriteStream(img_path))
+            .on("finish", () => resolve({ id, img_path }))
+            .on("error", reject)
+    );
 
     const newfile = await context.prisma.file.create({
         data: {
-            name: filename,
+            name: `images/${id}-${filename}`,
             mimetype: mimetype,
             encoding: encoding,
             uploadedBy: { connect: { id:userId } }
         }
     })
 
-    await new Promise((res) =>
-        createReadStream()
-            .pipe(
-                createWriteStream(
-                    path.join(__dirname, "../../prisma/uploads/images", filename)
-                )
-            )
-            .on("close", res)
-    );
-
+    newfile.uploadedBy = context.prisma.user.findUnique({ where: { id: userId } })
     return newfile;
 }
 

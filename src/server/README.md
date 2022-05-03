@@ -24,11 +24,20 @@
     localhost:4000
 
 
+## 6. Get Images
+
+    localhost:4000/FILENAME
+    # FILENAME : type File의 name. 
+
+
 ## 테스트 가능한 schema
 ```text
 type Query {
     getMyProfile: User                                                                        # 내 프로필
     getUserProfile(userid: Int!): User                                                        # 특정 유저의 프로필
+    
+    getFile(id: Int!): File                                                                   # 특정 File
+    getFiles: [File]                                                                          # 모든 File
     
     getMyAlarms: [Alarm]                                                                      # 나에게 등록된 알림들
     
@@ -52,5 +61,7 @@ type Mutation {
     updateStuffStatus(id: Int!, status: String!): Stuff                                       # 물건상태 변경
     updateStuffReward(id: Int!, reward: Int!): Stuff                                          # 물건사례금 변경
     updateStuffLocation(id: Int!, location: String!): Stuff                                   # 물건 분실위치 변경
+    
+    singleUpload(file: Upload!): File!
 }
 ```
