@@ -1,6 +1,5 @@
 # Server
 
-
 ## 1. Git clone
 
     git clone https://github.com/kookmin-sw/capstone-2022-01.git
@@ -22,30 +21,17 @@
 
 ## 5. Playground
 
-    localhost:4000/graphql
+    localhost:4000
 
 
-## Schema : src/schema.graphql
+## 0503기준 테스트 가능한 schema
 ```text
 type Query {
-    getFile(id: Int!): File
-    getFiles: [File]
-
     getMyProfile: User
-    getUserProfile(userid: Int!): User
-    getMyStuff: [Stuff]
-    getMyStuffStatus(status: String!): [Stuff]
-    getStuffByLocation(location: String!): [Stuff]
 }
 
 type Mutation {
-    singleUpload(file: Upload!): File!
     signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    updateUserLocation(location: String!): User
-    uploadStuff(title: String!): Stuff
-    updateStuffStatus(id: Int!, status: String!): Stuff
-    updateStuffReward(id: Int!, reward: Int!): Stuff
-    updateStuffLocation(id: Int!, location: String!): Stuff
 }
 ```
