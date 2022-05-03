@@ -54,7 +54,8 @@ async function getMyStuff(parent, args, context) {
     /**
      * 내가 등록한 물건을 return하는 함수
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
 
     const getMyStuff = await context.prisma.user.findUnique({
         where: {
@@ -78,7 +79,8 @@ async function getMyStuffStatus(parent, args, context) {
      * 내가 등록한 물건중, 특정 상태("소통중", "찾는중", "내물건")에 해당하는 물건을 return하는 함수
      * @param args.status (String!) ("소통중", "찾는중", "내물건")
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
 
     const getMyStuff = await context.prisma.user.findUnique({
         where: {
@@ -94,7 +96,8 @@ async function getMyStuffStatus(parent, args, context) {
             where: { id: getMyStuff[i].postedById }
         })
     }
-    return getMyStuff;
+
+    return getMyStuff.map(elm => elm.status === args.status? elm : '').filter(String);
 }
 
 

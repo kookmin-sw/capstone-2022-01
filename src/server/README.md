@@ -30,7 +30,9 @@ type Query {
     getMyProfile: User
     getUserProfile(userid: Int!): User
     
-    
+    getMyStuff: [Stuff]
+    getMyStuffStatus(status: String!): [Stuff]
+    getStuffByLocation(location: String!): [Stuff]
 }
 
 type Mutation {
