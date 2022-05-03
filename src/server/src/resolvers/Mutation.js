@@ -82,10 +82,11 @@ async function updateUserLocation(parent, args, context, info) {
      * 입력한 token으로 user_id를 받아오고, 내 location을 수정하는 함수
      * @param args.location (String!)
      */
-    const user_id = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
     const updateUser = await context.prisma.user.update({
         where: {
-            id: user_id,
+            id: userId,
         },
         data: {
             location: args.location,

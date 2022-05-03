@@ -24,14 +24,16 @@
     localhost:4000
 
 
-## 0503기준 테스트 가능한 schema
+## 테스트 가능한 schema
 ```text
 type Query {
     getMyProfile: User
+    getUserProfile(userid: Int!): User
 }
 
 type Mutation {
     signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
+    updateUserLocation(location: String!): User
 }
 ```
