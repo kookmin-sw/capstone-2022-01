@@ -47,8 +47,12 @@ async function tradingReward(parent, args, context, info) {
     if (args.amount <= 0) {
         throw new Error("The amount must be greater than zero")
     }
+
+    const Authorization = context.request.get("Authorization");
+    const myUserId = getUserIdByToken(Authorization)
+
     const targetProfile = await context.prisma.user.findUnique({ where: { id: args.userid} })
-    const myProfile = await context.prisma.user.findUnique({ where: { id: context.userId } })
+    const myProfile = await context.prisma.user.findUnique({ where: { id: myUserId } })
 
     if (!myProfile || !targetProfile) {
         throw new Error('No such user found')
@@ -68,7 +72,7 @@ async function tradingReward(parent, args, context, info) {
     })
     const updatedMyPoint = await context.prisma.user.update({
         where: {
-            id: context.userId
+            id: myUserId
         },
         data: {
             point: myProfile.point - args.amount

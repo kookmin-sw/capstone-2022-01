@@ -27,23 +27,32 @@
 ## 테스트 가능한 schema
 ```text
 type Query {
-    getMyProfile: User
-    getUserProfile(userid: Int!): User
+    getMyProfile: User # 내 프로필
+    getUserProfile(userid: Int!): User # 특정 유저의 프로필
     
-    getMyStuff: [Stuff]
-    getMyStuffByStatus(status: String!): [Stuff]
-    getStuffByLocation(location: String!): [Stuff]
-    getStuffById(id: Int!): Stuff
+    getMyStuff: [Stuff] # 내가 등록한 물건들
+    getMyStuffByStatus(status: String!): [Stuff] # 내가 등록한 상태별 물건들
+    getStuffByLocation(location: String!): [Stuff] # 지역별 분실물들
+    getStuffById(id: Int!): Stuff # 특정 물건정보
 }
 
 type Mutation {
+    # 회원가입
     signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
+    # 로그인
     login(email: String!, password: String!): AuthPayload
     
-    updateUserLocation(location: String!): User
+    # 사례금 전달
+    tradingReward(userid: Int!, amount: Int!): User 
+    # 유저 위치 수정
+    updateUserLocation(location: String!): User 
     
+    # 물건등록
     uploadStuff(title: String!): Stuff
+    # 물건상태 변경
     updateStuffStatus(id: Int!, status: String!): Stuff
+    # 물건사례금 변경
     updateStuffReward(id: Int!, reward: Int!): Stuff
+    # 물건 분실위치 변경
     updateStuffLocation(id: Int!, location: String!): Stuff
 ```
