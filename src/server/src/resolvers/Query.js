@@ -103,12 +103,19 @@ async function getMyStuffByStatus(parent, args, context) {
 
 async function getStuffByLocation(parent, args, context) {
     /**
-     * 특정 위치에 등록된 모든 물건을 return하는 함수
+     * 특정 위치의 '찾는중 상태'의 모든 물건을 return하는 함수
      * @param args.location (String!)
      */
     const stuffByLocation = await context.prisma.stuff.findMany({
         where: {
-            location: args.location,
+            AND: [
+                {
+                    location: args.location,
+                },
+                {
+                    status: "찾는중"
+                }
+            ]
         }
     })
     for (var i = 0; i < stuffByLocation.length; i++) {
