@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@ant-design/react-native": "^4.2.0",
+    "@apollo/client": "^3.6.1",
+    "@react-native-async-storage/async-storage": "^1.17.3",
     "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/segmented-control": "^2.2.2",
@@ -17,6 +19,8 @@
     "@react-navigation/native": "^6.0.8",
     "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
+    "graphql": "^16.4.0",
+    "graphql-tag": "latest",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
