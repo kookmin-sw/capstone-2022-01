@@ -52,4 +52,5 @@ type Mutation {
     updateStuffStatus(id: Int!, status: String!): Stuff                                       # 물건상태 변경
     updateStuffReward(id: Int!, reward: Int!): Stuff                                          # 물건사례금 변경
     updateStuffLocation(id: Int!, location: String!): Stuff                                   # 물건 분실위치 변경
+}
 ```
