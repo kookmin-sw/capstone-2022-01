@@ -31,8 +31,9 @@ type Query {
     getUserProfile(userid: Int!): User
     
     getMyStuff: [Stuff]
-    getMyStuffStatus(status: String!): [Stuff]
+    getMyStuffByStatus(status: String!): [Stuff]
     getStuffByLocation(location: String!): [Stuff]
+    getStuffById(id: Int!): Stuff
 }
 
 type Mutation {

@@ -74,7 +74,7 @@ async function getMyStuff(parent, args, context) {
     return getMyStuff;
 }
 
-async function getMyStuffStatus(parent, args, context) {
+async function getMyStuffByStatus(parent, args, context) {
     /**
      * 내가 등록한 물건중, 특정 상태("소통중", "찾는중", "내물건")에 해당하는 물건을 return하는 함수
      * @param args.status (String!) ("소통중", "찾는중", "내물건")
@@ -167,7 +167,7 @@ module.exports = {
     getUserProfile,
     getMyAlarms,
     getMyStuff,
-    getMyStuffStatus,
+    getMyStuffByStatus,
     getStuffByLocation,
     getStuffById,
     getFile,

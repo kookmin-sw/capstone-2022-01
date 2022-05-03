@@ -10,7 +10,7 @@ type Query {
   getUserProfile(userid: Int!): User
   getMyAlarms: [Alarm]
   getMyStuff: [Stuff]
-  getMyStuffStatus(status: String!): [Stuff]
+  getMyStuffByStatus(status: String!): [Stuff]
   getStuffByLocation(location: String!): [Stuff]
   getStuffById(id: Int!): Stuff
 }
