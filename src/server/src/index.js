@@ -1,62 +1,36 @@
 const { PrismaClient } = require('@prisma/client')
+const { GraphQLServer } = require("graphql-yoga");
+const express = require("express");
 
-const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const {
-    GraphQLUpload,
-    graphqlUploadExpress, // A Koa implementation is also exported.
-} = require('graphql-upload');
-
-const { getUserId } = require('./utils');
-const Query = require('./resolvers/Query')
-const Mutation = require('./resolvers/Mutation')
-
-const fs = require('fs');
-const path = require('path');
-
+const path = require("path");
 const prisma = new PrismaClient()
 
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
 
 const resolvers = {
     Query,
     Mutation,
-    Upload: GraphQLUpload
-}
+};
 
-async function startServer() {
-    const server = new ApolloServer({
-        typeDefs: fs.readFileSync(
-            path.join(__dirname, 'schema.graphql'),
-            'utf8'
-        ),
-        resolvers,
-        uploads: false, // add this
-        introspection: true,  // if false, not working on AWS Playground.
-        context: ({ req }) => {
-            return {
-                ...req,
-                prisma,
-                userId:
-                    req && req.headers.authorization
-                        ? getUserId(req)
-                        : null,
-                token:
-                req.headers.authorization
-            };
-        }
-    })
-    await server.start();
+const server = new GraphQLServer({
+    typeDefs: "./src/schema.graphql",
+    resolvers,
+    context: req => {
+        return {
+            ...req,
+            prisma,
+        };
+    }
+});
 
-    const app = express();
+const options = {
+    port: process.env.PORT || 4000
+};
 
-    app.use(graphqlUploadExpress());
-
-    server.applyMiddleware({ app });
-
-    await new Promise (r => app.listen(
-        { port: 4000 }, r));
-
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
-}
-
-startServer();
+server.express.use("/images", express.static(path.join(__dirname, "../prisma/uploads/images")));
+server.start(options, ({ port }) =>
+    console.log(
+        `Server started, listening on port ${port} for incoming requests.\n`
+    )
+);

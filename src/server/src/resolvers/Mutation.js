@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserIdByToken } = require('../utils')
-
 const path = require("path");
 const { createWriteStream } = require("fs");
+const shortId = require("shortid");
 
 async function signup(parent, args, context, info) {
     const password = await bcrypt.hash(args.password, 10)
@@ -47,8 +47,12 @@ async function tradingReward(parent, args, context, info) {
     if (args.amount <= 0) {
         throw new Error("The amount must be greater than zero")
     }
+
+    const Authorization = context.request.get("Authorization");
+    const myUserId = getUserIdByToken(Authorization)
+
     const targetProfile = await context.prisma.user.findUnique({ where: { id: args.userid} })
-    const myProfile = await context.prisma.user.findUnique({ where: { id: context.userId } })
+    const myProfile = await context.prisma.user.findUnique({ where: { id: myUserId } })
 
     if (!myProfile || !targetProfile) {
         throw new Error('No such user found')
@@ -68,7 +72,7 @@ async function tradingReward(parent, args, context, info) {
     })
     const updatedMyPoint = await context.prisma.user.update({
         where: {
-            id: context.userId
+            id: myUserId
         },
         data: {
             point: myProfile.point - args.amount
@@ -82,10 +86,11 @@ async function updateUserLocation(parent, args, context, info) {
      * 입력한 token으로 user_id를 받아오고, 내 location을 수정하는 함수
      * @param args.location (String!)
      */
-    const user_id = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
     const updateUser = await context.prisma.user.update({
         where: {
-            id: user_id,
+            id: userId,
         },
         data: {
             location: args.location,
@@ -100,7 +105,8 @@ async function uploadStuff(parent, args, context, info) {
      * title의 물건을 생성하는 함수
      * @param args.title (String!)
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
     const newStuff = await context.prisma.stuff.create({
         data: {
             title: args.title,
@@ -171,29 +177,31 @@ async function singleUpload (parent, args, context) {
      * Image Upload 함수
      * @param args.file
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
 
-    const { createReadStream, filename, mimetype, encoding } = await args.file;
+    const { stream, filename, mimetype, encoding } = await args.file;
+
+    const id = shortId.generate();
+    const img_path = `${path.join(__dirname, "../../prisma/uploads/images")}/${id}-${filename}`;
+
+    await new Promise((resolve, reject) =>
+        stream
+            .pipe(createWriteStream(img_path))
+            .on("finish", () => resolve({ id, img_path }))
+            .on("error", reject)
+    );
 
     const newfile = await context.prisma.file.create({
         data: {
-            name: filename,
+            name: `images/${id}-${filename}`,
             mimetype: mimetype,
             encoding: encoding,
             uploadedBy: { connect: { id:userId } }
         }
     })
 
-    await new Promise((res) =>
-        createReadStream()
-            .pipe(
-                createWriteStream(
-                    path.join(__dirname, "../../prisma/uploads/images", filename)
-                )
-            )
-            .on("close", res)
-    );
-
+    newfile.uploadedBy = context.prisma.user.findUnique({ where: { id: userId } })
     return newfile;
 }
 
@@ -202,14 +210,17 @@ async function putAlarms (parent, args, context) {
      * Alarm을 생성하는 함수
      * @param args.text
      */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
     const alarms = await context.prisma.alarm.create({
         data: {
             text: args.text,
             read: false,
-            owner: { connect: { id:context.userId } }
+            owner: { connect: { id: userId } }
         }
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: context.userId } })
+    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
 
     return alarms
 }
@@ -219,6 +230,9 @@ async function readAlarm (parent, args, context) {
      * Alarm을 읽음 처리하는 함수
      * @param args.id
      */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
     const alarms = await context.prisma.alarm.update({
         where: {
             id: args.id
@@ -227,7 +241,7 @@ async function readAlarm (parent, args, context) {
             read: true
         },
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: context.userId } })
+    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
 
     return alarms
 }

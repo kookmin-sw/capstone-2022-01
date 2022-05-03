@@ -4,7 +4,10 @@ async function getMyProfile(parent, args, context) {
     /**
      * 내 user profile을 return하는 함수
      */
-    const user = await context.prisma.user.findUnique({ where: { id: context.userId } })
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
+    const user = await context.prisma.user.findUnique({where: {id: userId}})
 
     if (!user) {
         throw new Error('No such user found')
@@ -30,9 +33,11 @@ async function getMyAlarms(parent, args, context) {
     /**
      * 내 alarms를 모두 return하는 함수
      */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
     const myAlarms = await context.prisma.user.findUnique({
         where: {
-            id: context.userId,
+            id: userId,
         },
         select: {
             alarms: true, // All alarms
@@ -51,7 +56,8 @@ async function getMyStuff(parent, args, context) {
     /**
      * 내가 등록한 물건을 return하는 함수
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
 
     const getMyStuff = await context.prisma.user.findUnique({
         where: {
@@ -70,12 +76,13 @@ async function getMyStuff(parent, args, context) {
     return getMyStuff;
 }
 
-async function getMyStuffStatus(parent, args, context) {
+async function getMyStuffByStatus(parent, args, context) {
     /**
      * 내가 등록한 물건중, 특정 상태("소통중", "찾는중", "내물건")에 해당하는 물건을 return하는 함수
      * @param args.status (String!) ("소통중", "찾는중", "내물건")
      */
-    const userId = getUserIdByToken(context.token)
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
 
     const getMyStuff = await context.prisma.user.findUnique({
         where: {
@@ -91,18 +98,26 @@ async function getMyStuffStatus(parent, args, context) {
             where: { id: getMyStuff[i].postedById }
         })
     }
-    return getMyStuff;
+
+    return getMyStuff.map(elm => elm.status === args.status? elm : '').filter(String);
 }
 
 
 async function getStuffByLocation(parent, args, context) {
     /**
-     * 특정 위치에 등록된 모든 물건을 return하는 함수
+     * 특정 위치의 '찾는중 상태'의 모든 물건을 return하는 함수
      * @param args.location (String!)
      */
     const stuffByLocation = await context.prisma.stuff.findMany({
         where: {
-            location: args.location,
+            AND: [
+                {
+                    location: args.location,
+                },
+                {
+                    status: "찾는중"
+                }
+            ]
         }
     })
     for (var i = 0; i < stuffByLocation.length; i++) {
@@ -161,7 +176,7 @@ module.exports = {
     getUserProfile,
     getMyAlarms,
     getMyStuff,
-    getMyStuffStatus,
+    getMyStuffByStatus,
     getStuffByLocation,
     getStuffById,
     getFile,
