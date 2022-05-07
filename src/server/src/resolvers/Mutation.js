@@ -75,6 +75,7 @@ async function tradingReward(parent, args, context, info) {
         throw new Error('No such user found')
     }
 
+    // 사례금 전달
     const updatedTargetUserPoint = await context.prisma.user.update({
         where: {
             id: stuff.acquirerId
@@ -89,6 +90,20 @@ async function tradingReward(parent, args, context, info) {
         },
         data: {
             point: myProfile.point - stuff.reward
+        },
+    })
+
+    // 물건 상태 Own으로 초기화
+
+    const updatedStuffStatus = await context.prisma.stuff.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            status: "Owned",
+            location: "",
+            reward: 0,
+            acquirerId: -1
         },
     })
     return updatedMyPoint
@@ -397,8 +412,6 @@ async function deleteOwned(parent, args, context, info) {
     if (userId !== stuff.postedById) {
         throw new Error("You don't have delete permission.")
     }
-
-
 
     const deletedStuff = await context.prisma.stuff.delete({
         where: {
