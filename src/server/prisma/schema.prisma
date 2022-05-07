@@ -8,14 +8,17 @@ generator client {
 }
 
 model Stuff {
-  id         Int      @id @default(autoincrement())
-  title      String
-  status     String   @default("내물건")
-  location   String @default("서울")
-  reward     Int      @default(0)
-  createdAt  DateTime @default(now())
-  postedBy   User?    @relation(name: "UploadedStuff", fields: [postedById], references: [id])
-  postedById Int?
+  id          Int      @id @default(autoincrement())
+  title       String
+  status      String   @default("Owned")
+  location    String   @default("")
+  reward      Int      @default(0)
+  imageUrl    String   @default("")
+  qrcodeUrl   String
+  createdAt   DateTime @default(now())
+  postedBy    User?    @relation(name: "UploadedStuff", fields: [postedById], references: [id])
+  postedById  Int?
+  acquirerId  Int      @default(-1)
 }
 
 model File {

@@ -3,12 +3,14 @@ scalar Upload
 
 
 type Query {
+  getMyProfile: User
+  getUserProfile(userid: Int!): User
+
   getFile(id: Int!): File
   getFiles: [File]
 
-  getMyProfile: User
-  getUserProfile(userid: Int!): User
   getMyAlarms: [Alarm]
+
   getMyStuff: [Stuff]
   getMyStuffByStatus(status: String!): [Stuff]
   getStuffByLocation(location: String!): [Stuff]
@@ -16,17 +18,27 @@ type Query {
 }
 
 type Mutation {
-  singleUpload(file: Upload!): File!
   signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+
   putAlarms(text: String!): Alarm
   readAlarm(id: Int!): Alarm
-  tradingReward(userid: Int!, amount: Int!): User
+
+  tradingReward(id: Int!): User
   updateUserLocation(location: String!): User
-  uploadStuff(title: String!): Stuff
-  updateStuffStatus(id: Int!, status: String!): Stuff
+
+  uploadStuff(title: String!, qrcodeUrl: String!, imageUrl: String): Stuff
+  updateOwnedToFinding(id: Int!, location: String!, reward: Int!): Stuff
+  updateFindingToOwned(id: Int!): Stuff
+  updateFindingToCommunicating(id: Int!, acquirerId: Int!): Stuff
+  updateCommunicatingToFinding(id: Int!): Stuff
+  updateCommunicatingToOwned(id: Int!): Stuff
+  deleteOwned(id: Int!): Stuff
+
   updateStuffReward(id: Int!, reward: Int!): Stuff
   updateStuffLocation(id: Int!, location: String!): Stuff
+
+  singleUpload(file: Upload!): File!
 }
 
 type AuthPayload {
@@ -48,8 +60,11 @@ type Stuff {
   status: String
   location: String
   reward: Int
+  imageUrl: String
+  qrcodeUrl: String!
   createdAt: DateTime!
   postedBy: User
+  acquirerId: Int
 }
 
 type File {

@@ -62,6 +62,16 @@ type Mutation {
     updateStuffReward(id: Int!, reward: Int!): Stuff                                          # 물건사례금 변경
     updateStuffLocation(id: Int!, location: String!): Stuff                                   # 물건 분실위치 변경
     
+    uploadStuff(title: String!, qrcodeUrl: String!, imageUrl: String): Stuff                  # 물건등록
+    updateOwnedToFinding(id: Int!, location: String!, reward: Int!): Stuff                    # 물건상태 변경 
+    updateFindingToOwned(id: Int!): Stuff                                                     # 물건상태 변경  
+    updateFindingToCommunicating(id: Int!, acquirerId: Int!): Stuff                           # 물건상태 변경  
+    updateCommunicatingToFinding(id: Int!): Stuff                                             # 물건상태 변경
+    updateCommunicatingToOwned(id: Int!): Stuff                                               # 물건상태 변경
+    deleteOwned(id: Int!): Stuff                                                              # 내 소유 물건삭제
+    
+    updateStuffReward(id: Int!, reward: Int!): Stuff
+    updateStuffLocation(id: Int!, location: String!): Stuff
     singleUpload(file: Upload!): File!                                                        # 이미지 업로드
 }
 ```
