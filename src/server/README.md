@@ -79,7 +79,7 @@ type Mutation {
     updateStuffLocation(id: Int!, location: String!): Stuff
     singleUpload(file: Upload!): File!                                                        # 이미지 업로드
     
-    createMessage(targetUserId: Int!, stuffId: Int!): Chat
-    sendMessage(chatId: Int!, text: String!): Message
+    createMessage(targetUserId: Int!, stuffId: Int!): Chat                                    # 채팅방 생성
+    sendMessage(chatId: Int!, text: String!): Message                                         # 채팅방에 메시지 전송
 }
 ```
