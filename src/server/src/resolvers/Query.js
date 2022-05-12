@@ -78,8 +78,8 @@ async function getMyStuff(parent, args, context) {
 
 async function getMyStuffByStatus(parent, args, context) {
     /**
-     * 내가 등록한 물건중, 특정 상태("소통중", "찾는중", "내물건")에 해당하는 물건을 return하는 함수
-     * @param args.status (String!) ("소통중", "찾는중", "내물건")
+     * 내가 등록한 물건중, 특정 상태("Communicating", "Finding", "Owned")에 해당하는 물건을 return하는 함수
+     * @param args.status (String!) ("Communicating", "Finding", "Owned")
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
@@ -105,7 +105,7 @@ async function getMyStuffByStatus(parent, args, context) {
 
 async function getStuffByLocation(parent, args, context) {
     /**
-     * 특정 위치의 '찾는중 상태'의 모든 물건을 return하는 함수
+     * 특정 위치의 'Finding 상태'의 모든 물건을 return하는 함수
      * @param args.location (String!)
      */
     const stuffByLocation = await context.prisma.stuff.findMany({
@@ -115,7 +115,7 @@ async function getStuffByLocation(parent, args, context) {
                     location: args.location,
                 },
                 {
-                    status: "찾는중"
+                    status: "Finding"
                 }
             ]
         }

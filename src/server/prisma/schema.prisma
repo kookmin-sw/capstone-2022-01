@@ -42,6 +42,8 @@ model User {
   stuffs    Stuff[] @relation("UploadedStuff")
   files     File[]  @relation("UploadedFile")
   alarms    Alarm[] @relation(name: "alarm")
+  hostChats Chat[]  @relation(name: "hostChats")
+  joinChats Chat[]  @relation(name: "joinChats")
 }
 
 model Alarm {
@@ -51,4 +53,25 @@ model Alarm {
   createdAt DateTime @default(now())
   owner     User?    @relation(name: "alarm",fields: [ownerId], references: [id])
   ownerId   Int?
+}
+
+model Chat {
+  id                Int       @id @default(autoincrement())
+  host              User?     @relation(name: "hostChats", fields: [hostId], references: [id])
+  hostId            Int?
+  participant       User?     @relation(name: "joinChats", fields: [participantId], references: [id])
+  participantId     Int?
+  stuffId           Int       @unique
+  messages          Message[] @relation(name: "message")
+  lastConnectHost   DateTime  @default(now())
+  lastConnectParti  DateTime?
+}
+
+model Message {
+  id           Int       @id @default(autoincrement())
+  text         String
+  fromUserId   Int
+  mainChat     Chat?     @relation(name: "message", fields: [mainChatId], references: [id])
+  mainChatId   Int?
+  createdAt    DateTime  @default(now())
 }
