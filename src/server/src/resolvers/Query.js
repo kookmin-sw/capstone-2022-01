@@ -171,6 +171,94 @@ async function getFiles(parent, args, context){
     return files;
 }
 
+
+async function getMyHostChats(parent, args, context) {
+    /**
+     * 내가 Host인 채팅방을 return하는 함수
+     */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+    const myInfo = await context.prisma.user.findUnique({
+        where: { id: userId }
+    })
+
+    const hostChats = await context.prisma.chat.findMany({
+        where: {
+            hostId: userId
+        },
+        include: {
+            messages: true,
+        },
+    });
+
+    for (var i = 0; i < hostChats.length; i++) {
+        hostChats[i]["host"] = myInfo
+        hostChats[i]["participant"] = context.prisma.user.findUnique({
+            where: { id: hostChats[i].participantId }
+        })
+    }
+
+    return hostChats;
+}
+
+async function getMyJoinChats(parent, args, context) {
+    /**
+     * 내가 participant로 참가하는 채팅방을 return하는 함수
+     */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+    const myInfo = await context.prisma.user.findUnique({
+        where: { id: userId }
+    })
+
+    const joinChats = await context.prisma.chat.findMany({
+        where: {
+            participantId: userId
+        },
+        include: {
+            messages: true,
+        },
+    });
+
+    for (var i = 0; i < joinChats.length; i++) {
+        joinChats[i]["participant"] = myInfo
+        joinChats[i]["host"] = context.prisma.user.findUnique({
+            where: { id: joinChats[i].hostId }
+        })
+    }
+
+    return joinChats;
+}
+
+async function getChat(parent, args, context) {
+    /**
+     * 내가 속해있는 모든 채팅방을 return하는 함수
+     * @param args.id (Int!) 채팅방 ID
+     */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
+    const chat = await context.prisma.chat.findUnique({
+        where: {
+            id: args.id,
+        },
+        include: {
+            messages: true,
+        },
+    })
+
+    chat.host = context.prisma.user.findUnique({
+        where: { id: chat.hostId }
+    })
+    chat.participant = context.prisma.user.findUnique({
+        where: { id: chat.participantId }
+    })
+
+
+    return chat;
+}
+
+
 module.exports = {
     getMyProfile,
     getUserProfile,
@@ -180,5 +268,8 @@ module.exports = {
     getStuffByLocation,
     getStuffById,
     getFile,
-    getFiles
+    getFiles,
+    getMyHostChats,
+    getMyJoinChats,
+    getChat
 }

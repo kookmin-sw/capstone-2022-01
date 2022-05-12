@@ -480,6 +480,139 @@ async function updateStuffReward(parent, args, context, info) {
     return updatedStuff
 }
 
+async function createMessage (parent, args, context) {
+    /**
+     * 채팅방 생성 함수
+     * @param args.targetUserId: Int!
+     * @param args.stuffId: Int!
+     */
+
+    // 본인과 상대방의 유저 정보를 가져옴
+    const Authorization = context.request.get("Authorization");
+    const hostUserId = getUserIdByToken(Authorization)
+
+    const host = await context.prisma.user.findUnique({where: {id: hostUserId}})
+    const participant = await context.prisma.user.findUnique({
+        where: {id: args.targetUserId}
+    })
+
+    // 물건정보를 가져옴
+    const stuffInfo = await context.prisma.stuff.findUnique({
+            where: {id: args.stuffId}
+        }
+    )
+
+    // 물건 유저 예외처리
+    if (!stuffInfo){
+        throw new Error('No such stuff found')
+    }
+    if (!host) {
+        throw new Error('No such user found')
+    }
+    if (!participant) {
+        throw new Error('No such target user found')
+    }
+
+    // host와 참가자를 relation으로 연결하고, 물건ID를 등록함
+    const chat = await context.prisma.chat.create({
+        data: {
+            host: { connect: { id : hostUserId }},
+            participant: { connect: { id : args.targetUserId }},
+            stuffId: args.stuffId,
+        }
+    })
+
+    chat.host = context.prisma.user.findUnique({ where: { id: chat.hostId } })
+    chat.participant = context.prisma.user.findUnique({ where: { id: chat.participantId } })
+    chat.messages = []
+
+    return chat
+}
+
+async function sendMessage (parent, args, context) {
+    /**
+     * 생성된 채팅방에 메시지 보내기
+     * @param args.chatId: Int!
+     * @param args.text: String!
+     */
+
+    // 본인의 유저정보를 받아옴
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+    if (!userId) {
+        throw new Error('No such user found')
+    }
+
+    // 채팅ID를 통해 채팅정보를 받아옴
+    var chatInfo = await context.prisma.chat.findUnique({where: {id: args.chatId}})
+
+    if (!chatInfo) {
+        throw new Error('Chat not found, wrong chatId.')
+    }
+
+    // 해당 채팅에 host로 되어있는지, 참가자로 되어있는지를 판별함
+    var isParticipant = false
+    var isHost = false
+
+    if (chatInfo.participantId === userId){
+        isParticipant = true
+    }else {
+        if (chatInfo.hostId === userId) {
+            isHost = true
+        } else {
+            throw new Error('There is no matching user between host and participant.')
+        }
+    }
+
+    const NOW = new Date()
+
+    // message 생성. text와 fromUserId, createdAt을 만들고, 채팅과 relation으로 연결함
+    const message = await context.prisma.message.create({
+        data: {
+            text: args.text,
+            fromUserId: userId,
+            chat: { connect: { id : args.chatId }},
+            createdAt: NOW,
+        }
+    })
+    // owner: { connect: { id: userId } }
+    // alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
+    // return할 message의 chat 가져오고, host와 participant정보도 추가함
+    const chat = await context.prisma.chat.findUnique({where: {id: message.chatId}})
+
+    chat.host = context.prisma.user.findUnique({ where: { id: chat.hostId } })
+    chat.participant = context.prisma.user.findUnique({ where: { id: chat.participantId } })
+
+    // relation으로 연결되어있지만, return을 위해 chat을 연결시켜서 보여줌
+    message.chat = chat
+
+    // 해당 유저가 참가자인지, host인지를 판별한 후에, 마지막접속시간을 수정함
+    if (isParticipant) {
+        const chatInfo = await context.prisma.chat.update({
+            where: {
+                id: args.chatId
+            },
+            data: {
+                lastConnectParti: NOW
+            },
+        })
+    }else {
+        if (isHost) {
+            const chatInfo = await context.prisma.chat.update({
+                where: {
+                    id: args.chatId
+                },
+                data: {
+                    lastConnectHost: NOW
+                },
+            })
+        }
+    }
+
+    // 생성한 메시지를 return (message의 chat의 message는 null로 보임)
+    return message
+}
+
 module.exports = {
     signup,
     login,
@@ -502,4 +635,6 @@ module.exports = {
     updateStuffLocation,
 
     singleUpload,
+    createMessage,
+    sendMessage
 }

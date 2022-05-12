@@ -71,7 +71,7 @@ model Message {
   id           Int       @id @default(autoincrement())
   text         String
   fromUserId   Int
-  mainChat     Chat?     @relation(name: "message", fields: [mainChatId], references: [id])
-  mainChatId   Int?
+  chat         Chat?     @relation(name: "message", fields: [chatId], references: [id])
+  chatId       Int?
   createdAt    DateTime  @default(now())
 }
