@@ -109,7 +109,7 @@ async function tradingReward(parent, args, context, info) {
     return updatedMyPoint
 }
 
-async function updateUserLocation(parent, args, context, info) {
+async function updateMyLocation(parent, args, context, info) {
     /**
      * 입력한 token으로 user_id를 받아오고, 내 location을 수정하는 함수
      * @param args.location (String!)
@@ -122,6 +122,25 @@ async function updateUserLocation(parent, args, context, info) {
         },
         data: {
             location: args.location,
+        },
+    })
+
+    return updateUser
+}
+
+async function updateMyImageurl(parent, args, context, info) {
+    /**
+     * 입력한 token으로 user_id를 받아오고, 내 imageUrl을 수정하는 함수
+     * @param args.imageUrl (String!)
+     */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+    const updateUser = await context.prisma.user.update({
+        where: {
+            id: userId,
+        },
+        data: {
+            imageUrl: args.imageUrl,
         },
     })
 
@@ -469,7 +488,8 @@ module.exports = {
     readAlarm,
 
     tradingReward,
-    updateUserLocation,
+    updateMyLocation,
+    updateMyImageurl,
 
     uploadStuff,
     updateOwnedToFinding,

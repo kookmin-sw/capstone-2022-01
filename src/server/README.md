@@ -55,7 +55,8 @@ type Mutation {
     readAlarm(id: Int!): Alarm                                                                # 알림 읽음 처리
   
     tradingReward(userid: Int!, amount: Int!): User                                           # 사례금 전달
-    updateUserLocation(location: String!): User                                               # 유저 위치 수정
+    updateMyLocation(location: String!): User                                                 # 내 location 수정
+    updateMyImageurl(imageUrl: String!): User                                                 # 내 imageUrl 수정
     
     uploadStuff(title: String!): Stuff                                                        # 물건등록
     updateStuffStatus(id: Int!, status: String!): Stuff                                       # 물건상태 변경

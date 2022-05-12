@@ -18,14 +18,15 @@ type Query {
 }
 
 type Mutation {
-  signup(email: String!, password: String!, name: String!, location: String!): AuthPayload
+  signup(email: String!, password: String!, name: String!, location: String!, imageUrl: String): AuthPayload
   login(email: String!, password: String!): AuthPayload
 
   putAlarms(text: String!): Alarm
   readAlarm(id: Int!): Alarm
 
   tradingReward(id: Int!): User
-  updateUserLocation(location: String!): User
+  updateMyLocation(location: String!): User
+  updateMyImageurl(imageUrl: String!): User
 
   uploadStuff(title: String!, qrcodeUrl: String!, imageUrl: String): Stuff
   updateOwnedToFinding(id: Int!, location: String!, reward: Int!): Stuff
@@ -50,6 +51,7 @@ type User {
   id: ID!
   name: String!
   email: String!
+  imageUrl: String
   location:  String!
   point: Int
 }
