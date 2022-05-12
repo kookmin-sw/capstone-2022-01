@@ -45,6 +45,10 @@ type Query {
     getMyStuffByStatus(status: String!): [Stuff]                                              # 내가 등록한 상태별 물건들
     getStuffByLocation(location: String!): [Stuff]                                            # 지역별 분실물들
     getStuffById(id: Int!): Stuff                                                             # 특정 물건정보
+    
+    getMyHostChats: [Chat]                                                                    # 내가 생성한 채팅방들
+    getMyJoinChats: [Chat]                                                                    # 내가 초대된 채팅방들
+    getChat(id: Int!): Chat                                                                   # 특정 채팅방 조회
 }
 
 type Mutation {
@@ -74,5 +78,8 @@ type Mutation {
     updateStuffReward(id: Int!, reward: Int!): Stuff
     updateStuffLocation(id: Int!, location: String!): Stuff
     singleUpload(file: Upload!): File!                                                        # 이미지 업로드
+    
+    createMessage(targetUserId: Int!, stuffId: Int!): Chat
+    sendMessage(chatId: Int!, text: String!): Message
 }
 ```
