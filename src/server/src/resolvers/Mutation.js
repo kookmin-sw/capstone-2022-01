@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserIdByToken } = require('../utils')
 const path = require("path");
 const { createWriteStream } = require("fs");
+const QRCode = require('easyqrcodejs-nodejs');
 const shortId = require("shortid");
 
 async function signup(parent, args, context, info) {
@@ -613,6 +614,44 @@ async function sendMessage (parent, args, context) {
     return message
 }
 
+async function qrcodeGenerate(parent, args, context, info) {
+    /**
+     * QR코드를 생성하는 함수
+     * @param args.id (Int!) 물건 id
+     * @param args.size (Int!) QR코드 사이즈
+     */
+    const randomId = shortId.generate();
+    const qrcode_path = `${path.join(__dirname, "../../prisma/uploads/qrcodes")}/${randomId}-${String(args.id)+'.png'}`;
+
+    var options = {
+        text: String(args.id),
+        width: args.size,
+        height: args.size,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H, // L, M, Q, H
+    };
+
+    var qrcode = new QRCode(options);
+
+    qrcode.saveImage({
+        path: qrcode_path
+    });
+
+    return await context.prisma.stuff.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            qrcodeUrl: qrcode_path
+        },
+        include: {
+            postedBy: true,
+        },
+    })
+}
+
+
 module.exports = {
     signup,
     login,
@@ -635,6 +674,7 @@ module.exports = {
     updateStuffLocation,
 
     singleUpload,
+    qrcodeGenerate,
     createMessage,
-    sendMessage
+    sendMessage,
 }

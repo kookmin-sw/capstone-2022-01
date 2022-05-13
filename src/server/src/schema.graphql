@@ -45,6 +45,7 @@ type Mutation {
   updateStuffLocation(id: Int!, location: String!): Stuff
 
   singleUpload(file: Upload!): File!
+  qrcodeGenerate(id: Int!, size: Int!): Stuff
   createMessage(targetUserId: Int!, stuffId: Int!): Chat
   sendMessage(chatId: Int!, text: String!): Message
 }
