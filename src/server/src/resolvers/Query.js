@@ -188,15 +188,10 @@ async function getMyHostChats(parent, args, context) {
         },
         include: {
             messages: true,
+            participant: true,
+            host: true
         },
     });
-
-    for (var i = 0; i < hostChats.length; i++) {
-        hostChats[i]["host"] = myInfo
-        hostChats[i]["participant"] = context.prisma.user.findUnique({
-            where: { id: hostChats[i].participantId }
-        })
-    }
 
     return hostChats;
 }
@@ -217,17 +212,49 @@ async function getMyJoinChats(parent, args, context) {
         },
         include: {
             messages: true,
+            participant: true,
+            host: true
         },
     });
 
-    for (var i = 0; i < joinChats.length; i++) {
-        joinChats[i]["participant"] = myInfo
-        joinChats[i]["host"] = context.prisma.user.findUnique({
-            where: { id: joinChats[i].hostId }
-        })
-    }
+    console.log(joinChats);
 
     return joinChats;
+}
+
+async function getMyChats(parent, args, context) {
+    /**
+     * 내가 참가하는 모든 채팅방을 return하는 함수
+     */
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+    const myInfo = await context.prisma.user.findUnique({
+        where: { id: userId }
+    })
+
+    const joinChats = await context.prisma.chat.findMany({
+        where: {
+            participantId: userId
+        },
+        include: {
+            messages: true,
+            participant: true,
+            host: true
+        },
+    });
+
+    const hostChats = await context.prisma.chat.findMany({
+        where: {
+            hostId: userId
+        },
+        include: {
+            messages: true,
+            participant: true,
+            host: true
+        },
+    });
+
+    return joinChats.concat(hostChats)
 }
 
 async function getChat(parent, args, context) {
@@ -271,5 +298,6 @@ module.exports = {
     getFiles,
     getMyHostChats,
     getMyJoinChats,
+    getMyChats,
     getChat
 }

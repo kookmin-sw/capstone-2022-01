@@ -46,8 +46,9 @@ type Query {
     getStuffByLocation(location: String!): [Stuff]                                            # 지역별 분실물들
     getStuffById(id: Int!): Stuff                                                             # 특정 물건정보
     
-    getMyHostChats: [Chat]                                                                    # 내가 생성한 채팅방들
-    getMyJoinChats: [Chat]                                                                    # 내가 초대된 채팅방들
+    getMyHostChats: [Chat]                                                                    # 생성한 채팅방들(안써도댐)
+    getMyJoinChats: [Chat]                                                                    # 초대된 채팅방들(안써도댐)
+    getMyChats: [Chat]                                                                        # 내가 참여하는 채팅방들
     getChat(id: Int!): Chat                                                                   # 특정 채팅방 조회
 }
 

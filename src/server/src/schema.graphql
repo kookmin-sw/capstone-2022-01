@@ -18,6 +18,7 @@ type Query {
 
   getMyHostChats: [Chat]
   getMyJoinChats: [Chat]
+  getMyChats: [Chat]
   getChat(id: Int!): Chat
 }
 
