@@ -271,18 +271,47 @@ async function getChat(parent, args, context) {
         },
         include: {
             messages: true,
+            host: true,
+            participant: true
         },
     })
 
-    chat.host = context.prisma.user.findUnique({
-        where: { id: chat.hostId }
-    })
-    chat.participant = context.prisma.user.findUnique({
-        where: { id: chat.participantId }
-    })
+    // 해당 채팅에 host로 되어있는지, 참가자로 되어있는지를 판별하고, 최종접속기록을 업데이트함
+    if (chat.participantId === userId){
+        return await context.prisma.chat.update({
+            where: {
+                id: args.id,
+            },
+            data: {
+                lastConnectParti: new Date()
+            },
+            include: {
+                messages: true,
+                host: true,
+                participant: true
+            },
+        })
+    }else {
+        if (chat.hostId === userId){
+            return await context.prisma.chat.update({
+                where: {
+                    id: args.id,
+                },
+                data: {
+                    lastConnectHost: new Date()
+                },
+                include: {
+                    messages: true,
+                    host: true,
+                    participant: true
+                },
+            })
+        }else{
+            throw new Error("You are neither a host nor a participant.")
+        }
 
+    }
 
-    return chat;
 }
 
 
