@@ -84,6 +84,10 @@ async function getMyStuffByStatus(parent, args, context) {
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
 
+    if (!['Communicating', 'Finding', 'Owned'].includes(args.status)) {
+        throw new Error("Only the following status are supported: 'Communicating', 'Finding', 'Owned'")
+    }
+
     const getMyStuff = await context.prisma.user.findUnique({
         where: {
             id: userId,
@@ -108,24 +112,17 @@ async function getStuffByLocation(parent, args, context) {
      * 특정 위치의 'Finding 상태'의 모든 물건을 return하는 함수
      * @param args.location (String!)
      */
-    const stuffByLocation = await context.prisma.stuff.findMany({
+    return await context.prisma.stuff.findMany({
         where: {
             AND: [
-                {
-                    location: args.location,
-                },
-                {
-                    status: "Finding"
-                }
+                {location: args.location},
+                {status: "Finding"}
             ]
+        },
+        include:{
+            postedBy: true
         }
     })
-    for (var i = 0; i < stuffByLocation.length; i++) {
-        stuffByLocation[i]["postedBy"] = context.prisma.user.findUnique({
-            where: { id: stuffByLocation[i].postedById }
-        })
-    }
-    return stuffByLocation;
 }
 
 async function getStuffById(parent, args, context) {
@@ -133,15 +130,14 @@ async function getStuffById(parent, args, context) {
      * 해당 id의 물건을 return하는 함수
      * @param args.id (Int!)
      */
-    const stuffById = await context.prisma.stuff.findUnique({
+    return await context.prisma.stuff.findUnique({
         where: {
             id: args.id,
+        },
+        include:{
+            postedBy: true
         }
     })
-    stuffById["postedBy"] = context.prisma.user.findUnique({
-        where: { id: stuffById.postedById }
-    })
-    return stuffById;
 }
 
 async function getFile(parent, args, context){
@@ -149,26 +145,29 @@ async function getFile(parent, args, context){
      * 해당 id의 File을 return하는 함수
      * @param args.id (Int!)
      */
-    const files = await context.prisma.file.findUnique({
-        where: { id: args.id }
+    return await context.prisma.file.findUnique({
+        where: { id: args.id },
+        include: {
+            uploadedBy: true
+        }
     })
-
-    files.uploadedBy = context.prisma.user.findUnique({ where: { id: files.uploadedById } })
-
-    return files;
 }
 
 async function getFiles(parent, args, context){
     /**
-     * 모든 Files을 return하는 함수
+     * 내가 올린 모든 Files을 return하는 함수
      */
-    const files = await context.prisma.file.findMany({})
-    for (var i = 0; i < files.length; i++) {
-        files[i]["uploadedBy"] = context.prisma.user.findUnique({
-            where: { id: files[i].uploadedById }
-        })
-    }
-    return files;
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
+    return await context.prisma.file.findMany({
+        where: {
+            uploadedById: userId
+        },
+        include: {
+            uploadedBy: true
+        }
+    })
 }
 
 
@@ -178,11 +177,8 @@ async function getMyHostChats(parent, args, context) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const myInfo = await context.prisma.user.findUnique({
-        where: { id: userId }
-    })
 
-    const hostChats = await context.prisma.chat.findMany({
+    return await context.prisma.chat.findMany({
         where: {
             hostId: userId
         },
@@ -192,8 +188,6 @@ async function getMyHostChats(parent, args, context) {
             host: true
         },
     });
-
-    return hostChats;
 }
 
 async function getMyJoinChats(parent, args, context) {
@@ -202,11 +196,8 @@ async function getMyJoinChats(parent, args, context) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const myInfo = await context.prisma.user.findUnique({
-        where: { id: userId }
-    })
 
-    const joinChats = await context.prisma.chat.findMany({
+    return await context.prisma.chat.findMany({
         where: {
             participantId: userId
         },
@@ -216,10 +207,6 @@ async function getMyJoinChats(parent, args, context) {
             host: true
         },
     });
-
-    console.log(joinChats);
-
-    return joinChats;
 }
 
 async function getMyChats(parent, args, context) {
@@ -228,9 +215,6 @@ async function getMyChats(parent, args, context) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const myInfo = await context.prisma.user.findUnique({
-        where: { id: userId }
-    })
 
     const joinChats = await context.prisma.chat.findMany({
         where: {
@@ -309,9 +293,7 @@ async function getChat(parent, args, context) {
         }else{
             throw new Error("You are neither a host nor a participant.")
         }
-
     }
-
 }
 
 

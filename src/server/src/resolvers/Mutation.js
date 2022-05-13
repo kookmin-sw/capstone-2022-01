@@ -8,9 +8,7 @@ const shortId = require("shortid");
 
 async function signup(parent, args, context, info) {
     const password = await bcrypt.hash(args.password, 10)
-
     const user = await context.prisma.user.create({ data: { ...args, password } })
-
     const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
     return {
@@ -95,7 +93,6 @@ async function tradingReward(parent, args, context, info) {
     })
 
     // 물건 상태 Own으로 초기화
-
     const updatedStuffStatus = await context.prisma.stuff.update({
         where: {
             id: args.id
@@ -117,7 +114,7 @@ async function updateMyLocation(parent, args, context, info) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const updateUser = await context.prisma.user.update({
+    return await context.prisma.user.update({
         where: {
             id: userId,
         },
@@ -125,8 +122,6 @@ async function updateMyLocation(parent, args, context, info) {
             location: args.location,
         },
     })
-
-    return updateUser
 }
 
 async function updateMyImageurl(parent, args, context, info) {
@@ -136,7 +131,7 @@ async function updateMyImageurl(parent, args, context, info) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const updateUser = await context.prisma.user.update({
+    return await context.prisma.user.update({
         where: {
             id: userId,
         },
@@ -144,8 +139,6 @@ async function updateMyImageurl(parent, args, context, info) {
             imageUrl: args.imageUrl,
         },
     })
-
-    return updateUser
 }
 
 async function singleUpload (parent, args, context) {
@@ -168,17 +161,17 @@ async function singleUpload (parent, args, context) {
             .on("error", reject)
     );
 
-    const newfile = await context.prisma.file.create({
+    return await context.prisma.file.create({
         data: {
             name: `images/${id}-${filename}`,
             mimetype: mimetype,
             encoding: encoding,
             uploadedBy: { connect: { id:userId } }
+        },
+        include: {
+            uploadedBy: true
         }
     })
-
-    newfile.uploadedBy = context.prisma.user.findUnique({ where: { id: userId } })
-    return newfile;
 }
 
 async function putAlarms (parent, args, context) {
@@ -189,16 +182,16 @@ async function putAlarms (parent, args, context) {
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
 
-    const alarms = await context.prisma.alarm.create({
+    return await context.prisma.alarm.create({
         data: {
             text: args.text,
             read: false,
             owner: { connect: { id: userId } }
+        },
+        include: {
+            owner: true
         }
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
-
-    return alarms
 }
 
 async function readAlarm (parent, args, context) {
@@ -209,17 +202,17 @@ async function readAlarm (parent, args, context) {
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
 
-    const alarms = await context.prisma.alarm.update({
+    return await context.prisma.alarm.update({
         where: {
             id: args.id
         },
         data: {
             read: true
         },
+        include: {
+            owner: true
+        }
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
-
-    return alarms
 }
 
 async function uploadStuff(parent, args, context, info) {
@@ -231,16 +224,17 @@ async function uploadStuff(parent, args, context, info) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const newStuff = await context.prisma.stuff.create({
+    return await context.prisma.stuff.create({
         data: {
             title: args.title,
             postedBy: { connect: {id:userId} },
             imageUrl: args.imageUrl,
             qrcodeUrl: args.qrcodeUrl
+        },
+        include:{
+            postedBy: true
         }
     })
-    newStuff.postedBy = context.prisma.user.findUnique({ where: { id: newStuff.postedById } })
-    return newStuff
 }
 
 async function updateOwnedToFinding(parent, args, context, info) {
@@ -262,7 +256,7 @@ async function updateOwnedToFinding(parent, args, context, info) {
         throw new Error("Only apply status === 'Owned'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -271,10 +265,10 @@ async function updateOwnedToFinding(parent, args, context, info) {
             location: args.location,
             reward: args.reward
         },
+        include:{
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateFindingToOwned(parent, args, context, info) {
@@ -294,7 +288,7 @@ async function updateFindingToOwned(parent, args, context, info) {
         throw new Error("Only apply status === 'Finding'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -303,10 +297,10 @@ async function updateFindingToOwned(parent, args, context, info) {
             location: "",
             reward: 0,
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateFindingToCommunicating(parent, args, context, info) {
@@ -335,7 +329,7 @@ async function updateFindingToCommunicating(parent, args, context, info) {
         throw new Error("AcquireId and stuff.postedById are must be different")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -343,10 +337,10 @@ async function updateFindingToCommunicating(parent, args, context, info) {
             status: "Communicating",
             acquirerId: args.acquirerId
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateCommunicatingToFinding(parent, args, context, info) {
@@ -366,7 +360,7 @@ async function updateCommunicatingToFinding(parent, args, context, info) {
         throw new Error("Only apply status === 'Communicating'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -374,10 +368,10 @@ async function updateCommunicatingToFinding(parent, args, context, info) {
             status: "Finding",
             acquirerId: -1
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateCommunicatingToOwned(parent, args, context, info) {
@@ -397,7 +391,7 @@ async function updateCommunicatingToOwned(parent, args, context, info) {
         throw new Error("Only apply status === 'Communicating'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -407,10 +401,10 @@ async function updateCommunicatingToOwned(parent, args, context, info) {
             reward: 0,
             acquirerId: -1
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function deleteOwned(parent, args, context, info) {
@@ -420,9 +414,7 @@ async function deleteOwned(parent, args, context, info) {
      */
 
     const stuff = await context.prisma.stuff.findUnique({
-        where: {
-            id: args.id
-        }
+        where: {id: args.id}
     })
     if (!stuff){
         throw new Error("Can not found stuff.")
@@ -433,13 +425,9 @@ async function deleteOwned(parent, args, context, info) {
         throw new Error("You don't have delete permission.")
     }
 
-    const deletedStuff = await context.prisma.stuff.delete({
-        where: {
-            id: args.id
-        }
+    return await context.prisma.stuff.delete({
+        where: {id: args.id}
     })
-
-    return deletedStuff
 }
 
 async function updateStuffLocation(parent, args, context, info) {
@@ -448,16 +436,17 @@ async function updateStuffLocation(parent, args, context, info) {
      * @param args.id (Int!) 물건 id
      * @param args.location (String!)
      */
-    const updatedStuffLocation = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
         data: {
             location: args.location
         },
+        include: {
+            postedBy: true
+        }
     })
-    updatedStuffLocation.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffLocation.postedById } })
-    return updatedStuffLocation
 }
 
 async function updateStuffReward(parent, args, context, info) {
@@ -469,16 +458,17 @@ async function updateStuffReward(parent, args, context, info) {
     if (args.reward < 0){
         throw new Error("Reward must be greater than zero")
     }
-    const updatedStuff = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
         data: {
             reward: args.reward
         },
+        include: {
+            postedBy: true
+        }
     })
-    updatedStuff.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuff.postedById } })
-    return updatedStuff
 }
 
 async function createMessage (parent, args, context) {
@@ -515,19 +505,17 @@ async function createMessage (parent, args, context) {
     }
 
     // host와 참가자를 relation으로 연결하고, 물건ID를 등록함
-    const chat = await context.prisma.chat.create({
+    return await context.prisma.chat.create({
         data: {
             host: { connect: { id : hostUserId }},
             participant: { connect: { id : args.targetUserId }},
             stuffId: args.stuffId,
+        },
+        include:{
+            host: true,
+            participant: true,
         }
     })
-
-    chat.host = context.prisma.user.findUnique({ where: { id: chat.hostId } })
-    chat.participant = context.prisma.user.findUnique({ where: { id: chat.participantId } })
-    chat.messages = []
-
-    return chat
 }
 
 async function sendMessage (parent, args, context) {
@@ -550,19 +538,8 @@ async function sendMessage (parent, args, context) {
     if (!chatInfo) {
         throw new Error('Chat not found, wrong chatId.')
     }
-
-    // 해당 채팅에 host로 되어있는지, 참가자로 되어있는지를 판별함
-    var isParticipant = false
-    var isHost = false
-
-    if (chatInfo.participantId === userId){
-        isParticipant = true
-    }else {
-        if (chatInfo.hostId === userId) {
-            isHost = true
-        } else {
-            throw new Error('There is no matching user between host and participant.')
-        }
+    if ((chatInfo.participantId !== userId) && (chatInfo.hostId !== userId)){
+        throw new Error('There is no matching user between host and participant.')
     }
 
     const NOW = new Date()
@@ -588,7 +565,7 @@ async function sendMessage (parent, args, context) {
     message.chat = chat
 
     // 해당 유저가 참가자인지, host인지를 판별한 후에, 마지막접속시간을 수정함
-    if (isParticipant) {
+    if (chatInfo.participantId === userId) {
         const chatInfo = await context.prisma.chat.update({
             where: {
                 id: args.chatId
@@ -598,7 +575,7 @@ async function sendMessage (parent, args, context) {
             },
         })
     }else {
-        if (isHost) {
+        if (chatInfo.hostId === userId) {
             const chatInfo = await context.prisma.chat.update({
                 where: {
                     id: args.chatId
