@@ -22,6 +22,7 @@
 ## 5. Playground
 
     localhost:4000
+    http://52.79.153.136:4000/
 
 
 ## 6. Get Images
@@ -29,6 +30,11 @@
     localhost:4000/FILENAME
     # FILENAME : type File의 name. 
 
+## 6. Get QRCodes
+
+    localhost:4000/FILENAME
+    # FILENAME : type Stuff의 qrcodeUrl. 
+    QRCode의 내용은 stuffId가 들어감
 
 ## 테스트 가능한 schema
 ```text

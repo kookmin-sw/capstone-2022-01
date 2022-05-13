@@ -643,7 +643,7 @@ async function qrcodeGenerate(parent, args, context, info) {
             id: args.id
         },
         data: {
-            qrcodeUrl: qrcode_path
+            qrcodeUrl: `qrcodes/${randomId}-${String(args.id)+'.png'}`
         },
         include: {
             postedBy: true,
