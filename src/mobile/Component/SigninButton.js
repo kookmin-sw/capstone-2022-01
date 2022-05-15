@@ -6,6 +6,7 @@ import { gql } from "graphql-tag";
 function signin({ mutate, finishSignin }) {
   let token = null;
   let userId = null;
+  let location = null;
   return (
     <Button
       style={{
@@ -18,13 +19,14 @@ function signin({ mutate, finishSignin }) {
             if (result.data.login.token) {
               token = result.data.login.token;
               userId = result.data.login.user.id;
+              location = result.data.login.user.location;
             }
           })
           .catch((error) => {
             console.log(error);
           })
           .then(() => {
-            finishSignin(token, userId);
+            finishSignin(token, userId, location);
           });
       }}
     >
@@ -40,6 +42,7 @@ export default graphql(
         token
         user {
           id
+          location
         }
       }
     }

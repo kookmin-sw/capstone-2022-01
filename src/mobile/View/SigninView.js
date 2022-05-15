@@ -8,18 +8,19 @@ export default class SigninView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID: "",
-      PW: "",
+      ID: "test",
+      PW: "test",
     };
     this.finishSignin = this.finishSignin.bind(this);
   }
 
-  finishSignin(token, userId) {
+  finishSignin(token, userId, location) {
     if (token) {
       const setData = async () => {
         await AsyncStorage.multiSet([
           ["token", token],
           ["userId", userId],
+          ["location", location],
         ]);
       };
       setData();
