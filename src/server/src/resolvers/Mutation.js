@@ -3,13 +3,12 @@ const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserIdByToken } = require('../utils')
 const path = require("path");
 const { createWriteStream } = require("fs");
+const QRCode = require('easyqrcodejs-nodejs');
 const shortId = require("shortid");
 
 async function signup(parent, args, context, info) {
     const password = await bcrypt.hash(args.password, 10)
-
     const user = await context.prisma.user.create({ data: { ...args, password } })
-
     const token = jwt.sign({ userId: user.id }, APP_SECRET)
 
     return {
@@ -94,7 +93,6 @@ async function tradingReward(parent, args, context, info) {
     })
 
     // 물건 상태 Own으로 초기화
-
     const updatedStuffStatus = await context.prisma.stuff.update({
         where: {
             id: args.id
@@ -116,7 +114,7 @@ async function updateMyLocation(parent, args, context, info) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const updateUser = await context.prisma.user.update({
+    return await context.prisma.user.update({
         where: {
             id: userId,
         },
@@ -124,8 +122,6 @@ async function updateMyLocation(parent, args, context, info) {
             location: args.location,
         },
     })
-
-    return updateUser
 }
 
 async function updateMyImageurl(parent, args, context, info) {
@@ -135,7 +131,7 @@ async function updateMyImageurl(parent, args, context, info) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const updateUser = await context.prisma.user.update({
+    return await context.prisma.user.update({
         where: {
             id: userId,
         },
@@ -143,8 +139,6 @@ async function updateMyImageurl(parent, args, context, info) {
             imageUrl: args.imageUrl,
         },
     })
-
-    return updateUser
 }
 
 async function singleUpload (parent, args, context) {
@@ -167,17 +161,17 @@ async function singleUpload (parent, args, context) {
             .on("error", reject)
     );
 
-    const newfile = await context.prisma.file.create({
+    return await context.prisma.file.create({
         data: {
             name: `images/${id}-${filename}`,
             mimetype: mimetype,
             encoding: encoding,
             uploadedBy: { connect: { id:userId } }
+        },
+        include: {
+            uploadedBy: true
         }
     })
-
-    newfile.uploadedBy = context.prisma.user.findUnique({ where: { id: userId } })
-    return newfile;
 }
 
 async function putAlarms (parent, args, context) {
@@ -188,16 +182,16 @@ async function putAlarms (parent, args, context) {
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
 
-    const alarms = await context.prisma.alarm.create({
+    return await context.prisma.alarm.create({
         data: {
             text: args.text,
             read: false,
             owner: { connect: { id: userId } }
+        },
+        include: {
+            owner: true
         }
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
-
-    return alarms
 }
 
 async function readAlarm (parent, args, context) {
@@ -208,17 +202,17 @@ async function readAlarm (parent, args, context) {
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
 
-    const alarms = await context.prisma.alarm.update({
+    return await context.prisma.alarm.update({
         where: {
             id: args.id
         },
         data: {
             read: true
         },
+        include: {
+            owner: true
+        }
     })
-    alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
-
-    return alarms
 }
 
 async function uploadStuff(parent, args, context, info) {
@@ -230,16 +224,17 @@ async function uploadStuff(parent, args, context, info) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const newStuff = await context.prisma.stuff.create({
+    return await context.prisma.stuff.create({
         data: {
             title: args.title,
             postedBy: { connect: {id:userId} },
             imageUrl: args.imageUrl,
             qrcodeUrl: args.qrcodeUrl
+        },
+        include:{
+            postedBy: true
         }
     })
-    newStuff.postedBy = context.prisma.user.findUnique({ where: { id: newStuff.postedById } })
-    return newStuff
 }
 
 async function updateOwnedToFinding(parent, args, context, info) {
@@ -261,7 +256,7 @@ async function updateOwnedToFinding(parent, args, context, info) {
         throw new Error("Only apply status === 'Owned'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -270,10 +265,10 @@ async function updateOwnedToFinding(parent, args, context, info) {
             location: args.location,
             reward: args.reward
         },
+        include:{
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateFindingToOwned(parent, args, context, info) {
@@ -293,7 +288,7 @@ async function updateFindingToOwned(parent, args, context, info) {
         throw new Error("Only apply status === 'Finding'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -302,10 +297,10 @@ async function updateFindingToOwned(parent, args, context, info) {
             location: "",
             reward: 0,
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateFindingToCommunicating(parent, args, context, info) {
@@ -334,7 +329,7 @@ async function updateFindingToCommunicating(parent, args, context, info) {
         throw new Error("AcquireId and stuff.postedById are must be different")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -342,10 +337,10 @@ async function updateFindingToCommunicating(parent, args, context, info) {
             status: "Communicating",
             acquirerId: args.acquirerId
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateCommunicatingToFinding(parent, args, context, info) {
@@ -365,7 +360,7 @@ async function updateCommunicatingToFinding(parent, args, context, info) {
         throw new Error("Only apply status === 'Communicating'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -373,10 +368,10 @@ async function updateCommunicatingToFinding(parent, args, context, info) {
             status: "Finding",
             acquirerId: -1
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function updateCommunicatingToOwned(parent, args, context, info) {
@@ -396,7 +391,7 @@ async function updateCommunicatingToOwned(parent, args, context, info) {
         throw new Error("Only apply status === 'Communicating'")
     }
 
-    const updatedStuffStatus = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
@@ -406,10 +401,10 @@ async function updateCommunicatingToOwned(parent, args, context, info) {
             reward: 0,
             acquirerId: -1
         },
+        include: {
+            postedBy: true
+        }
     })
-
-    updatedStuffStatus.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffStatus.postedById } })
-    return updatedStuffStatus
 }
 
 async function deleteOwned(parent, args, context, info) {
@@ -419,9 +414,7 @@ async function deleteOwned(parent, args, context, info) {
      */
 
     const stuff = await context.prisma.stuff.findUnique({
-        where: {
-            id: args.id
-        }
+        where: {id: args.id}
     })
     if (!stuff){
         throw new Error("Can not found stuff.")
@@ -432,13 +425,9 @@ async function deleteOwned(parent, args, context, info) {
         throw new Error("You don't have delete permission.")
     }
 
-    const deletedStuff = await context.prisma.stuff.delete({
-        where: {
-            id: args.id
-        }
+    return await context.prisma.stuff.delete({
+        where: {id: args.id}
     })
-
-    return deletedStuff
 }
 
 async function updateStuffLocation(parent, args, context, info) {
@@ -447,16 +436,17 @@ async function updateStuffLocation(parent, args, context, info) {
      * @param args.id (Int!) 물건 id
      * @param args.location (String!)
      */
-    const updatedStuffLocation = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
         data: {
             location: args.location
         },
+        include: {
+            postedBy: true
+        }
     })
-    updatedStuffLocation.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuffLocation.postedById } })
-    return updatedStuffLocation
 }
 
 async function updateStuffReward(parent, args, context, info) {
@@ -468,17 +458,176 @@ async function updateStuffReward(parent, args, context, info) {
     if (args.reward < 0){
         throw new Error("Reward must be greater than zero")
     }
-    const updatedStuff = await context.prisma.stuff.update({
+    return await context.prisma.stuff.update({
         where: {
             id: args.id
         },
         data: {
             reward: args.reward
         },
+        include: {
+            postedBy: true
+        }
     })
-    updatedStuff.postedBy = context.prisma.user.findUnique({ where: { id: updatedStuff.postedById } })
-    return updatedStuff
 }
+
+async function createMessage (parent, args, context) {
+    /**
+     * 채팅방 생성 함수
+     * @param args.targetUserId: Int!
+     * @param args.stuffId: Int!
+     */
+
+    // 본인과 상대방의 유저 정보를 가져옴
+    const Authorization = context.request.get("Authorization");
+    const hostUserId = getUserIdByToken(Authorization)
+
+    const host = await context.prisma.user.findUnique({where: {id: hostUserId}})
+    const participant = await context.prisma.user.findUnique({
+        where: {id: args.targetUserId}
+    })
+
+    // 물건정보를 가져옴
+    const stuffInfo = await context.prisma.stuff.findUnique({
+            where: {id: args.stuffId}
+        }
+    )
+
+    // 물건 유저 예외처리
+    if (!stuffInfo){
+        throw new Error('No such stuff found')
+    }
+    if (!host) {
+        throw new Error('No such user found')
+    }
+    if (!participant) {
+        throw new Error('No such target user found')
+    }
+
+    // host와 참가자를 relation으로 연결하고, 물건ID를 등록함
+    return await context.prisma.chat.create({
+        data: {
+            host: { connect: { id : hostUserId }},
+            participant: { connect: { id : args.targetUserId }},
+            stuffId: args.stuffId,
+        },
+        include:{
+            host: true,
+            participant: true,
+        }
+    })
+}
+
+async function sendMessage (parent, args, context) {
+    /**
+     * 생성된 채팅방에 메시지 보내기
+     * @param args.chatId: Int!
+     * @param args.text: String!
+     */
+
+    // 본인의 유저정보를 받아옴
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+    if (!userId) {
+        throw new Error('No such user found')
+    }
+
+    // 채팅ID를 통해 채팅정보를 받아옴
+    var chatInfo = await context.prisma.chat.findUnique({where: {id: args.chatId}})
+
+    if (!chatInfo) {
+        throw new Error('Chat not found, wrong chatId.')
+    }
+    if ((chatInfo.participantId !== userId) && (chatInfo.hostId !== userId)){
+        throw new Error('There is no matching user between host and participant.')
+    }
+
+    const NOW = new Date()
+
+    // message 생성. text와 fromUserId, createdAt을 만들고, 채팅과 relation으로 연결함
+    const message = await context.prisma.message.create({
+        data: {
+            text: args.text,
+            fromUserId: userId,
+            chat: { connect: { id : args.chatId }},
+            createdAt: NOW,
+        }
+    })
+    // owner: { connect: { id: userId } }
+    // alarms.owner = context.prisma.user.findUnique({ where: { id: userId } })
+    // return할 message의 chat 가져오고, host와 participant정보도 추가함
+    const chat = await context.prisma.chat.findUnique({where: {id: message.chatId}})
+
+    chat.host = context.prisma.user.findUnique({ where: { id: chat.hostId } })
+    chat.participant = context.prisma.user.findUnique({ where: { id: chat.participantId } })
+
+    // relation으로 연결되어있지만, return을 위해 chat을 연결시켜서 보여줌
+    message.chat = chat
+
+    // 해당 유저가 참가자인지, host인지를 판별한 후에, 마지막접속시간을 수정함
+    if (chatInfo.participantId === userId) {
+        const chatInfo = await context.prisma.chat.update({
+            where: {
+                id: args.chatId
+            },
+            data: {
+                lastConnectParti: NOW
+            },
+        })
+    }else {
+        if (chatInfo.hostId === userId) {
+            const chatInfo = await context.prisma.chat.update({
+                where: {
+                    id: args.chatId
+                },
+                data: {
+                    lastConnectHost: NOW
+                },
+            })
+        }
+    }
+
+    // 생성한 메시지를 return (message의 chat의 message는 null로 보임)
+    return message
+}
+
+async function qrcodeGenerate(parent, args, context, info) {
+    /**
+     * QR코드를 생성하는 함수
+     * @param args.id (Int!) 물건 id
+     * @param args.size (Int!) QR코드 사이즈
+     */
+    const randomId = shortId.generate();
+    const qrcode_path = `${path.join(__dirname, "../../prisma/uploads/qrcodes")}/${randomId}-${String(args.id)+'.png'}`;
+
+    var options = {
+        text: String(args.id),
+        width: args.size,
+        height: args.size,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H, // L, M, Q, H
+    };
+
+    var qrcode = new QRCode(options);
+
+    qrcode.saveImage({
+        path: qrcode_path
+    });
+
+    return await context.prisma.stuff.update({
+        where: {
+            id: args.id
+        },
+        data: {
+            qrcodeUrl: `qrcodes/${randomId}-${String(args.id)+'.png'}`
+        },
+        include: {
+            postedBy: true,
+        },
+    })
+}
+
 
 module.exports = {
     signup,
@@ -502,4 +651,7 @@ module.exports = {
     updateStuffLocation,
 
     singleUpload,
+    qrcodeGenerate,
+    createMessage,
+    sendMessage,
 }

@@ -15,6 +15,11 @@ type Query {
   getMyStuffByStatus(status: String!): [Stuff]
   getStuffByLocation(location: String!): [Stuff]
   getStuffById(id: Int!): Stuff
+
+  getMyHostChats: [Chat]
+  getMyJoinChats: [Chat]
+  getMyChats: [Chat]
+  getChat(id: Int!): Chat
 }
 
 type Mutation {
@@ -40,6 +45,9 @@ type Mutation {
   updateStuffLocation(id: Int!, location: String!): Stuff
 
   singleUpload(file: Upload!): File!
+  qrcodeGenerate(id: Int!, size: Int!): Stuff
+  createMessage(targetUserId: Int!, stuffId: Int!): Chat
+  sendMessage(chatId: Int!, text: String!): Message
 }
 
 type AuthPayload {
@@ -54,6 +62,8 @@ type User {
   imageUrl: String
   location:  String!
   point: Int
+  hostChats: [Chat]
+  joinChats: [Chat]
 }
 
 type Stuff {
@@ -84,4 +94,22 @@ type Alarm {
   read: Boolean!
   createdAt: DateTime!
   owner: User
+}
+
+type Chat {
+  id: ID!
+  host: User!
+  participant: User!
+  stuffId: Int!
+  messages: [Message]
+  lastConnectHost: DateTime!
+  lastConnectParti: DateTime
+}
+
+type Message {
+  id: ID!
+  text: String!
+  fromUserId: Int!
+  chat: Chat!
+  createdAt: DateTime!
 }

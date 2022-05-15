@@ -29,6 +29,8 @@ const options = {
 };
 
 server.express.use("/images", express.static(path.join(__dirname, "../prisma/uploads/images")));
+server.express.use("/qrcodes", express.static(path.join(__dirname, "../prisma/uploads/qrcodes")));
+
 server.start(options, ({ port }) =>
     console.log(
         `Server started, listening on port ${port} for incoming requests.\n`
