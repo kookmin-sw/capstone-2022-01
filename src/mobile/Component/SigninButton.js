@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql } from "@apollo/client/react/hoc";
+import { graphql } from "react-apollo";
 import { Button } from "@ant-design/react-native";
 import { gql } from "graphql-tag";
 
