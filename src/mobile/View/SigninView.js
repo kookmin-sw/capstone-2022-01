@@ -8,7 +8,7 @@ export default class SigninView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID: "test",
+      ID: "sskim0126",
       PW: "test",
     };
     this.finishSignin = this.finishSignin.bind(this);
@@ -27,6 +27,7 @@ export default class SigninView extends React.Component {
       this.props.onSignin(token);
     }
   }
+
   render() {
     return (
       <View style={styles.container}>
@@ -36,12 +37,15 @@ export default class SigninView extends React.Component {
           <InputItem
             clear
             placeholder="ID"
-            onChange={(val) => this.setState({ ID: val })}
+            value={this.state.ID}
+            onChange={(val) => this.setState({ ID: val.toLowerCase() })}
           />
           <InputItem
             clear
             placeholder="PW"
-            onChange={(val) => this.setState({ PW: val })}
+            type="password"
+            value={this.state.PW}
+            onChange={(val) => this.setState({ PW: val.toLowerCase })}
           />
         </List>
         <WhiteSpace style={{ height: "8%" }} />
@@ -54,7 +58,9 @@ export default class SigninView extends React.Component {
         <Button
           style={styles.button}
           onPress={() => {
-            this.props.navigation.navigate("Signup");
+            this.props.navigation.navigate("Signup", {
+              finishSignup: this.finishSignin,
+            });
           }}
         >
           Sign up
