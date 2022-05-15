@@ -21,6 +21,10 @@ export default class LocationView extends React.Component {
       PW: this.props.navigation.getParam("PW", ""),
       isSignup: this.props.navigation.getParam("isSignup", false),
       finishSignup: this.props.navigation.getParam("finishSignup", null),
+      finishSetLocation: this.props.navigation.getParam(
+        "finishSetLocation",
+        null
+      ),
     };
     this.onChangeGroup1 = this.onChangeGroup1.bind(this);
     this.onChangeGroup2 = this.onChangeGroup2.bind(this);
@@ -154,7 +158,10 @@ export default class LocationView extends React.Component {
             finishSignup={this.state.finishSignup}
           />
         ) : (
-          <LocationSettingButton />
+          <LocationSettingButton
+            location={this.getLocation()}
+            finishSetLocation={this.state.finishSetLocation}
+          />
         )}
       </View>
     );

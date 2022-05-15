@@ -16,6 +16,7 @@ export default class MainView extends React.Component {
       location: "",
     };
     this.onChangeTab = this.onChangeTab.bind(this);
+    this.finishSetLocation = this.finishSetLocation.bind(this);
   }
 
   async componentWillMount() {
@@ -33,10 +34,27 @@ export default class MainView extends React.Component {
     });
   }
 
+  finishSetLocation(location) {
+    if (location) {
+      const setData = async () => {
+        await AsyncStorage.multiSet([["location", location]]);
+      };
+      setData();
+      this.setState({
+        location: location,
+      });
+      this.props.navigation.navigate("Main");
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Header navigation={this.props.navigation} isMain={true} />
+        <Header
+          navigation={this.props.navigation}
+          isMain={true}
+          finishSetLocation={this.finishSetLocation}
+        />
         {
           {
             Main: (

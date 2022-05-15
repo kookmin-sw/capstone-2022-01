@@ -5,7 +5,6 @@ import { Button } from "@ant-design/react-native";
 import { gql } from "graphql-tag";
 
 function signup({ mutate, location, finishSignup }) {
-  console.log(location);
   let token = null;
   let userId = null;
   return (
@@ -21,7 +20,6 @@ function signup({ mutate, location, finishSignup }) {
         if (location) {
           mutate()
             .then((result) => {
-              console.log(result);
               if (result.data.signup.token) {
                 token = result.data.signup.token;
                 userId = result.data.signup.user.id;

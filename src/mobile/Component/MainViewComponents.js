@@ -22,7 +22,7 @@ function showItemCards({ data: { loading, items, variables } }) {
             }}
           >
             <Text style={{ color: "#4080FF", fontSize: 20 }}>
-              {variables.location}
+              {variables.location.split(",")[2]}
             </Text>
             <Text style={{ fontSize: 20 }}>{" 주변의 분실물"}</Text>
           </View>
