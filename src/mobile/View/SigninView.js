@@ -1,46 +1,70 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Button, InputItem, List, WhiteSpace } from "@ant-design/react-native";
-import SigninButton from '../Component/SigninButton'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import SigninButton from "../Component/SigninButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class SigninView extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      ID: "",
-      PW: ""
-    }
-    this.finishSignin = this.finishSignin.bind(this)
+      ID: "sskim0126",
+      PW: "test",
+    };
+    this.finishSignin = this.finishSignin.bind(this);
   }
 
-  finishSignin (token, userId) {
+  finishSignin(token, userId, location) {
     if (token) {
       const setData = async () => {
         await AsyncStorage.multiSet([
-          ['token', token],
-          ['userId', userId]
-        ])
-      }
-      setData()
-      this.props.onSignin(token)
+          ["token", token],
+          ["userId", userId],
+          ["location", location],
+        ]);
+      };
+      setData();
+      this.props.onSignin(token);
     }
   }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.main_logo}>O.LaF</Text>
         <WhiteSpace style={{ height: "17%" }} />
         <List style={styles.input_list}>
-          <InputItem clear placeholder="ID" onChange={(val) => this.setState({ID: val})}/>
-          <InputItem clear placeholder="PW" onChange={(val) => this.setState({PW: val})}/>
+          <InputItem
+            clear
+            placeholder="ID"
+            value={this.state.ID}
+            onChange={(val) => this.setState({ ID: val.toLowerCase() })}
+          />
+          <InputItem
+            clear
+            placeholder="PW"
+            type="password"
+            value={this.state.PW}
+            onChange={(val) => this.setState({ PW: val.toLowerCase })}
+          />
         </List>
         <WhiteSpace style={{ height: "8%" }} />
-        <SigninButton ID={this.state.ID} PW={this.state.PW} finishSignin={this.finishSignin}/>
+        <SigninButton
+          ID={this.state.ID}
+          PW={this.state.PW}
+          finishSignin={this.finishSignin}
+        />
         <WhiteSpace style={{ height: "2%" }} />
-        <Button style={styles.button} onPress={() => {
-          this.props.navigation.navigate("Signup")
-        }}>Sign up</Button>
+        <Button
+          style={styles.button}
+          onPress={() => {
+            this.props.navigation.navigate("Signup", {
+              finishSignup: this.finishSignin,
+            });
+          }}
+        >
+          Sign up
+        </Button>
       </View>
     );
   }
