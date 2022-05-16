@@ -14,7 +14,7 @@ model Stuff {
   location    String   @default("")
   reward      Int      @default(0)
   imageUrl    String   @default("")
-  qrcodeUrl   String
+  qrcodeUrl   String   @default("")
   createdAt   DateTime @default(now())
   postedBy    User?    @relation(name: "UploadedStuff", fields: [postedById], references: [id])
   postedById  Int?

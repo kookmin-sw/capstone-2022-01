@@ -33,7 +33,7 @@ type Mutation {
   updateMyLocation(location: String!): User
   updateMyImageurl(imageUrl: String!): User
 
-  uploadStuff(title: String!, qrcodeUrl: String!, imageUrl: String): Stuff
+  uploadStuff(title: String!, qrcodeUrl: String, imageUrl: String): Stuff
   updateOwnedToFinding(id: Int!, location: String!, reward: Int!): Stuff
   updateFindingToOwned(id: Int!): Stuff
   updateFindingToCommunicating(id: Int!, acquirerId: Int!): Stuff

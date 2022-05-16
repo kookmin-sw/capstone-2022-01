@@ -220,7 +220,7 @@ async function uploadStuff(parent, args, context, info) {
      * title의 물건을 생성하는 함수
      * @param args.title (String!)
      * @param args.imageUrl (String)
-     * @param args.qrcodeUrl (String!)
+     * @param args.qrcodeUrl (String)
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
