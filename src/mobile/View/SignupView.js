@@ -25,7 +25,7 @@ export default class SignupView extends React.Component {
             <InputItem
               clear
               placeholder="이름"
-              value={this.state.name}
+              type="text"
               onChange={(val) => this.setState({ name: val })}
             />
             <InputItem
