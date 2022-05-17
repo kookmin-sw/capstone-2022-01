@@ -34,12 +34,10 @@ export default class App extends React.Component {
       }),
     };
     this.onSignin = this.onSignin.bind(this);
+    this.onSignout = this.onSignout.bind(this);
   }
 
   onSignin(token) {
-    const httpLink = createHttpLink({
-      uri: SERVER_URI,
-    });
     const authLink = setContext((_, { headers }) => {
       return {
         headers: {
@@ -57,11 +55,30 @@ export default class App extends React.Component {
     });
   }
 
+  onSignout() {
+    AsyncStorage.setItem("token", "");
+    const authLink = setContext((_, { headers }) => {
+      return {
+        headers: {
+          ...headers,
+          authorization: "",
+        },
+      };
+    });
+    this.setState({
+      token: "",
+      client: new ApolloClient({
+        link: authLink.concat(httpLink),
+        cache: new InMemoryCache(),
+      }),
+    });
+  }
+
   render() {
     return (
       <ApolloProvider client={this.state.client}>
         {this.state.token ? (
-          <AppNavigator />
+          <AppNavigator screenProps={{ onSignout: this.onSignout }} />
         ) : (
           <SigninNavigator
             screenProps={{

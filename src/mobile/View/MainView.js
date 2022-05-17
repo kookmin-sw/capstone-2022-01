@@ -68,7 +68,10 @@ export default class MainView extends React.Component {
               <ChatlistViewComponents navigation={this.props.navigation} />
             ),
             Profile: (
-              <ProfileViewComponents navigation={this.props.navigation} />
+              <ProfileViewComponents
+                navigation={this.props.navigation}
+                onSignout={this.props.onSignout}
+              />
             ),
           }[this.state.selectedTab]
         }
