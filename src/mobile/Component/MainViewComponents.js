@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, ScrollView, View, Text } from "react-native";
 import ItemCard from "./ItemCard";
-// import { gql, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 

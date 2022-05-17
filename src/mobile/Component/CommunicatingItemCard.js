@@ -1,32 +1,33 @@
 import React from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 import { Card, Flex, Button } from "@ant-design/react-native";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 
-export default class CommunicatingItemCard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
+function showCommunicatingItemCard({ data: { loading, user, variables } }) {
+  if (loading) {
+    return <Text>loading</Text>;
+  } else {
     return (
       <Card style={styles.itemCard}>
         <Card.Body style={styles.itemCardContent}>
           <Flex>
             <Flex.Item flex={1}>
-              <Image source={this.props.item.image} style={styles.itemImage} />
+              <Image
+                source={{ uri: variables.imageUrl }}
+                style={styles.itemImage}
+              />
             </Flex.Item>
             <Flex.Item flex={2}>
               <View>
                 <Flex direction="column" style={styles.itemInfo} align="start">
                   <Flex.Item>
-                    <Text style={styles.itemName}>
-                      {this.props.item.itemName}
-                    </Text>
+                    <Text style={styles.itemName}>{variables.title}</Text>
                   </Flex.Item>
                   <Flex.Item>
                     <View style={styles.row}>
                       <Text style={styles.location}>
-                        {this.props.item.location} 추정
+                        {variables.location} 추정
                       </Text>
                       <Button size="small">변경</Button>
                     </View>
@@ -35,7 +36,7 @@ export default class CommunicatingItemCard extends React.Component {
                     <View style={styles.row}>
                       <Text style={styles.reward}>
                         {"보상금 " +
-                          this.props.item.reward
+                          variables.reward
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
                           " 원"}
@@ -45,7 +46,7 @@ export default class CommunicatingItemCard extends React.Component {
                   </Flex.Item>
                   <Flex.Item>
                     <Text style={styles.reward}>
-                      {this.props.item.opponentName + "님과 대화중"}
+                      {user.name + "님과 대화중"}
                     </Text>
                   </Flex.Item>
                 </Flex>
@@ -57,6 +58,29 @@ export default class CommunicatingItemCard extends React.Component {
     );
   }
 }
+
+export default graphql(
+  gql`
+    query ($id: Int!) {
+      user: getUserProfile(userid: $id) {
+        name
+      }
+    }
+  `,
+  {
+    options: (props) => {
+      return {
+        variables: {
+          id: props.item.acquirerId,
+          title: props.item.title,
+          location: props.item.location,
+          imageUrl: props.item.imageUrl,
+          reward: props.item.reward,
+        },
+      };
+    },
+  }
+)(showCommunicatingItemCard);
 
 const styles = StyleSheet.create({
   container: {
