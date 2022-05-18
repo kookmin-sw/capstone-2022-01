@@ -39,6 +39,10 @@ export default graphql(
     query ($location: String!) {
       items: getStuffByLocation(location: $location) {
         id
+        title
+        location
+        reward
+        imageUrl
       }
     }
   `,
