@@ -177,21 +177,46 @@ async function singleUpload (parent, args, context) {
 async function putAlarms (parent, args, context) {
     /**
      * Alarm을 생성하는 함수
-     * @param args.text
+     * @param args.targetUserId! # 상대방의 유저 ID
+     * @param args.text! # 알림 내용
+     * @param args.stuffId # 물건 ID (default -1)
      */
     const Authorization = context.request.get("Authorization");
-    const userId = getUserIdByToken(Authorization)
+    const myUserId = getUserIdByToken(Authorization)
 
-    return await context.prisma.alarm.create({
-        data: {
-            text: args.text,
-            read: false,
-            owner: { connect: { id: userId } }
-        },
-        include: {
-            owner: true
-        }
-    })
+    const targetUser = await context.prisma.user.findUnique({ where: { id: args.targetUserId } })
+    if (!targetUser){
+        throw new Error('No such user found')
+    }
+
+    if (!args.stuffId){
+        return await context.prisma.alarm.create({
+            data: {
+                text: args.text,
+                read: false,
+                targetUserId: args.targetUserId,
+                stuffId: args.stuffId,
+                owner: { connect: { id: myUserId } }
+            },
+            include: {
+                owner: true
+            }
+        })
+    } else {
+        return await context.prisma.alarm.create({
+            data: {
+                text: args.text,
+                read: false,
+                targetUserId: args.targetUserId,
+                stuffId: -1,
+                owner: { connect: { id: myUserId } }
+            },
+            include: {
+                owner: true
+            }
+        })
+    }
+
 }
 
 async function readAlarm (parent, args, context) {
