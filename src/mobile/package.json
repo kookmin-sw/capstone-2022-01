@@ -21,6 +21,8 @@
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "expo": "~44.0.0",
+    "expo-barcode-scanner": "^11.3.0",
+    "expo-font": "^10.1.0",
     "expo-image-picker": "^13.1.1",
     "expo-status-bar": "~1.2.0",
     "graphql": "^16.4.0",

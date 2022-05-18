@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql } from "react-apollo";
 import { Button } from "@ant-design/react-native";
+import { defaultFontText as Text } from "./Text";
 import { gql } from "graphql-tag";
 
 function deleteOwnedItem({ mutate }) {
@@ -17,7 +18,7 @@ function deleteOwnedItem({ mutate }) {
           });
       }}
     >
-      분실 신고 취소하기
+      <Text>분실 신고 취소하기</Text>
     </Button>
   );
 }

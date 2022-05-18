@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql } from "react-apollo";
 import { Button } from "@ant-design/react-native";
+import { defaultFontText as Text } from "./Text";
 import { gql } from "graphql-tag";
 
 function signin({ mutate, finishSignin }) {
@@ -30,7 +31,7 @@ function signin({ mutate, finishSignin }) {
           });
       }}
     >
-      Sign In
+      <Text>Sign In</Text>
     </Button>
   );
 }

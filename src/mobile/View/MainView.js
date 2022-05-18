@@ -4,6 +4,7 @@ import Header from "../Component/Header";
 import Footer from "../Component/Footer";
 import MainViewComponents from "../Component/MainViewComponents";
 import ItemViewComponents from "../Component/ItemViewComponents";
+import QRcodeScannerComponents from "../Component/QRcodeScannerComponents";
 import ChatlistViewComponents from "../Component/ChatlistViewComponents";
 import ProfileViewComponents from "../Component/ProfileViewComponents";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -64,6 +65,9 @@ export default class MainView extends React.Component {
               />
             ),
             Item: <ItemViewComponents navigation={this.props.navigation} />,
+            QRcode: (
+              <QRcodeScannerComponents navigation={this.props.navigation} />
+            ),
             Chatlist: (
               <ChatlistViewComponents navigation={this.props.navigation} />
             ),

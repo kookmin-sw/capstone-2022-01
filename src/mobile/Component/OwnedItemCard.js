@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import { Card, Flex, Button, Modal, InputItem } from "@ant-design/react-native";
 import DeleteOwnedItemButton from "./DeleteOwnedItemButton";
 import OwnedToFindingButton from "./OwnedToFindingButton";

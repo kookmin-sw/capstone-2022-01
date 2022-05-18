@@ -8,6 +8,8 @@ import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import SERVER_URI from "./constants/SERVER_URI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Font from "expo-font";
+import { Text } from "react-native";
 
 const httpLink = createHttpLink({
   uri: SERVER_URI,
@@ -23,6 +25,10 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+let fonts = {
+  Pretendard: require("./assets/fonts/Pretendard-Light.otf"),
+};
+
 export default class App extends React.Component {
   constructor() {
     super();
@@ -32,9 +38,19 @@ export default class App extends React.Component {
         link: authLink.concat(httpLink),
         cache: new InMemoryCache(),
       }),
+      fontsLoaded: false,
     };
     this.onSignin = this.onSignin.bind(this);
     this.onSignout = this.onSignout.bind(this);
+  }
+
+  async _loadFontsAsync() {
+    await Font.loadAsync(fonts);
+    this.setState({ fontsLoaded: true });
+  }
+
+  componentDidMount() {
+    this._loadFontsAsync();
   }
 
   onSignin(token) {
@@ -75,6 +91,9 @@ export default class App extends React.Component {
   }
 
   render() {
+    if (!this.state.fontsLoaded) {
+      return <Text>loading</Text>;
+    }
     return (
       <ApolloProvider client={this.state.client}>
         {this.state.token ? (

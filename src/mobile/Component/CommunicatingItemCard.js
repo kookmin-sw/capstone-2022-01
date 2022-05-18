@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import { Card, Flex, Button } from "@ant-design/react-native";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";

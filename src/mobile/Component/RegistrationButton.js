@@ -2,7 +2,7 @@ import React from "react";
 import { graphql } from "react-apollo";
 import { Button } from "@ant-design/react-native";
 import { gql } from "graphql-tag";
-import { Text } from "react-native";
+import { defaultFontText as Text } from "./Text";
 
 function itemRegistration({ mutate, finishRegistration }) {
   let itemId = null;

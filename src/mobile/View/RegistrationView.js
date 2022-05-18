@@ -2,17 +2,13 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  Text,
   ScrollView,
   Image,
   TouchableOpacity,
 } from "react-native";
+import { defaultFontText as Text } from "../Component/Text";
 import Header from "../Component/Header";
-import {
-  Flex,
-  InputItem,
-  Button,
-} from "@ant-design/react-native";
+import { Flex, InputItem, Button } from "@ant-design/react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
 import RegistrationButton from "../Component/RegistrationButton";

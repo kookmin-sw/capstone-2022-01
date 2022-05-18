@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import CommunicatingItemCard from "../Component/CommunicatingItemCard";
 import FindingItemCard from "../Component/FindingItemCard";
 import OwnedItemCard from "../Component/OwnedItemCard";

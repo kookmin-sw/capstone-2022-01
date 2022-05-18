@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { Flex, Button } from "@ant-design/react-native";
@@ -9,7 +10,6 @@ function showProfile({ data: { loading, profile, variables } }) {
   if (loading) {
     return <Text>loading</Text>;
   } else {
-    console.log(profile);
     return (
       <View style={styles.container}>
         <Flex style={{ height: "20%" }}>
