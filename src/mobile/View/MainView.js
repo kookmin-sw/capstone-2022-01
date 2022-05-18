@@ -15,6 +15,7 @@ export default class MainView extends React.Component {
     this.state = {
       selectedTab: "Main",
       location: "",
+      userId: "",
     };
     this.onChangeTab = this.onChangeTab.bind(this);
     this.finishSetLocation = this.finishSetLocation.bind(this);
@@ -22,9 +23,15 @@ export default class MainView extends React.Component {
 
   async componentWillMount() {
     const location = await AsyncStorage.getItem("location");
+    const userId = await AsyncStorage.getItem("userId");
     if (location) {
       this.setState({
         location: location,
+      });
+    }
+    if (userId) {
+      this.setState({
+        userId: userId,
       });
     }
   }
@@ -66,7 +73,10 @@ export default class MainView extends React.Component {
             ),
             Item: <ItemViewComponents navigation={this.props.navigation} />,
             QRcode: (
-              <QRcodeScannerComponents navigation={this.props.navigation} />
+              <QRcodeScannerComponents
+                navigation={this.props.navigation}
+                userId={this.state.userId}
+              />
             ),
             Chatlist: (
               <ChatlistViewComponents navigation={this.props.navigation} />

@@ -36,7 +36,7 @@ function showCommunicatingItemCard({ data: { loading, user, variables } }) {
                   <Flex.Item>
                     <View style={styles.row}>
                       <Text style={styles.reward}>
-                        {"보상금 " +
+                        {"사례금 " +
                           variables.reward
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +

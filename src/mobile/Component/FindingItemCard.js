@@ -37,7 +37,7 @@ export default class FindingItemCard extends React.Component {
                   <Flex.Item>
                     <View style={styles.row}>
                       <Text style={styles.reward}>
-                        {"보상금 " +
+                        {"사례금 " +
                           this.props.item.reward
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +

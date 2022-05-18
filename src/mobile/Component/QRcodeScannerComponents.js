@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { defaultFontText as Text } from "./Text";
 import { Button } from "@ant-design/react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import SendAlarmViewComponents from "./SendAlarmViewComponents";
 
 export default class QRcodeScannerComponents extends React.Component {
   constructor(props) {
@@ -10,6 +11,7 @@ export default class QRcodeScannerComponents extends React.Component {
     this.state = {
       scanned: false,
       hasCameraPermission: null,
+      stuffId: null,
     };
     this.onQRcodeScanned = this.onQRcodeScanned.bind(this);
   }
@@ -26,10 +28,12 @@ export default class QRcodeScannerComponents extends React.Component {
   };
 
   onQRcodeScanned({ data, type }) {
-    console.log(data, type);
-    this.setState({
-      scanned: true,
-    });
+    if (type === "org.iso.QRCode" && !isNaN(data)) {
+      this.setState({
+        scanned: true,
+        stuffId: parseInt(data),
+      });
+    }
   }
 
   render() {
@@ -37,6 +41,13 @@ export default class QRcodeScannerComponents extends React.Component {
       return <Text>Requesting for camera permission</Text>;
     } else if (this.state.hasCameraPermission === false) {
       return <Text>No access to camera</Text>;
+    } else if (this.state.scanned && this.state.stuffId !== null) {
+      return (
+        <SendAlarmViewComponents
+          stuffId={this.state.stuffId}
+          userId={this.props.userId}
+        />
+      );
     } else {
       return (
         <View style={styles.container}>

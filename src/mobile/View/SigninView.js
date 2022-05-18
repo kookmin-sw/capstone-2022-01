@@ -9,8 +9,8 @@ export default class SigninView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID: "sskim0126",
-      PW: "test",
+      ID: "test2",
+      PW: "test2",
     };
     this.finishSignin = this.finishSignin.bind(this);
   }
@@ -49,7 +49,7 @@ export default class SigninView extends React.Component {
             placeholder="PW"
             type="password"
             value={this.state.PW}
-            onChange={(val) => this.setState({ PW: val.toLowerCase })}
+            onChange={(val) => this.setState({ PW: val.toLowerCase() })}
           />
         </List>
         <WhiteSpace style={{ height: "10%" }} />

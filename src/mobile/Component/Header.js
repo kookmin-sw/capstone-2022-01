@@ -19,7 +19,7 @@ export default class Header extends React.Component {
               })
             }
           >
-            <Icon name="map-outline" size={30} />
+            <Icon name="compass-outline" size={30} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
