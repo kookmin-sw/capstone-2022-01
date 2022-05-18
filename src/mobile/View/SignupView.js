@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { defaultFontText as Text } from "../Component/Text";
 import Header from "../Component/Header";
 import { Button, InputItem, List, WhiteSpace } from "@ant-design/react-native";
 
@@ -25,7 +26,7 @@ export default class SignupView extends React.Component {
             <InputItem
               clear
               placeholder="이름"
-              value={this.state.name}
+              type="text"
               onChange={(val) => this.setState({ name: val })}
             />
             <InputItem

@@ -4,6 +4,7 @@ import Header from "../Component/Header";
 import Footer from "../Component/Footer";
 import MainViewComponents from "../Component/MainViewComponents";
 import ItemViewComponents from "../Component/ItemViewComponents";
+import QRcodeScannerComponents from "../Component/QRcodeScannerComponents";
 import ChatlistViewComponents from "../Component/ChatlistViewComponents";
 import ProfileViewComponents from "../Component/ProfileViewComponents";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,6 +15,7 @@ export default class MainView extends React.Component {
     this.state = {
       selectedTab: "Main",
       location: "",
+      userId: "",
     };
     this.onChangeTab = this.onChangeTab.bind(this);
     this.finishSetLocation = this.finishSetLocation.bind(this);
@@ -21,9 +23,15 @@ export default class MainView extends React.Component {
 
   async componentWillMount() {
     const location = await AsyncStorage.getItem("location");
+    const userId = await AsyncStorage.getItem("userId");
     if (location) {
       this.setState({
         location: location,
+      });
+    }
+    if (userId) {
+      this.setState({
+        userId: userId,
       });
     }
   }
@@ -64,11 +72,20 @@ export default class MainView extends React.Component {
               />
             ),
             Item: <ItemViewComponents navigation={this.props.navigation} />,
+            QRcode: (
+              <QRcodeScannerComponents
+                navigation={this.props.navigation}
+                userId={this.state.userId}
+              />
+            ),
             Chatlist: (
               <ChatlistViewComponents navigation={this.props.navigation} />
             ),
             Profile: (
-              <ProfileViewComponents navigation={this.props.navigation} />
+              <ProfileViewComponents
+                navigation={this.props.navigation}
+                onSignout={this.props.onSignout}
+              />
             ),
           }[this.state.selectedTab]
         }

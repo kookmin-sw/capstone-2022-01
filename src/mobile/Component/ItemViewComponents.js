@@ -1,69 +1,103 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import CommunicatingItemCard from "../Component/CommunicatingItemCard";
 import FindingItemCard from "../Component/FindingItemCard";
 import OwnedItemCard from "../Component/OwnedItemCard";
-import { Button } from "@ant-design/react-native";
+import { Button, Provider } from "@ant-design/react-native";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 
-export default class ItemViewComponents extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: {
-        communicating: [
-          {
-            image: require("../assets/dummy_data/tumbler.jpeg"),
-            itemName: "스타벅스 텀블러",
-            location: "정릉동",
-            reward: 5000,
-            opponentName: "김진우",
-          },
-        ],
-        finding: [
-          {
-            image: require("../assets/dummy_data/adaptor.jpeg"),
-            itemName: "HDMI-to-C 어댑터",
-            location: "정릉동",
-            reward: 6000,
-          },
-        ],
-        owned: [
-          {
-            image: require("../assets/dummy_data/keyboard.jpeg"),
-            itemName: "애플 매직 키보드",
-          },
-        ],
-      },
-    };
-  }
-
-  render() {
+function showMyItemCards({ data: { loading, myItems, variables } }) {
+  if (loading) {
+    return <Text>loading</Text>;
+  } else {
+    let communicatingItems = [];
+    let findingItems = [];
+    let ownedItems = [];
+    for (let item of myItems) {
+      switch (item.status) {
+        case "Communicating":
+          communicatingItems.push(item);
+          break;
+        case "Finding":
+          findingItems.push(item);
+          break;
+        case "Owned":
+          ownedItems.push(item);
+          break;
+      }
+    }
     return (
-      <View style={styles.container}>
+      <Provider style={styles.container}>
         <ScrollView>
-          <Text style={styles.categoryText}>소통 중</Text>
-          {this.state.items.communicating.map((item, index) => {
-            return <CommunicatingItemCard item={item} key={index} />;
-          })}
-          <Text style={styles.categoryText}>찾는 중</Text>
-          {this.state.items.finding.map((item, index) => {
-            return <FindingItemCard item={item} key={index} />;
-          })}
-          <Text style={styles.categoryText}>내 물건</Text>
-          {this.state.items.owned.map((item, index) => {
-            return <OwnedItemCard item={item} key={index} />;
-          })}
+          {communicatingItems.length > 0 ? (
+            <View>
+              <Text style={styles.categoryText}>소통 중</Text>
+              {communicatingItems.map((item, index) => {
+                return <CommunicatingItemCard item={item} key={index} />;
+              })}
+            </View>
+          ) : (
+            <View />
+          )}
+          {findingItems.length > 0 ? (
+            <View>
+              <Text style={styles.categoryText}>찾는 중</Text>
+              {findingItems.map((item, index) => {
+                return <FindingItemCard item={item} key={index} />;
+              })}
+            </View>
+          ) : (
+            <View />
+          )}
+          {ownedItems.length > 0 ? (
+            <View>
+              <Text style={styles.categoryText}>내 물건</Text>
+              {ownedItems.map((item, index) => {
+                return <OwnedItemCard item={item} key={index} />;
+              })}
+            </View>
+          ) : (
+            <View />
+          )}
         </ScrollView>
         <Button
           style={styles.registrationButton}
-          onPress={() => this.props.navigation.navigate("Registration")}
+          onPress={() => variables.navigation.navigate("Registration")}
         >
           <Text style={{ color: "white", fontSize: 30 }}>+</Text>
         </Button>
-      </View>
+      </Provider>
     );
   }
 }
+
+export default graphql(
+  gql`
+    query {
+      myItems: getMyStuff {
+        id
+        title
+        status
+        location
+        reward
+        imageUrl
+        qrcodeUrl
+        acquirerId
+      }
+    }
+  `,
+  {
+    options: (props) => {
+      return {
+        variables: {
+          navigation: props.navigation,
+        },
+      };
+    },
+  }
+)(showMyItemCards);
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +114,7 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
     position: "absolute",
-    bottom: 195,
+    bottom: 105,
     right: 20,
     borderWidth: 0,
     backgroundColor: "#4080FF",

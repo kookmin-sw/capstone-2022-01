@@ -1,50 +1,74 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
-import { Flex } from "@ant-design/react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import { Flex, Button } from "@ant-design/react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default class ProfileViewComponents extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      profileImage: null,
-      name: "김성식",
-      pointAmount: 100000,
-    };
-  }
-
-  render() {
+function showProfile({ data: { loading, profile, variables } }) {
+  if (loading) {
+    return <Text>loading</Text>;
+  } else {
     return (
       <View style={styles.container}>
         <Flex style={{ height: "20%" }}>
           <Flex.Item flex={1}>
-            {this.state.profileImage == null ? (
+            {profile.imageUrl === "" ? (
               <Icon
                 name="person-circle-outline"
                 size={130}
                 style={styles.icon}
               />
             ) : (
-              <Image source={this.props.opponentImage} />
+              <Image source={{ uri: profile.imageUrl }} />
             )}
           </Flex.Item>
           <Flex.Item flex={2}>
             <View style={styles.info}>
-              <Text style={styles.name}>{this.state.name}</Text>
+              <Text style={styles.name}>{profile.name}</Text>
               <Text style={styles.pointAmount}>
                 {"보상금 " +
-                this.state.pointAmount
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                " 원"}
+                  profile.point
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                  " 원"}
               </Text>
             </View>
           </Flex.Item>
         </Flex>
+        <Button
+          style={{ width: "70%", alignSelf: "center", marginTop: 20 }}
+          onPress={() => variables.onSignout()}
+        >
+          <Text style={{ color: "red" }}>Sign out</Text>
+        </Button>
       </View>
     );
   }
 }
+
+export default graphql(
+  gql`
+    query {
+      profile: getMyProfile {
+        id
+        name
+        point
+        imageUrl
+      }
+    }
+  `,
+  {
+    options: (props) => {
+      return {
+        variables: {
+          onSignout: props.onSignout,
+        },
+      };
+    },
+  }
+)(showProfile);
 
 const styles = StyleSheet.create({
   container: {

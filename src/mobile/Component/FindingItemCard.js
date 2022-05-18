@@ -1,6 +1,8 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import { Card, Flex, Button } from "@ant-design/react-native";
+import FindingToOwnedButton from "./FindingToOwnedButton";
 
 export default class FindingItemCard extends React.Component {
   constructor(props) {
@@ -13,20 +15,21 @@ export default class FindingItemCard extends React.Component {
         <Card.Body style={styles.itemCardContent}>
           <Flex>
             <Flex.Item flex={1}>
-              <Image source={this.props.item.image} style={styles.itemImage} />
+              <Image
+                source={{ uri: this.props.item.imageUrl }}
+                style={styles.itemImage}
+              />
             </Flex.Item>
             <Flex.Item flex={2}>
               <View>
                 <Flex direction="column" style={styles.itemInfo} align="start">
                   <Flex.Item>
-                    <Text style={styles.itemName}>
-                      {this.props.item.itemName}
-                    </Text>
+                    <Text style={styles.itemName}>{this.props.item.title}</Text>
                   </Flex.Item>
                   <Flex.Item>
                     <View style={styles.row}>
                       <Text style={styles.location}>
-                        {this.props.item.location} 추정
+                        {this.props.item.location.split(",")[2]} 추정
                       </Text>
                       <Button size="small">변경</Button>
                     </View>
@@ -34,7 +37,7 @@ export default class FindingItemCard extends React.Component {
                   <Flex.Item>
                     <View style={styles.row}>
                       <Text style={styles.reward}>
-                        {"보상금 " +
+                        {"사례금 " +
                           this.props.item.reward
                             .toString()
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
@@ -44,7 +47,7 @@ export default class FindingItemCard extends React.Component {
                     </View>
                   </Flex.Item>
                   <Flex.Item>
-                    <Button size="small">분실 신고 취소하기</Button>
+                    <FindingToOwnedButton id={this.props.item.id} />
                   </Flex.Item>
                 </Flex>
               </View>

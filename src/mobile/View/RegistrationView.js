@@ -1,40 +1,62 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
-import Header from "../Component/Header";
 import {
-  Flex,
-  InputItem,
-  Picker,
-  List,
-  Provider,
-  Button,
-} from "@ant-design/react-native";
+  StyleSheet,
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { defaultFontText as Text } from "../Component/Text";
+import Header from "../Component/Header";
+import { Flex, InputItem, Button } from "@ant-design/react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import * as ImagePicker from "expo-image-picker";
+import RegistrationButton from "../Component/RegistrationButton";
+import QRcodeGenerationButton from "../Component/QRcodeGenerationButton";
+import QRcodeButton from "../Component/QRcodeButton";
 
 export default class RegistrationView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sizes: [
-        {
-          value: "2x2",
-          label: "2cm x 2cm",
-        },
-        {
-          value: "3x3",
-          label: "3cm x 3cm",
-        },
-        {
-          value: "5x5",
-          label: "5cm x 5cm",
-        },
-        {
-          value: "10x10",
-          label: "10cm x 10cm",
-        },
-      ],
-      value: ["2x2"],
+      title: "",
+      itemImageUri: "",
+      qrcodeUri: "",
+      itemId: null,
     };
+    this.finishRegistration = this.finishRegistration.bind(this);
+    this.finishQRcodeGeneration = this.finishQRcodeGeneration.bind(this);
+  }
+
+  async addImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      this.setState({
+        itemImageUri: result.uri,
+      });
+    }
+  }
+
+  finishRegistration(itemId) {
+    if (itemId) {
+      this.setState({
+        itemId: itemId,
+      });
+    }
+  }
+
+  finishQRcodeGeneration(qrcodeUrl) {
+    if (qrcodeUrl) {
+      this.setState({
+        qrcodeUri: qrcodeUrl,
+      });
+    }
   }
 
   render() {
@@ -52,56 +74,77 @@ export default class RegistrationView extends React.Component {
               <Text style={styles.tag}>이름</Text>
             </Flex.Item>
             <Flex.Item flex={3}>
-              <InputItem />
+              <InputItem
+                onChange={(value) => {
+                  this.setState({ title: value });
+                }}
+              />
             </Flex.Item>
           </Flex>
-          <Flex align="center" style={styles.input}>
+          <Flex style={styles.input}>
             <Flex.Item flex={1}>
               <Text style={styles.tag}>사진</Text>
             </Flex.Item>
             <Flex.Item flex={1} />
             <Flex.Item flex={1}>
-              <Icon name="camera-outline" size={30} />
+              <TouchableOpacity onPress={() => this.addImage()}>
+                <Icon name="image-outline" size={30} />
+              </TouchableOpacity>
             </Flex.Item>
             <Flex.Item flex={1}>
-              <Icon name="image-outline" size={30} />
+              {this.state.itemImageUri !== "" ? (
+                <Image
+                  source={{ uri: this.state.itemImageUri }}
+                  style={{ width: 70, height: 70, borderRadius: 5 }}
+                />
+              ) : (
+                <View />
+              )}
             </Flex.Item>
           </Flex>
-          <Text style={styles.title}>QR 코드</Text>
-          <Flex align="center" style={styles.input}>
-            <Flex.Item flex={1}>
-              <Text style={styles.tag}>사이즈</Text>
-            </Flex.Item>
-            <Flex.Item flex={3}>
-              <Provider>
-                <List>
-                  <Picker
-                    data={this.state.sizes}
-                    cols={1}
-                    value={this.state.value}
-                  >
-                    <List.Item />
-                  </Picker>
-                </List>
-              </Provider>
-            </Flex.Item>
-          </Flex>
-          <Button
-            style={{
-              width: 250,
-              height: 250,
-              alignSelf: "center",
-              marginTop: 30,
-            }}
-          >
-            <Image
-              source={require("../assets/dummy_data/qr.png")}
-              style={{ width: 200, height: 200 }}
+          {this.state.itemId ? (
+            <View />
+          ) : (
+            <RegistrationButton
+              title={this.state.title}
+              imageUrl={this.state.itemImageUri}
+              finishRegistration={this.finishRegistration}
             />
-          </Button>
-          <Button style={styles.registrationButton}>
-            <Text style={{ color: "white" }}>등록하기</Text>
-          </Button>
+          )}
+
+          {this.state.itemId ? (
+            <View>
+              <Text style={styles.title}>QR 코드</Text>
+              {this.state.qrcodeUri === "" ? (
+                <QRcodeGenerationButton
+                  id={this.state.itemId}
+                  finishQRcodeGeneration={this.finishQRcodeGeneration}
+                />
+              ) : (
+                <QRcodeButton qrcodeUri={this.state.qrcodeUri} />
+              )}
+            </View>
+          ) : (
+            <View />
+          )}
+          {this.state.qrcodeUri ? (
+            <Button
+              style={{
+                marginTop: 40,
+                width: "30%",
+                borderWidth: 0,
+                alignSelf: "center",
+                backgroundColor: "#4080FF",
+              }}
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            >
+              <Text style={{ color: "white" }}>완료</Text>
+            </Button>
+          ) : (
+            <View />
+          )}
         </ScrollView>
       </View>
     );
@@ -127,12 +170,5 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginRight: 20,
     fontSize: 15,
-  },
-  registrationButton: {
-    marginTop: 40,
-    width: "30%",
-    borderWidth: 0,
-    alignSelf: "center",
-    backgroundColor: "#4080FF",
   },
 });

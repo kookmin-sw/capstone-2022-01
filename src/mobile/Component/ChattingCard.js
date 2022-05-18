@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import { Badge, Card, Flex } from "@ant-design/react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 

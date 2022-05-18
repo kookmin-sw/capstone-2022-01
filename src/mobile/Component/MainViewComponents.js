@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, ScrollView, View, Text } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import ItemCard from "./ItemCard";
-// import { gql, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
@@ -40,6 +40,10 @@ export default graphql(
     query ($location: String!) {
       items: getStuffByLocation(location: $location) {
         id
+        title
+        location
+        reward
+        imageUrl
       }
     }
   `,

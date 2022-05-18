@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "../Component/Text";
 import { Button, InputItem, List, WhiteSpace } from "@ant-design/react-native";
 import SigninButton from "../Component/SigninButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,8 +9,8 @@ export default class SigninView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID: "sskim0126",
-      PW: "test",
+      ID: "test2",
+      PW: "test2",
     };
     this.finishSignin = this.finishSignin.bind(this);
   }
@@ -31,8 +32,11 @@ export default class SigninView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.main_logo}>O.LaF</Text>
-        <WhiteSpace style={{ height: "17%" }} />
+        <Image
+          style={styles.main_logo}
+          source={require("../assets/logo.png")}
+        />
+        <WhiteSpace style={{ height: "20%" }} />
         <List style={styles.input_list}>
           <InputItem
             clear
@@ -45,10 +49,10 @@ export default class SigninView extends React.Component {
             placeholder="PW"
             type="password"
             value={this.state.PW}
-            onChange={(val) => this.setState({ PW: val.toLowerCase })}
+            onChange={(val) => this.setState({ PW: val.toLowerCase() })}
           />
         </List>
-        <WhiteSpace style={{ height: "8%" }} />
+        <WhiteSpace style={{ height: "10%" }} />
         <SigninButton
           ID={this.state.ID}
           PW={this.state.PW}
@@ -63,7 +67,7 @@ export default class SigninView extends React.Component {
             });
           }}
         >
-          Sign up
+          <Text>Sign up</Text>
         </Button>
       </View>
     );
@@ -74,12 +78,13 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     alignItems: "center",
+    fontFamily: "Pretendard",
   },
   main_logo: {
     alignSelf: "center",
-    fontSize: 70,
     marginTop: "45%",
-    color: "#4080FF",
+    width: 200,
+    height: 56,
   },
   input_list: {
     width: "75%",

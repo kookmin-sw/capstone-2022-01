@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { defaultFontText as Text } from "../Component/Text";
 import ModalDropdown from "react-native-modal-dropdown";
 import Header from "../Component/Header";
 import location from "../assets/location.json";

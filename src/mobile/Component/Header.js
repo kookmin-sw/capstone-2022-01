@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default class Header extends React.Component {
@@ -18,7 +19,7 @@ export default class Header extends React.Component {
               })
             }
           >
-            <Icon name="map-outline" size={30} />
+            <Icon name="compass-outline" size={30} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
@@ -28,7 +29,7 @@ export default class Header extends React.Component {
         {this.props.title ? (
           <Text style={styles.title}>{this.props.title}</Text>
         ) : (
-          <Text style={styles.logo}>O.LaF</Text>
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
         )}
 
         {this.props.isMain ? (
@@ -61,9 +62,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "grey",
   },
   logo: {
-    alignSelf: "center",
-    fontSize: 35,
-    color: "#4080FF",
+    margin: 5,
+    width: 108,
+    height: 30,
   },
   title: {
     alignSelf: "center",

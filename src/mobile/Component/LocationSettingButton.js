@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from "react-apollo";
-import { Text } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import { Button } from "@ant-design/react-native";
 import { gql } from "graphql-tag";
 

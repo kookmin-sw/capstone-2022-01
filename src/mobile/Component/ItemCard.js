@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
+import { defaultFontText as Text } from "./Text";
 import { Card, Flex } from "@ant-design/react-native";
 
 export default class ItemCard extends React.Component {
@@ -16,19 +17,20 @@ export default class ItemCard extends React.Component {
         <Card.Body style={styles.itemCardContent}>
           <Flex>
             <Flex.Item flex={1}>
-              <Image source={this.props.item.image} style={styles.itemImage} />
+              <Image
+                source={{ uri: this.props.item.imageUrl }}
+                style={styles.itemImage}
+              />
             </Flex.Item>
             <Flex.Item flex={2}>
               <View>
                 <Flex direction="column" style={styles.itemInfo} align="start">
                   <Flex.Item>
-                    <Text style={styles.itemName}>
-                      {this.props.item.itemName}
-                    </Text>
+                    <Text style={styles.itemName}>{this.props.item.title}</Text>
                   </Flex.Item>
                   <Flex.Item>
                     <Text style={styles.location}>
-                      {this.props.item.location} 추정
+                      {this.props.item.location.split(",")[2]} 추정
                     </Text>
                   </Flex.Item>
                   <Flex.Item>
