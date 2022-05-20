@@ -1,61 +1,81 @@
-import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { defaultFontText as Text } from "./Text";
 import { Card, Flex, Button } from "@ant-design/react-native";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
+import Icon from "react-native-vector-icons/Ionicons";
+import QRcodeImageModal from "./QRcodeImageModal";
 
 function showCommunicatingItemCard({ data: { loading, user, variables } }) {
+  const [qrModalVisible, setQrModalVisible] = useState(false);
+
   if (loading) {
     return <Text>loading</Text>;
   } else {
     return (
-      <Card style={styles.itemCard}>
-        <Card.Body style={styles.itemCardContent}>
-          <Flex>
-            <Flex.Item flex={1}>
-              <Image
-                source={{ uri: variables.imageUrl }}
-                style={styles.itemImage}
-              />
-            </Flex.Item>
-            <Flex.Item flex={2}>
-              <View>
-                <Flex direction="column" style={styles.itemInfo} align="start">
-                  <Flex.Item>
-                    <Text style={styles.itemName}>{variables.title}</Text>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <View style={styles.row}>
-                      <Text style={styles.location}>
-                        {variables.location} 추정
-                      </Text>
-                      <Button size="small">변경</Button>
-                    </View>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <View style={styles.row}>
+      <View>
+        <Card style={styles.itemCard}>
+          <Card.Body style={styles.itemCardContent}>
+            <Flex>
+              <Flex.Item flex={4}>
+                <Image
+                  source={{ uri: variables.imageUrl }}
+                  style={styles.itemImage}
+                />
+              </Flex.Item>
+              <Flex.Item flex={6}>
+                <View>
+                  <Flex
+                    direction="column"
+                    style={styles.itemInfo}
+                    align="start"
+                  >
+                    <Flex.Item>
+                      <Text style={styles.itemName}>{variables.title}</Text>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <View style={styles.row}>
+                        <Text style={styles.location}>
+                          {variables.location} 추정
+                        </Text>
+                        <Button size="small">변경</Button>
+                      </View>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <View style={styles.row}>
+                        <Text style={styles.reward}>
+                          {"사례금 " +
+                            variables.reward
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                            " 원"}
+                        </Text>
+                        <Button size="small">변경</Button>
+                      </View>
+                    </Flex.Item>
+                    <Flex.Item>
                       <Text style={styles.reward}>
-                        {"사례금 " +
-                          variables.reward
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                          " 원"}
+                        {user.name + "님과 대화중"}
                       </Text>
-                      <Button size="small">변경</Button>
-                    </View>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <Text style={styles.reward}>
-                      {user.name + "님과 대화중"}
-                    </Text>
-                  </Flex.Item>
-                </Flex>
-              </View>
-            </Flex.Item>
-          </Flex>
-        </Card.Body>
-      </Card>
+                    </Flex.Item>
+                  </Flex>
+                </View>
+              </Flex.Item>
+              <Flex.Item flex={1}>
+                <TouchableOpacity onPress={() => setQrModalVisible(true)}>
+                  <Icon name="qr-code" size={20} />
+                </TouchableOpacity>
+              </Flex.Item>
+            </Flex>
+          </Card.Body>
+        </Card>
+        <QRcodeImageModal
+          qrModalVisible={qrModalVisible}
+          closeQRModal={() => setQrModalVisible(false)}
+          qrcodeUrl={variables.qrcodeUrl}
+        />
+      </View>
     );
   }
 }
@@ -76,6 +96,7 @@ export default graphql(
           title: props.item.title,
           location: props.item.location,
           imageUrl: props.item.imageUrl,
+          qrcodeUrl: props.item.qrcodeUrl,
           reward: props.item.reward,
         },
       };

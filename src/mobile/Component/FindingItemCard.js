@@ -1,60 +1,85 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { defaultFontText as Text } from "./Text";
 import { Card, Flex, Button } from "@ant-design/react-native";
 import FindingToOwnedButton from "./FindingToOwnedButton";
+import Icon from "react-native-vector-icons/Ionicons";
+import QRcodeImageModal from "./QRcodeImageModal";
 
 export default class FindingItemCard extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      qrModalVisible: false,
+    };
   }
 
   render() {
     return (
-      <Card style={styles.itemCard}>
-        <Card.Body style={styles.itemCardContent}>
-          <Flex>
-            <Flex.Item flex={1}>
-              <Image
-                source={{ uri: this.props.item.imageUrl }}
-                style={styles.itemImage}
-              />
-            </Flex.Item>
-            <Flex.Item flex={2}>
-              <View>
-                <Flex direction="column" style={styles.itemInfo} align="start">
-                  <Flex.Item>
-                    <Text style={styles.itemName}>{this.props.item.title}</Text>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <View style={styles.row}>
-                      <Text style={styles.location}>
-                        {this.props.item.location.split(",")[2]} 추정
+      <View>
+        <Card style={styles.itemCard}>
+          <Card.Body style={styles.itemCardContent}>
+            <Flex>
+              <Flex.Item flex={4}>
+                <Image
+                  source={{ uri: this.props.item.imageUrl }}
+                  style={styles.itemImage}
+                />
+              </Flex.Item>
+              <Flex.Item flex={6}>
+                <View>
+                  <Flex
+                    direction="column"
+                    style={styles.itemInfo}
+                    align="start"
+                  >
+                    <Flex.Item>
+                      <Text style={styles.itemName}>
+                        {this.props.item.title}
                       </Text>
-                      <Button size="small">변경</Button>
-                    </View>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <View style={styles.row}>
-                      <Text style={styles.reward}>
-                        {"사례금 " +
-                          this.props.item.reward
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                          " 원"}
-                      </Text>
-                      <Button size="small">변경</Button>
-                    </View>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <FindingToOwnedButton id={this.props.item.id} />
-                  </Flex.Item>
-                </Flex>
-              </View>
-            </Flex.Item>
-          </Flex>
-        </Card.Body>
-      </Card>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <View style={styles.row}>
+                        <Text style={styles.location}>
+                          {this.props.item.location.split(",")[2]} 추정
+                        </Text>
+                        <Button size="small">변경</Button>
+                      </View>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <View style={styles.row}>
+                        <Text style={styles.reward}>
+                          {"사례금 " +
+                            this.props.item.reward
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                            " 원"}
+                        </Text>
+                        <Button size="small">변경</Button>
+                      </View>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <FindingToOwnedButton id={this.props.item.id} />
+                    </Flex.Item>
+                  </Flex>
+                </View>
+              </Flex.Item>
+              <Flex.Item flex={1}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ qrModalVisible: true })}
+                >
+                  <Icon name="qr-code" size={20} />
+                </TouchableOpacity>
+              </Flex.Item>
+            </Flex>
+          </Card.Body>
+        </Card>
+        <QRcodeImageModal
+          qrModalVisible={this.state.qrModalVisible}
+          closeQRModal={() => this.setState({ qrModalVisible: false })}
+          qrcodeUrl={this.props.item.qrcodeUrl}
+        />
+      </View>
     );
   }
 }

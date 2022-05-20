@@ -1,11 +1,13 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { defaultFontText as Text } from "./Text";
 import { Card, Flex, Button, Modal, InputItem } from "@ant-design/react-native";
 import DeleteOwnedItemButton from "./DeleteOwnedItemButton";
 import OwnedToFindingButton from "./OwnedToFindingButton";
 import location from "../assets/location.json";
 import ModalDropdown from "react-native-modal-dropdown";
+import Icon from "react-native-vector-icons/Ionicons";
+import QRcodeImageModal from "./QRcodeImageModal";
 
 export default class OwnedItemCard extends React.Component {
   constructor(props) {
@@ -20,6 +22,7 @@ export default class OwnedItemCard extends React.Component {
       selected2: null,
       selected3: null,
       reward: 0,
+      qrModalVisible: false,
     };
     this.openModal = this.openModal.bind(this);
     this.onChangeGroup1 = this.onChangeGroup1.bind(this);
@@ -105,13 +108,13 @@ export default class OwnedItemCard extends React.Component {
         <Card style={styles.itemCard}>
           <Card.Body style={styles.itemCardContent}>
             <Flex>
-              <Flex.Item flex={1}>
+              <Flex.Item flex={4}>
                 <Image
                   source={{ uri: this.props.item.imageUrl }}
                   style={styles.itemImage}
                 />
               </Flex.Item>
-              <Flex.Item flex={2}>
+              <Flex.Item flex={6}>
                 <View>
                   <Flex
                     direction="column"
@@ -133,6 +136,13 @@ export default class OwnedItemCard extends React.Component {
                     </Flex.Item>
                   </Flex>
                 </View>
+              </Flex.Item>
+              <Flex.Item flex={1}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ qrModalVisible: true })}
+                >
+                  <Icon name="qr-code" size={20} />
+                </TouchableOpacity>
               </Flex.Item>
             </Flex>
           </Card.Body>
@@ -199,6 +209,11 @@ export default class OwnedItemCard extends React.Component {
             reward={this.state.reward}
           />
         </Modal>
+        <QRcodeImageModal
+          qrModalVisible={this.state.qrModalVisible}
+          closeQRModal={() => this.setState({ qrModalVisible: false })}
+          qrcodeUrl={this.props.item.qrcodeUrl}
+        />
       </View>
     );
   }
