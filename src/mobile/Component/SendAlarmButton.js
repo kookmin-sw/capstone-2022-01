@@ -12,6 +12,15 @@ function sendAlarm({ mutate }) {
         backgroundColor: "#4080ff",
         alignSelf: "center",
       }}
+      onPress={() => {
+        mutate()
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }}
     >
       <Text style={{ color: "white" }}>분실자에게 알림 보내기</Text>
     </Button>
@@ -20,16 +29,19 @@ function sendAlarm({ mutate }) {
 
 export default graphql(
   gql`
-    mutation ($text: String!) {
-      putAlarms(text: $text) {
+    mutation {
+      putAlarms(targetUserId: 5, text: "test", stuffId: 75) {
         id
       }
     }
   `,
   {
     options: (props) => {
+      console.log(props);
       return {
         variables: {
+          targetUserId: props.targetUserId,
+          stuffId: props.stuffId,
           text: props.text,
         },
       };

@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Image, ScrollView } from "react-native";
 import { defaultFontText as Text } from "./Text";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { WhiteSpace } from "@ant-design/react-native";
 import SendAlarmButton from "./SendAlarmButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function showSendAlarmView({ data: { loading, stuff, variables } }) {
+  const [userName, setUserName] = useState("");
+  useEffect(async () => {
+    await AsyncStorage.getItem("userName").then(setUserName);
+  });
   if (loading) {
     return <Text>loading</Text>;
   } else if (stuff.postedBy.id === variables.userId) {
@@ -56,7 +61,16 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
             " 원"}
         </Text>
         <WhiteSpace style={{ height: "10%" }} />
-        <SendAlarmButton />
+        <SendAlarmButton
+          text={
+            userName +
+            "님이 " +
+            stuff.title +
+            "을 찾았다고 알림이 도착했습니다!"
+          }
+          stuffId={parseInt(stuff.id)}
+          targetUserId={parseInt(stuff.postedBy.id)}
+        />
       </ScrollView>
     );
   }
