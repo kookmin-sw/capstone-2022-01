@@ -28,7 +28,7 @@ function showProfile({ data: { loading, profile, variables } }) {
             <View style={styles.info}>
               <Text style={styles.name}>{profile.name}</Text>
               <Text style={styles.pointAmount}>
-                {"보상금 " +
+                {"보유 포인트 : " +
                   profile.point
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
