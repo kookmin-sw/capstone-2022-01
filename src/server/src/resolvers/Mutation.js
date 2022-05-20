@@ -189,7 +189,7 @@ async function putAlarms (parent, args, context) {
         throw new Error('No such user found')
     }
 
-    if (!args.stuffId){
+    if (args.stuffId){
         return await context.prisma.alarm.create({
             data: {
                 text: args.text,
