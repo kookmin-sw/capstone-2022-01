@@ -8,6 +8,7 @@ function signin({ mutate, finishSignin }) {
   let token = null;
   let userId = null;
   let location = null;
+  let userName = null;
   return (
     <Button
       style={{
@@ -21,13 +22,14 @@ function signin({ mutate, finishSignin }) {
               token = result.data.login.token;
               userId = result.data.login.user.id;
               location = result.data.login.user.location;
+              userName = result.data.login.user.name;
             }
           })
           .catch((error) => {
             console.log(error);
           })
           .then(() => {
-            finishSignin(token, userId, location);
+            finishSignin(token, userId, location, userName);
           });
       }}
     >
@@ -44,6 +46,7 @@ export default graphql(
         user {
           id
           location
+          name
         }
       }
     }
