@@ -45,7 +45,9 @@ function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
             <View>
               <Text style={styles.categoryText}>찾는 중</Text>
               {findingItems.map((item, index) => {
-                return <FindingItemCard item={item} key={index} />;
+                return (
+                  <FindingItemCard item={item} key={index} refetch={refetch} />
+                );
               })}
             </View>
           ) : (
@@ -55,7 +57,9 @@ function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
             <View>
               <Text style={styles.categoryText}>내 물건</Text>
               {ownedItems.map((item, index) => {
-                return <OwnedItemCard item={item} key={index} />;
+                return (
+                  <OwnedItemCard item={item} key={index} refetch={refetch} />
+                );
               })}
             </View>
           ) : (

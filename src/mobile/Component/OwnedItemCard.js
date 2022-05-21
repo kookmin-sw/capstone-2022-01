@@ -29,6 +29,16 @@ export default class OwnedItemCard extends React.Component {
     this.onChangeGroup2 = this.onChangeGroup2.bind(this);
     this.onChangeGroup3 = this.onChangeGroup3.bind(this);
     this.getLocation = this.getLocation.bind(this);
+    this.finishDelete = this.finishDelete.bind(this);
+    this.finishOwnedToFinding = this.finishOwnedToFinding.bind(this);
+  }
+
+  finishDelete() {
+    this.props.refetch();
+  }
+
+  finishOwnedToFinding() {
+    this.props.refetch();
   }
 
   openModal() {
@@ -132,7 +142,10 @@ export default class OwnedItemCard extends React.Component {
                       </Button>
                     </Flex.Item>
                     <Flex.Item>
-                      <DeleteOwnedItemButton id={this.props.item.id} />
+                      <DeleteOwnedItemButton
+                        id={this.props.item.id}
+                        finishDelete={this.finishDelete}
+                      />
                     </Flex.Item>
                   </Flex>
                 </View>
@@ -207,6 +220,7 @@ export default class OwnedItemCard extends React.Component {
             id={this.props.item.id}
             location={this.getLocation()}
             reward={this.state.reward}
+            finishOwnedToFinding={this.finishOwnedToFinding}
           />
         </Modal>
         <QRcodeImageModal

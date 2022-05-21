@@ -12,6 +12,11 @@ export default class FindingItemCard extends React.Component {
     this.state = {
       qrModalVisible: false,
     };
+    this.finishFindingToOwned = this.finishFindingToOwned.bind(this);
+  }
+
+  finishFindingToOwned() {
+    this.props.refetch();
   }
 
   render() {
@@ -59,7 +64,10 @@ export default class FindingItemCard extends React.Component {
                       </View>
                     </Flex.Item>
                     <Flex.Item>
-                      <FindingToOwnedButton id={this.props.item.id} />
+                      <FindingToOwnedButton
+                        id={this.props.item.id}
+                        finishFindingToOwned={this.finishFindingToOwned}
+                      />
                     </Flex.Item>
                   </Flex>
                 </View>

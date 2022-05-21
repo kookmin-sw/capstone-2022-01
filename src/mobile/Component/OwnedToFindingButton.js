@@ -4,7 +4,7 @@ import { defaultFontText as Text } from "./Text";
 import { Button } from "@ant-design/react-native";
 import { gql } from "graphql-tag";
 
-function ownedToFinding({ mutate }) {
+function ownedToFinding({ mutate, finishOwnedToFinding }) {
   return (
     <Button
       style={{
@@ -21,7 +21,8 @@ function ownedToFinding({ mutate }) {
           })
           .catch((error) => {
             console.log(error);
-          });
+          })
+          .then(() => finishOwnedToFinding());
       }}
     >
       <Text style={{ color: "white" }}>분실 신고하기</Text>

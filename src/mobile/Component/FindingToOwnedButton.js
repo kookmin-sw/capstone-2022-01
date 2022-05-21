@@ -4,7 +4,7 @@ import { Button } from "@ant-design/react-native";
 import { defaultFontText as Text } from "./Text";
 import { gql } from "graphql-tag";
 
-function deleteOwnedItem({ mutate }) {
+function deleteOwnedItem({ mutate, finishFindingToOwned }) {
   return (
     <Button
       size="small"
@@ -15,6 +15,9 @@ function deleteOwnedItem({ mutate }) {
           })
           .catch((error) => {
             console.log(error);
+          })
+          .then(() => {
+            finishFindingToOwned();
           });
       }}
     >
