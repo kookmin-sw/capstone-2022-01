@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { APP_SECRET, getUserIdByToken } = require('../utils')
 const path = require("path");
-const { createWriteStream } = require("fs");
+const { createWriteStream, unlink } = require("fs");
 const QRCode = require('easyqrcodejs-nodejs');
 const shortId = require("shortid");
 
@@ -153,13 +153,17 @@ async function singleUpload (parent, args, context) {
 
     const id = shortId.generate();
     const img_path = `${path.join(__dirname, "../../prisma/uploads/images")}/${id}-${filename}`;
-
-    await new Promise((resolve, reject) =>
-        stream
-            .pipe(createWriteStream(img_path))
-            .on("finish", () => resolve({ id, img_path }))
-            .on("error", reject)
-    );
+    await new Promise((resolve, reject) => {
+        const writeStream = createWriteStream(img_path);
+        writeStream.on("finish", resolve);
+        writeStream.on("error", (error) => {
+            unlink(img_path, () => {
+                reject(error);
+            });
+        });
+        stream.on("error", (error) => writeStream.destroy(error));
+        stream.pipe(writeStream);
+    });
 
     return await context.prisma.file.create({
         data: {
