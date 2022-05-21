@@ -35,21 +35,12 @@ async function getMyAlarms(parent, args, context) {
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
-    const myAlarms = await context.prisma.user.findUnique({
-        where: {
-            id: userId,
-        },
-        select: {
-            alarms: true, // All alarms
-        },
-    }).alarms()
 
-    for (var i = 0; i < myAlarms.length; i++) {
-        myAlarms[i]["owner"] = context.prisma.user.findUnique({
-            where: { id: myAlarms[i].ownerId }
-        })
-    }
-    return myAlarms
+    return await context.prisma.alarm.findMany({
+        where: {
+            targetUserId: userId,
+        }
+    })
 }
 
 async function getMyStuff(parent, args, context) {
