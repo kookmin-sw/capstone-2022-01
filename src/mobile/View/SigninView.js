@@ -9,8 +9,8 @@ export default class SigninView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID: "test2",
-      PW: "test2",
+      ID: "test",
+      PW: "test",
     };
     this.finishSignin = this.finishSignin.bind(this);
   }

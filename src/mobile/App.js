@@ -3,7 +3,8 @@ import AppNavigator from "./AppNavigator";
 import SigninNavigator from "./SigninNavigator";
 import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-client";
-import { createHttpLink } from "apollo-link-http";
+// import { createHttpLink } from "apollo-link-http";
+import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import SERVER_URI from "./constants/SERVER_URI";
@@ -11,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
 import { Text } from "react-native";
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: SERVER_URI,
 });
 

@@ -20,7 +20,7 @@ function showCommunicatingItemCard({ data: { loading, user, variables } }) {
             <Flex>
               <Flex.Item flex={4}>
                 <Image
-                  source={{ uri: variables.imageUrl }}
+                  source={{ uri: variables.imageUrl.toString() }}
                   style={styles.itemImage}
                 />
               </Flex.Item>
