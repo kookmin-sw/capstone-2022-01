@@ -1,84 +1,86 @@
-import React from 'react'
+import React from "react";
 import {
   StyleSheet,
   View,
   ScrollView,
   Image,
   TouchableOpacity,
-} from 'react-native'
-import { defaultFontText as Text } from '../Component/Text'
-import Header from '../Component/Header'
-import { Flex, InputItem, Button } from '@ant-design/react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
-import * as ImagePicker from 'expo-image-picker'
-import RegistrationButton from '../Component/RegistrationButton'
-import QRcodeGenerationButton from '../Component/QRcodeGenerationButton'
-import QRcodeButton from '../Component/QRcodeButton'
-import UploadImageMutation from '../Component/UploadImageMutation'
-import { ReactNativeFile } from 'apollo-upload-client'
-import * as mime from 'react-native-mime-types'
-import SERVER_URI from '../constants/SERVER_URI'
+} from "react-native";
+import { defaultFontText as Text } from "../Component/Text";
+import Header from "../Component/Header";
+import { Flex, InputItem, Button } from "@ant-design/react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import * as ImagePicker from "expo-image-picker";
+import RegistrationButton from "../Component/RegistrationButton";
+import QRcodeGenerationButton from "../Component/QRcodeGenerationButton";
+import QRcodeButton from "../Component/QRcodeButton";
+import UploadImageMutation from "../Component/UploadImageMutation";
+import { ReactNativeFile } from "apollo-upload-client";
+import * as mime from "react-native-mime-types";
+import SERVER_URI from "../constants/SERVER_URI";
 
 export default class RegistrationView extends React.Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      title: '',
-      itemImageUri: '',
-      qrcodeUri: '',
+      title: "",
+      itemImageUri: "",
+      qrcodeUri: "",
       itemId: null,
       file: null,
-      fileName: '',
-      uploaded: false
-    }
-    this.finishRegistration = this.finishRegistration.bind(this)
-    this.finishQRcodeGeneration = this.finishQRcodeGeneration.bind(this)
+      fileName: "",
+      uploaded: false,
+      onRegistration: this.props.navigation.getParam("onRegistration", null),
+    };
+    this.finishRegistration = this.finishRegistration.bind(this);
+    this.finishQRcodeGeneration = this.finishQRcodeGeneration.bind(this);
   }
 
-  async addImage () {
+  async addImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    })
+    });
 
     if (!result.cancelled) {
       let data = new ReactNativeFile({
         uri: result.uri,
-        type: mime.lookup(result.uri) || 'image',
-        name: result.uri
-      })
+        type: mime.lookup(result.uri) || "image",
+        name: result.uri,
+      });
       this.setState({
         itemImageUri: result.uri,
-        file: data
-      })
+        file: data,
+      });
     }
   }
 
-  finishRegistration (itemId) {
+  finishRegistration(itemId) {
     if (itemId) {
       this.setState({
         itemId: itemId,
-      })
+      });
     }
+    this.state.onRegistration();
   }
 
-  finishQRcodeGeneration (qrcodeUrl) {
+  finishQRcodeGeneration(qrcodeUrl) {
     if (qrcodeUrl) {
       this.setState({
         qrcodeUri: qrcodeUrl,
-      })
+      });
     }
   }
 
-  render () {
+  render() {
     return (
       <View style={styles.container}>
         <Header
           isHome={false}
           navigation={this.props.navigation}
-          destination={'Item'}
+          destination={"Item"}
         />
         <ScrollView>
           <Text style={styles.title}>물건 등록</Text>
@@ -89,7 +91,7 @@ export default class RegistrationView extends React.Component {
             <Flex.Item flex={3}>
               <InputItem
                 onChange={(value) => {
-                  this.setState({title: value})
+                  this.setState({ title: value });
                 }}
               />
             </Flex.Item>
@@ -98,84 +100,89 @@ export default class RegistrationView extends React.Component {
             <Flex.Item flex={1}>
               <Text style={styles.tag}>사진</Text>
             </Flex.Item>
-            <Flex.Item flex={1}/>
+            <Flex.Item flex={1} />
             <Flex.Item flex={1}>
               <TouchableOpacity onPress={() => this.addImage()}>
-                <Icon name="image-outline" size={30}/>
+                <Icon name="image-outline" size={30} />
               </TouchableOpacity>
             </Flex.Item>
             <Flex.Item flex={1}>
-              {this.state.itemImageUri !== '' ? (
+              {this.state.itemImageUri !== "" ? (
                 <View>
                   <Image
-                    source={{uri: this.state.itemImageUri}}
-                    style={{width: 70, height: 70, borderRadius: 5}}
+                    source={{ uri: this.state.itemImageUri }}
+                    style={{ width: 70, height: 70, borderRadius: 5 }}
                   />
-                  {
-                    !this.state.uploaded
-                    ?  <UploadImageMutation file={this.state.file} uploaded={this.state.uploaded}
-                                            finishUpload={(name) => this.setState({fileName: name, uploaded: true})}/>
-                    : <View />
-                  }
+                  {!this.state.uploaded ? (
+                    <UploadImageMutation
+                      file={this.state.file}
+                      uploaded={this.state.uploaded}
+                      finishUpload={(name) =>
+                        this.setState({ fileName: name, uploaded: true })
+                      }
+                    />
+                  ) : (
+                    <View />
+                  )}
                 </View>
               ) : (
-                <View/>
+                <View />
               )}
             </Flex.Item>
           </Flex>
-          {this.state.title !== '' && this.state.uploaded ? (
-            <View/>
-          ) : (
+          {this.state.title !== "" && this.state.uploaded ? (
             <RegistrationButton
               title={this.state.title}
               imageUrl={SERVER_URI + this.state.fileName}
               finishRegistration={this.finishRegistration}
             />
+          ) : (
+            <View />
           )}
 
           {this.state.itemId ? (
             <View>
               <Text style={styles.title}>QR 코드</Text>
-              {this.state.qrcodeUri === '' ? (
+              {this.state.qrcodeUri === "" ? (
                 <QRcodeGenerationButton
                   id={this.state.itemId}
                   finishQRcodeGeneration={this.finishQRcodeGeneration}
                 />
               ) : (
-                <QRcodeButton qrcodeUri={this.state.qrcodeUri}/>
+                <QRcodeButton qrcodeUri={this.state.qrcodeUri} />
               )}
             </View>
           ) : (
-            <View/>
+            <View />
           )}
           {this.state.qrcodeUri ? (
             <Button
               style={{
                 marginTop: 40,
-                width: '30%',
+                width: "30%",
                 borderWidth: 0,
-                alignSelf: 'center',
-                backgroundColor: '#4080FF',
+                alignSelf: "center",
+                backgroundColor: "#4080FF",
               }}
               onPress={() => {
-                this.props.navigation.goBack()
+                this.props.navigation.goBack();
               }}
             >
-              <Text style={{color: 'white'}}>완료</Text>
+              <Text style={{ color: "white" }}>완료</Text>
             </Button>
           ) : (
-            <View/>
+            <View />
           )}
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    height: '100%',
+    display: "flex",
+    height: "100%",
   },
   title: {
     fontSize: 25,
@@ -188,8 +195,8 @@ const styles = StyleSheet.create({
     paddingRight: 40,
   },
   tag: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginRight: 20,
     fontSize: 15,
   },
-})
+});

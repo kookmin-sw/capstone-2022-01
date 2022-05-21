@@ -8,7 +8,7 @@ import { Button, Provider } from "@ant-design/react-native";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
-function showMyItemCards({ data: { loading, myItems, variables } }) {
+function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
   if (loading) {
     return <Text>loading</Text>;
   } else {
@@ -64,7 +64,11 @@ function showMyItemCards({ data: { loading, myItems, variables } }) {
         </ScrollView>
         <Button
           style={styles.registrationButton}
-          onPress={() => variables.navigation.navigate("Registration")}
+          onPress={() =>
+            variables.navigation.navigate("Registration", {
+              onRegistration: refetch,
+            })
+          }
         >
           <Text style={{ color: "white", fontSize: 30 }}>+</Text>
         </Button>
