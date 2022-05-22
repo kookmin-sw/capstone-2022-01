@@ -46,6 +46,7 @@ export default class ChattingCard extends React.Component {
           this.props.navigation.navigate("Chatting", {
             id: this.props.chatting.id,
             userId: this.props.userId,
+            chattingRefetch: this.props.refetch,
           });
         }}
       >

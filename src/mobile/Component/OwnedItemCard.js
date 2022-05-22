@@ -212,6 +212,7 @@ export default class OwnedItemCard extends React.Component {
           <InputItem
             type="number"
             extra={"원"}
+            onExtraClick={() => console.log("test")}
             onChange={(value) => {
               this.setState({ reward: value });
             }}

@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import ChattingCard from "./ChattingCard";
 
-function showMyChatlist({ data: { loading, myChats, variables } }) {
+function showMyChatlist({ data: { loading, myChats, variables, refetch } }) {
   if (loading) {
     return <Text>loading</Text>;
   } else {
@@ -18,6 +18,7 @@ function showMyChatlist({ data: { loading, myChats, variables } }) {
               key={chatting.id}
               navigation={variables.navigation}
               userId={variables.userId}
+              refetch={refetch}
             />
           );
         })}

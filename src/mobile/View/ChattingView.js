@@ -50,7 +50,12 @@ function showChattingView({ data: { loading, chatting, variables, refetch } }) {
           navigation={variables.navigation}
           destination={"Chatlist"}
         />
-        <ChattingItem id={chatting.stuffId} />
+        <ChattingItem
+          id={chatting.stuffId}
+          navigation={variables.navigation}
+          chattingRefetch={variables.chattingRefetch}
+          userId={variables.userId}
+        />
         <GiftedChat
           messages={messages}
           scrollToBottom={true}
@@ -111,6 +116,7 @@ export default graphql(
           navigation: props.navigation,
           id: props.navigation.getParam("id", null),
           userId: props.navigation.getParam("userId", null),
+          chattingRefetch: props.navigation.getParam("chattingRefetch", null),
         },
         fetchPolicy: "cache-and-network",
       };

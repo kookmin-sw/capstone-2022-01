@@ -4,51 +4,78 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { Card, Flex } from "@ant-design/react-native";
 import { defaultFontText as Text } from "./Text";
+import CommunicatingToFindingButton from "./CommunicatingToFindingButton";
+import TradeRewardButton from "./TradeRewardButton";
 
-function showChattingItem({ data: { loading, stuff } }) {
+function showChattingItem({ data: { loading, stuff, variables } }) {
   if (loading) {
     return <View />;
   } else {
     return (
-      <Card style={styles.itemCard}>
-        <Card.Body style={styles.itemCardContent}>
+      <View>
+        <Card style={styles.itemCard}>
+          <Card.Body style={styles.itemCardContent}>
+            <Flex>
+              <Flex.Item flex={1}>
+                <Image
+                  source={{ uri: stuff.imageUrl }}
+                  style={styles.itemImage}
+                />
+              </Flex.Item>
+              <Flex.Item flex={2}>
+                <View>
+                  <Flex
+                    direction="column"
+                    style={styles.itemInfo}
+                    align="start"
+                  >
+                    <Flex.Item>
+                      <Text style={styles.itemName}>{stuff.title}</Text>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <View style={styles.row}>
+                        <Text style={styles.location}>
+                          {stuff.location.split(",")[2]} 추정
+                        </Text>
+                      </View>
+                    </Flex.Item>
+                    <Flex.Item>
+                      <View style={styles.row}>
+                        <Text style={styles.reward}>
+                          {"사례금 " +
+                            stuff.reward
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                            " 원"}
+                        </Text>
+                      </View>
+                    </Flex.Item>
+                  </Flex>
+                </View>
+              </Flex.Item>
+            </Flex>
+          </Card.Body>
+        </Card>
+        {stuff.postedBy.id === variables.userId ? (
           <Flex>
-            <Flex.Item flex={1}>
-              <Image
-                source={{ uri: stuff.imageUrl }}
-                style={styles.itemImage}
+            <Flex.Item>
+              <TradeRewardButton
+                id={stuff.id}
+                navigation={variables.navigation}
               />
             </Flex.Item>
-            <Flex.Item flex={2}>
-              <View>
-                <Flex direction="column" style={styles.itemInfo} align="start">
-                  <Flex.Item>
-                    <Text style={styles.itemName}>{stuff.title}</Text>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <View style={styles.row}>
-                      <Text style={styles.location}>
-                        {stuff.location.split(",")[2]} 추정
-                      </Text>
-                    </View>
-                  </Flex.Item>
-                  <Flex.Item>
-                    <View style={styles.row}>
-                      <Text style={styles.reward}>
-                        {"사례금 " +
-                          stuff.reward
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-                          " 원"}
-                      </Text>
-                    </View>
-                  </Flex.Item>
-                </Flex>
-              </View>
+            <Flex.Item>
+              <CommunicatingToFindingButton
+                id={stuff.id}
+                navigation={variables.navigation}
+                chattingRefetch={variables.chattingRefetch}
+              />
             </Flex.Item>
           </Flex>
-        </Card.Body>
-      </Card>
+        ) : (
+          <View />
+        )}
+      </View>
     );
   }
 }
@@ -65,6 +92,9 @@ export default graphql(
         imageUrl
         qrcodeUrl
         acquirerId
+        postedBy {
+          id
+        }
       }
     }
   `,
@@ -73,6 +103,9 @@ export default graphql(
       return {
         variables: {
           id: props.id,
+          navigation: props.navigation,
+          chattingRefetch: props.chattingRefetch,
+          userId: props.userId,
         },
       };
     },
