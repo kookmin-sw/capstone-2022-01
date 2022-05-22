@@ -39,6 +39,9 @@ async function getMyAlarms(parent, args, context) {
     return await context.prisma.alarm.findMany({
         where: {
             targetUserId: userId,
+        },
+        include: {
+            owner: true
         }
     })
 }
