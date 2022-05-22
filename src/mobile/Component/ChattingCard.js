@@ -3,33 +3,64 @@ import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { defaultFontText as Text } from "./Text";
 import { Badge, Card, Flex } from "@ant-design/react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import ChattingThumbnail from "./ChattingThumbnail";
 
 export default class ChattingCard extends React.Component {
   constructor(props) {
     super(props);
+    let lastChatting = "";
+    if (this.props.chatting.messages.length > 0) {
+      lastChatting =
+        this.props.chatting.messages[this.props.chatting.messages.length - 1]
+          .text;
+    }
+    let isHost = this.props.userId === this.props.chatting.host.id;
+    let lastConnectTime = isHost
+      ? this.props.chatting.lastConnectHost
+      : this.props.chatting.lastConnectParti;
+    let unreadNum = 0;
+    for (let message of this.props.chatting.messages.reverse()) {
+      if (lastConnectTime > message.createdAt) {
+        break;
+      } else {
+        unreadNum += 1;
+      }
+    }
+    this.state = {
+      lastChatting: lastChatting,
+      isHost: isHost,
+      opponentImage: isHost
+        ? this.props.chatting.participant.imageUrl
+        : this.props.chatting.host.imageUrl,
+      opponentName: isHost
+        ? this.props.chatting.participant.name
+        : this.props.chatting.host.name,
+      unreadNum: unreadNum,
+    };
   }
 
   render() {
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
           this.props.navigation.navigate("Chatting", {
-            chatting: this.props.chatting,
-          })
-        }
+            id: this.props.chatting.id,
+            userId: this.props.userId,
+          });
+        }}
       >
         <Card style={styles.chattingCard}>
           <Card.Body style={styles.chattingCardContent}>
             <Flex>
               <Flex.Item flex={1}>
-                {this.props.opponentImage == null ? (
+                {this.state.opponentImage === "" ? (
                   <Icon
                     name="person-circle-outline"
                     size={70}
                     style={styles.icon}
                   />
                 ) : (
-                  <Image source={this.props.opponentImage} />
+                  <Image source={{ uri: this.state.opponentImage }} />
                 )}
               </Flex.Item>
               <Flex.Item flex={2}>
@@ -37,12 +68,12 @@ export default class ChattingCard extends React.Component {
                   <Flex.Item>
                     <View style={{ display: "flex", flexDirection: "row" }}>
                       <Text style={styles.opponentName}>
-                        {this.props.chatting.opponentName}
+                        {this.state.opponentName}
                       </Text>
-                      {this.props.chatting.unreadNum > 0 ? (
+                      {this.state.unreadNum > 0 ? (
                         <Badge
                           style={{ marginLeft: 17, marginTop: 10 }}
-                          text={this.props.chatting.unreadNum}
+                          text={this.state.unreadNum}
                         />
                       ) : (
                         <View />
@@ -51,16 +82,13 @@ export default class ChattingCard extends React.Component {
                   </Flex.Item>
                   <Flex.Item>
                     <Text style={styles.lastChatting}>
-                      {this.props.chatting.lastChatting}
+                      {this.state.lastChatting}
                     </Text>
                   </Flex.Item>
                 </Flex>
               </Flex.Item>
               <Flex.Item flex={1}>
-                <Image
-                  source={this.props.chatting.item.image}
-                  style={styles.itemImage}
-                />
+                <ChattingThumbnail id={this.props.chatting.stuffId} />
               </Flex.Item>
             </Flex>
           </Card.Body>
@@ -89,13 +117,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     color: "grey",
     marginLeft: 10,
-  },
-  itemImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 7,
-    overflow: "hidden",
-    marginTop: 5,
   },
   opponentName: {
     fontSize: 20,

@@ -35,7 +35,13 @@ function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
             <View>
               <Text style={styles.categoryText}>소통 중</Text>
               {communicatingItems.map((item, index) => {
-                return <CommunicatingItemCard item={item} key={index} />;
+                return (
+                  <CommunicatingItemCard
+                    item={item}
+                    key={index}
+                    refetch={refetch}
+                  />
+                );
               })}
             </View>
           ) : (

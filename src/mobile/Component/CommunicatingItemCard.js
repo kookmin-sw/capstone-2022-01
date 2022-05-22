@@ -37,7 +37,7 @@ function showCommunicatingItemCard({ data: { loading, user, variables } }) {
                     <Flex.Item>
                       <View style={styles.row}>
                         <Text style={styles.location}>
-                          {variables.location} 추정
+                          {variables.location.split(",")[2]} 추정
                         </Text>
                         <Button size="small">변경</Button>
                       </View>

@@ -80,7 +80,10 @@ export default class MainView extends React.Component {
               />
             ),
             Chatlist: (
-              <ChatlistViewComponents navigation={this.props.navigation} />
+              <ChatlistViewComponents
+                navigation={this.props.navigation}
+                userId={this.state.userId}
+              />
             ),
             Profile: (
               <ProfileViewComponents

@@ -1,36 +1,122 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Header from "../Component/Header";
-import CommunicatingItemCard from "../Component/CommunicatingItemCard";
+import ChattingItem from "../Component/ChattingItem";
+import SendMessage from "../Component/SendMessage";
+import { defaultFontText as Text } from "../Component/Text";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 import { GiftedChat } from "react-native-gifted-chat";
 
-export default class ChattingView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      chatting: this.props.navigation.getParam("chatting", null),
-    };
-  }
+function showChattingView({ data: { loading, chatting, variables, refetch } }) {
+  if (loading) {
+    return <Text>loading</Text>;
+  } else {
+    const [sendMessage, setSendMessage] = useState(false);
+    const [lastMessage, setLastMessage] = useState("");
+    const [messages, setMessages] = useState([]);
 
-  render() {
+    useEffect(() => {
+      setMessages(
+        chatting.messages.map((message, id) => {
+          return {
+            _id: id,
+            text: message.text,
+            createdAt: message.createdAt,
+            user: {
+              _id: message.fromUserId,
+              name: "test",
+            },
+          };
+        })
+      );
+    }, []);
+
+    const onSend = useCallback((messages = []) => {
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, messages)
+      );
+    }, []);
+
+    const finishSendMessage = () => {
+      setSendMessage(false);
+      setLastMessage("");
+      refetch();
+    };
     return (
       <View style={styles.container}>
         <Header
           isHome={false}
-          navigation={this.props.navigation}
+          navigation={variables.navigation}
           destination={"Chatlist"}
         />
-        <CommunicatingItemCard item={this.state.chatting.item} />
+        <ChattingItem id={chatting.stuffId} />
         <GiftedChat
-          messages={this.state.chatting.messages}
-          user={{ _id: 1 }}
+          messages={messages}
+          scrollToBottom={true}
+          user={{ _id: parseInt(variables.userId) }}
           inverted={false}
-          onSend={() => {}}
+          onSend={(messages) => {
+            onSend(messages);
+            setSendMessage(true);
+          }}
+          onInputTextChanged={(message) => {
+            if (message !== "") {
+              setLastMessage(message);
+            }
+          }}
+        />
+        <SendMessage
+          chatId={chatting.id}
+          text={lastMessage}
+          sendMessage={sendMessage}
+          finishSendMessage={finishSendMessage}
         />
       </View>
     );
   }
 }
+
+export default graphql(
+  gql`
+    query ($id: Int!) {
+      chatting: getChat(id: $id) {
+        id
+        host {
+          id
+          name
+          imageUrl
+        }
+        participant {
+          id
+          name
+          imageUrl
+        }
+        stuffId
+        messages {
+          id
+          text
+          fromUserId
+          createdAt
+        }
+        lastConnectHost
+        lastConnectParti
+      }
+    }
+  `,
+  {
+    options: (props) => {
+      return {
+        variables: {
+          navigation: props.navigation,
+          id: props.navigation.getParam("id", null),
+          userId: props.navigation.getParam("userId", null),
+        },
+        fetchPolicy: "cache-and-network",
+      };
+    },
+  }
+)(showChattingView);
 
 const styles = StyleSheet.create({
   container: {

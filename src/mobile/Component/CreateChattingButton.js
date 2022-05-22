@@ -36,6 +36,9 @@ export default graphql(
       createMessage(targetUserId: $targetUserId, stuffId: $stuffId) {
         id
       }
+      updateFindingToCommunicating(id: $stuffId, acquirerId: $targetUserId) {
+        id
+      }
     }
   `,
   {
