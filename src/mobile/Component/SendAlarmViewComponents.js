@@ -12,6 +12,11 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
   useEffect(async () => {
     await AsyncStorage.getItem("userName").then(setUserName);
   });
+
+  const finishSendAlarm = () => {
+    variables.onChangeTab("Main");
+  };
+
   if (loading) {
     return <Text>loading</Text>;
   } else if (stuff.postedBy.id === variables.userId) {
@@ -66,10 +71,11 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
             userName +
             "님이 " +
             stuff.title +
-            "을 찾았다고 알림이 도착했습니다!"
+            " 물건을 찾았다고 알림이 도착했습니다!"
           }
           stuffId={parseInt(stuff.id)}
           targetUserId={parseInt(stuff.postedBy.id)}
+          finishSendAlarm={finishSendAlarm}
         />
       </ScrollView>
     );
@@ -99,6 +105,7 @@ export default graphql(
         variables: {
           id: props.stuffId,
           userId: props.userId,
+          onChangeTab: props.onChangeTab,
         },
       };
     },

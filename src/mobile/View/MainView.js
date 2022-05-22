@@ -76,6 +76,7 @@ export default class MainView extends React.Component {
               <QRcodeScannerComponents
                 navigation={this.props.navigation}
                 userId={this.state.userId}
+                onChangeTab={this.onChangeTab}
               />
             ),
             Chatlist: (

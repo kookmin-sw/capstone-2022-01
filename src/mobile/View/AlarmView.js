@@ -1,20 +1,29 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { defaultFontText as Text } from "../Component/Text";
 import { graphql } from "react-apollo";
 import Header from "../Component/Header";
 import gql from "graphql-tag";
+import AlarmCard from "../Component/AlarmCard";
+import { Provider } from "@ant-design/react-native";
 
 function showAlarm({ data: { loading, alarms, variables } }) {
   if (loading) {
     return <Text>loading</Text>;
   } else {
-    console.log(alarms);
     return (
-      <View style={styles.container}>
+      <Provider style={styles.container}>
         <Header isMain={false} navigation={variables.navigation} />
-        <Text>AlarmView</Text>
-      </View>
+        <ScrollView style={{ marginTop: 10 }}>
+          {alarms.length > 0 ? (
+            alarms.map((alarm) => {
+              return <AlarmCard alarm={alarm} key={alarm.id} />;
+            })
+          ) : (
+            <View />
+          )}
+        </ScrollView>
+      </Provider>
     );
   }
 }
@@ -27,6 +36,9 @@ export default graphql(
         text
         targetUserId
         stuffId
+        owner {
+          id
+        }
       }
     }
   `,
@@ -36,6 +48,7 @@ export default graphql(
         variables: {
           navigation: props.navigation,
         },
+        fetchPolicy: "network-only",
       };
     },
   }

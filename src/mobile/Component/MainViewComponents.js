@@ -53,6 +53,7 @@ export default graphql(
         variables: {
           location: props.location,
         },
+        fetchPolicy: "network-only",
       };
     },
   }

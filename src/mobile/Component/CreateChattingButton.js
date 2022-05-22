@@ -4,11 +4,11 @@ import { Button } from "@ant-design/react-native";
 import { defaultFontText as Text } from "./Text";
 import { gql } from "graphql-tag";
 
-function sendAlarm({ mutate, finishSendAlarm }) {
+function sendAlarm({ mutate, finishCreateChatting }) {
   return (
     <Button
       style={{
-        width: "70%",
+        width: "60%",
         backgroundColor: "#4080ff",
         alignSelf: "center",
       }}
@@ -21,24 +21,20 @@ function sendAlarm({ mutate, finishSendAlarm }) {
             console.log(error);
           })
           .then(() => {
-            finishSendAlarm();
+            finishCreateChatting();
           });
       }}
     >
-      <Text style={{ color: "white" }}>분실자에게 알림 보내기</Text>
+      <Text style={{ color: "white" }}>채팅방 생성</Text>
     </Button>
   );
 }
 
 export default graphql(
   gql`
-    mutation ($targetUserId: Int!, $text: String!, $stuffId: Int!) {
-      putAlarms(targetUserId: $targetUserId, text: $text, stuffId: $stuffId) {
+    mutation ($targetUserId: Int!, $stuffId: Int!) {
+      createMessage(targetUserId: $targetUserId, stuffId: $stuffId) {
         id
-        targetUserId
-        owner {
-          id
-        }
       }
     }
   `,
@@ -48,7 +44,6 @@ export default graphql(
         variables: {
           targetUserId: props.targetUserId,
           stuffId: props.stuffId,
-          text: props.text,
         },
       };
     },

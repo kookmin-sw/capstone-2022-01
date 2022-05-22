@@ -46,6 +46,7 @@ export default class QRcodeScannerComponents extends React.Component {
         <SendAlarmViewComponents
           stuffId={this.state.stuffId}
           userId={this.props.userId}
+          onChangeTab={this.props.onChangeTab}
         />
       );
     } else {

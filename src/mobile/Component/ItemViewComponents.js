@@ -102,6 +102,7 @@ export default graphql(
         variables: {
           navigation: props.navigation,
         },
+        fetchPolicy: "network-only",
       };
     },
   }
