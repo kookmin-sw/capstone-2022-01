@@ -39,6 +39,9 @@ async function getMyAlarms(parent, args, context) {
     return await context.prisma.alarm.findMany({
         where: {
             targetUserId: userId,
+        },
+        include: {
+            owner: true
         }
     })
 }
@@ -202,7 +205,7 @@ async function getMyJoinChats(parent, args, context) {
 
 async function getMyChats(parent, args, context) {
     /**
-     * 내가 참가하는 모든 채팅방을 return하는 함수
+     * 내가 참가하는(participant+host) 모든 채팅방을 return하는 함수
      */
     const Authorization = context.request.get("Authorization");
     const userId = getUserIdByToken(Authorization)
@@ -234,7 +237,8 @@ async function getMyChats(parent, args, context) {
 
 async function getChat(parent, args, context) {
     /**
-     * 내가 속해있는 모든 채팅방을 return하는 함수
+     * 해당 id의 채팅방을 return하는 함수
+     * participant나 host일 경우, 해당 lastconnect가 업데이트된다.
      * @param args.id (Int!) 채팅방 ID
      */
     const Authorization = context.request.get("Authorization");
