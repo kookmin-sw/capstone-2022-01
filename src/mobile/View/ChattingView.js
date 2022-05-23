@@ -25,7 +25,14 @@ function showChattingView({ data: { loading, chatting, variables, refetch } }) {
             createdAt: message.createdAt,
             user: {
               _id: message.fromUserId,
-              name: "test",
+              name:
+                message.fromUserId === chatting.host.id
+                  ? chatting.host.name
+                  : chatting.participant.name,
+              avatar:
+                message.fromUserId === chatting.host.id
+                  ? chatting.host.imageUrl
+                  : chatting.participant.imageUrl,
             },
           };
         })
