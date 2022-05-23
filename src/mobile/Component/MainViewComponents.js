@@ -12,7 +12,7 @@ function showItemCards({ data: { loading, items, variables } }) {
   } else {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView style={{ marginBottom: 120 }}>
           <View
             style={{
               display: "flex",
@@ -54,7 +54,7 @@ export default graphql(
         variables: {
           location: props.location,
         },
-        fetchPolicy: "network-only",
+        fetchPolicy: "cache-and-network",
       };
     },
   }

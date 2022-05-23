@@ -7,7 +7,7 @@ import OwnedItemCard from "../Component/OwnedItemCard";
 import { Button, Provider } from "@ant-design/react-native";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import AppLoading from 'expo-app-loading'
+import AppLoading from "expo-app-loading";
 
 function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
   if (loading) {
@@ -109,7 +109,7 @@ export default graphql(
         variables: {
           navigation: props.navigation,
         },
-        fetchPolicy: "network-only",
+        fetchPolicy: "cache-and-network",
       };
     },
   }

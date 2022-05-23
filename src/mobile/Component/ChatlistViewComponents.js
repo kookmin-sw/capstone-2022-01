@@ -61,7 +61,7 @@ export default graphql(
           navigation: props.navigation,
           userId: props.userId,
         },
-        fetchPolicy: "network-only",
+        fetchPolicy: "cache-and-network",
       };
     },
   }

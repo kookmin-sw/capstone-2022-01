@@ -61,7 +61,7 @@ export default class App extends React.Component {
     };
     this.onSignin = this.onSignin.bind(this);
     this.onSignout = this.onSignout.bind(this);
-    LogBox.ignoreLogs(["Warning:"]);
+    LogBox.ignoreAllLogs();
   }
 
   async _loadFontsAsync() {

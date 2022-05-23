@@ -232,7 +232,7 @@ export default class OwnedItemCard extends React.Component {
               <Text>↓</Text>
             </View>
           </ModalDropdown>
-          <Text style={styles.modalLabel}>보상금 설정</Text>
+          <Text style={styles.modalLabel}>사례금 설정</Text>
           <InputItem
             extra={"원"}
             onChange={(value) => {

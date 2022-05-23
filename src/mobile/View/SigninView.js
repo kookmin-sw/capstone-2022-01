@@ -9,8 +9,8 @@ export default class SigninView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ID: "sskim0126",
-      PW: "test",
+      ID: "",
+      PW: "",
     };
     this.finishSignin = this.finishSignin.bind(this);
   }
@@ -42,7 +42,7 @@ export default class SigninView extends React.Component {
         <List style={styles.input_list}>
           <InputItem
             clear
-            placeholder="ID"
+            placeholder={"ID"}
             value={this.state.ID}
             onChange={(val) => this.setState({ ID: val.toLowerCase() })}
           />

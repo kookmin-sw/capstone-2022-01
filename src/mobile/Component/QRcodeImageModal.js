@@ -14,7 +14,6 @@ export default class QRcodeImageModal extends React.Component {
   }
 
   async saveImage() {
-    console.log(this.props.qrcodeUrl);
     await MediaLibrary.saveToLibraryAsync(this.state.imageUri).then(
       this.props.closeQRModal
     );
