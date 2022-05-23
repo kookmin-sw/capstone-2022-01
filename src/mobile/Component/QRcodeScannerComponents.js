@@ -28,7 +28,7 @@ export default class QRcodeScannerComponents extends React.Component {
   };
 
   onQRcodeScanned({ data, type }) {
-    if (type === "org.iso.QRCode" && !isNaN(data)) {
+    if ((type === "org.iso.QRCode" || type === 256) && !isNaN(data)) {
       this.setState({
         scanned: true,
         stuffId: parseInt(data),
