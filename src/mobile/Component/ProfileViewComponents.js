@@ -11,7 +11,7 @@ import * as mime from "react-native-mime-types";
 import UploadImageMutation from "./UploadImageMutation";
 import SERVER_URI from "../constants/SERVER_URI";
 import UpdateMyImageMutation from "./UpdateMyImageMutation";
-import AppLoading from 'expo-app-loading'
+import AppLoading from "expo-app-loading";
 
 function showProfile({ data: { loading, profile, variables, refetch } }) {
   const [imageUrl, setImageUrl] = useState(null);
@@ -20,7 +20,7 @@ function showProfile({ data: { loading, profile, variables, refetch } }) {
   const [uploaded, setUploaded] = useState(false);
 
   useEffect(async () => {
-    if (!loading) {
+    if (!loading && profile.imageUrl !== "") {
       setImageUrl(() => profile.imageUrl);
     }
   }, [loading]);
