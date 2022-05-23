@@ -6,6 +6,7 @@ import { graphql } from "react-apollo";
 import { WhiteSpace } from "@ant-design/react-native";
 import SendAlarmButton from "./SendAlarmButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppLoading from 'expo-app-loading'
 
 function showSendAlarmView({ data: { loading, stuff, variables } }) {
   const [userName, setUserName] = useState("");
@@ -18,7 +19,7 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
   };
 
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else if (stuff.postedBy.id === variables.userId) {
     return (
       <View>

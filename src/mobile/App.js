@@ -10,11 +10,12 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import SERVER_URI from "./constants/SERVER_URI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
-import { Text, StatusBar, View, Platform } from "react-native";
+import { StatusBar, View, Platform, LogBox } from "react-native";
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import AppLoading from "expo-app-loading";
 
 const httpLink = createUploadLink({
   uri: SERVER_URI,
@@ -60,6 +61,7 @@ export default class App extends React.Component {
     };
     this.onSignin = this.onSignin.bind(this);
     this.onSignout = this.onSignout.bind(this);
+    LogBox.ignoreLogs(["Warning:"]);
   }
 
   async _loadFontsAsync() {
@@ -110,7 +112,7 @@ export default class App extends React.Component {
 
   render() {
     if (!this.state.fontsLoaded) {
-      return <Text>loading</Text>;
+      return <AppLoading />;
     }
     return (
       <ApolloProvider client={this.state.client}>

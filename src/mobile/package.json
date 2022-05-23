@@ -22,6 +22,7 @@
     "apollo-link-http": "^1.5.17",
     "apollo-upload-client": "^17.0.0",
     "expo": "~44.0.0",
+    "expo-app-loading": "^2.0.0",
     "expo-barcode-scanner": "^11.3.0",
     "expo-font": "~10.0.4",
     "expo-image-picker": "^13.1.1",

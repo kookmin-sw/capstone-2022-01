@@ -4,10 +4,11 @@ import { defaultFontText as Text } from "./Text";
 import ItemCard from "./ItemCard";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import AppLoading from "expo-app-loading";
 
 function showItemCards({ data: { loading, items, variables } }) {
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else {
     return (
       <View style={styles.container}>

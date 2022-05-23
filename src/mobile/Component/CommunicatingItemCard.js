@@ -8,12 +8,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 import QRcodeImageModal from "./QRcodeImageModal";
 import CommunicatingToFindingButton from "./CommunicatingToFindingButton";
 import CommunicatingToOwnedButton from "./CommunicatingToOwnedButton";
+import AppLoading from 'expo-app-loading'
 
 function showCommunicatingItemCard({ data: { loading, user, variables } }) {
   const [qrModalVisible, setQrModalVisible] = useState(false);
 
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else {
     return (
       <View>
