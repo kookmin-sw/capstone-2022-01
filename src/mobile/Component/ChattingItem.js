@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { Card, Flex } from "@ant-design/react-native";
 import { defaultFontText as Text } from "./Text";
-import CommunicatingToFindingButton from "./CommunicatingToFindingButton";
 import TradeRewardButton from "./TradeRewardButton";
 
 function showChattingItem({ data: { loading, stuff, variables } }) {
@@ -62,13 +61,6 @@ function showChattingItem({ data: { loading, stuff, variables } }) {
               <TradeRewardButton
                 id={stuff.id}
                 navigation={variables.navigation}
-              />
-            </Flex.Item>
-            <Flex.Item>
-              <CommunicatingToFindingButton
-                id={stuff.id}
-                navigation={variables.navigation}
-                chattingRefetch={variables.chattingRefetch}
               />
             </Flex.Item>
           </Flex>

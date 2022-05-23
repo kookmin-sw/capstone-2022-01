@@ -4,7 +4,7 @@ import { defaultFontText as Text } from "./Text";
 import { Button } from "@ant-design/react-native";
 import { gql } from "graphql-tag";
 
-function communicatingToFinding({ mutate, refetch }) {
+function communicatingToOwned({ mutate, refetch }) {
   return (
     <Button
       style={{
@@ -27,7 +27,7 @@ function communicatingToFinding({ mutate, refetch }) {
           });
       }}
     >
-      <Text style={{ color: "#4080FF", fontSize: 15 }}>찾는 중으로 변경</Text>
+      <Text style={{ color: "#4080FF", fontSize: 15 }}>내 물건으로 변경</Text>
     </Button>
   );
 }
@@ -35,7 +35,7 @@ function communicatingToFinding({ mutate, refetch }) {
 export default graphql(
   gql`
     mutation ($id: Int!) {
-      updateCommunicatingToFinding(id: $id) {
+      updateCommunicatingToOwned(id: $id) {
         id
       }
     }
@@ -49,4 +49,4 @@ export default graphql(
       };
     },
   }
-)(communicatingToFinding);
+)(communicatingToOwned);

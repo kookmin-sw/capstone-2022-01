@@ -6,6 +6,8 @@ import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import Icon from "react-native-vector-icons/Ionicons";
 import QRcodeImageModal from "./QRcodeImageModal";
+import CommunicatingToFindingButton from "./CommunicatingToFindingButton";
+import CommunicatingToOwnedButton from "./CommunicatingToOwnedButton";
 
 function showCommunicatingItemCard({ data: { loading, user, variables } }) {
   const [qrModalVisible, setQrModalVisible] = useState(false);
@@ -51,7 +53,6 @@ function showCommunicatingItemCard({ data: { loading, user, variables } }) {
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
                             " 원"}
                         </Text>
-                        <Button size="small">변경</Button>
                       </View>
                     </Flex.Item>
                     <Flex.Item>
@@ -66,6 +67,20 @@ function showCommunicatingItemCard({ data: { loading, user, variables } }) {
                 <TouchableOpacity onPress={() => setQrModalVisible(true)}>
                   <Icon name="qr-code" size={20} />
                 </TouchableOpacity>
+              </Flex.Item>
+            </Flex>
+            <Flex direction="row">
+              <Flex.Item flex={1}>
+                <CommunicatingToFindingButton
+                  id={variables.stuffId}
+                  refetch={variables.refetch}
+                />
+              </Flex.Item>
+              <Flex.Item flex={1}>
+                <CommunicatingToOwnedButton
+                  id={variables.stuffId}
+                  refetch={variables.refetch}
+                />
               </Flex.Item>
             </Flex>
           </Card.Body>
@@ -98,6 +113,8 @@ export default graphql(
           imageUrl: props.item.imageUrl,
           qrcodeUrl: props.item.qrcodeUrl,
           reward: props.item.reward,
+          stuffId: props.item.id,
+          refetch: props.refetch,
         },
       };
     },
