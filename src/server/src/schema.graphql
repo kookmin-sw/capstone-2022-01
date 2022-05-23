@@ -28,6 +28,7 @@ type Mutation {
 
   putAlarms(targetUserId: Int!, text: String!, stuffId: Int): Alarm
   readAlarm(id: Int!): Alarm
+  deleteAlarm(id: Int!): Alarm
 
   tradingReward(id: Int!): User
   updateMyLocation(location: String!): User

@@ -244,6 +244,30 @@ async function readAlarm (parent, args, context) {
     })
 }
 
+async function deleteAlarm(parent, args, context, info) {
+    /**
+     * id의 Alarm을 삭제하는 함수
+     * @param args.id (Int!) 물건 id
+     */
+
+    const alarm = await context.prisma.alarm.findUnique({
+        where: {id: args.id}
+    })
+    if (!alarm){
+        throw new Error("Can not found alarm.")
+    }
+
+    const Authorization = context.request.get("Authorization");
+    const userId = getUserIdByToken(Authorization)
+
+    return await context.prisma.alarm.delete({
+        where: {id: args.id},
+        include: {
+            owner: true
+        }
+    })
+}
+
 async function uploadStuff(parent, args, context, info) {
     /**
      * title의 물건을 생성하는 함수
@@ -664,6 +688,7 @@ module.exports = {
 
     putAlarms,
     readAlarm,
+    deleteAlarm,
 
     tradingReward,
     updateMyLocation,
