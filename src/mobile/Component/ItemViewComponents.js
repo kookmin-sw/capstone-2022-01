@@ -30,7 +30,7 @@ function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
     }
     return (
       <Provider style={styles.container}>
-        <ScrollView>
+        <ScrollView style={{ marginBottom: 80 }}>
           {communicatingItems.length > 0 ? (
             <View>
               <Text style={styles.categoryText}>소통 중</Text>
@@ -117,7 +117,6 @@ export default graphql(
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    height: "100%",
   },
   categoryText: {
     fontSize: 20,

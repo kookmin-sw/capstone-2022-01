@@ -210,11 +210,9 @@ export default class OwnedItemCard extends React.Component {
           </ModalDropdown>
           <Text style={styles.modalLabel}>보상금 설정</Text>
           <InputItem
-            type="number"
             extra={"원"}
-            onExtraClick={() => console.log("test")}
             onChange={(value) => {
-              this.setState({ reward: value });
+              this.setState({ reward: parseInt(value) });
             }}
           />
           <OwnedToFindingButton
