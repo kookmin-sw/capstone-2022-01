@@ -15,6 +15,18 @@ npm install
 expo start
 ```
 
+* font 관련 에러 발생
+
+```shell
+expo install expo-font
+```
+
+  * 위의 명령어 입력 시 node version이 맞지 않을 경우 에러 메세지에 나오는 node version으로 변경
+  ```shell
+  nvm install [node version]
+  nvm use [node version]
+  ```
+
 ### 개인 스마트폰 사용
 1. Expo Go application 다운로드
 2. expo start 명령어 입력 후 나오는 페이지에서 QR코드 스캔
