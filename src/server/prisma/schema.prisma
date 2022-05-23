@@ -38,7 +38,7 @@ model User {
   imageUrl  String  @default("")
   password  String
   location  String  @default("서울")
-  point     Int     @default(10000)
+  point     Int     @default(100000)
   stuffs    Stuff[] @relation("UploadedStuff")
   files     File[]  @relation("UploadedFile")
   alarms    Alarm[] @relation(name: "alarm")
