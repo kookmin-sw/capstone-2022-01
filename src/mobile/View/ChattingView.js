@@ -3,14 +3,13 @@ import { StyleSheet, View } from "react-native";
 import Header from "../Component/Header";
 import ChattingItem from "../Component/ChattingItem";
 import SendMessage from "../Component/SendMessage";
-import { defaultFontText as Text } from "../Component/Text";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { GiftedChat } from "react-native-gifted-chat";
 
 function showChattingView({ data: { loading, chatting, variables, refetch } }) {
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else {
     const [sendMessage, setSendMessage] = useState(false);
     const [lastMessage, setLastMessage] = useState("");

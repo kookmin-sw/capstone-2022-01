@@ -1,15 +1,16 @@
 import React from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { defaultFontText as Text } from "../Component/Text";
 import { graphql } from "react-apollo";
 import Header from "../Component/Header";
 import gql from "graphql-tag";
 import AlarmCard from "../Component/AlarmCard";
 import { Provider } from "@ant-design/react-native";
+import AppLoading from 'expo-app-loading'
+
 
 function showAlarm({ data: { loading, alarms, variables } }) {
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else {
     return (
       <Provider style={styles.container}>

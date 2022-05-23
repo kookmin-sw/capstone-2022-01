@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
-import { defaultFontText as Text } from "./Text";
+import { ScrollView } from "react-native";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import ChattingCard from "./ChattingCard";
+import AppLoading from "expo-app-loading";
 
 function showMyChatlist({ data: { loading, myChats, variables, refetch } }) {
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else {
     return (
       <ScrollView>
@@ -66,10 +66,3 @@ export default graphql(
     },
   }
 )(showMyChatlist);
-
-const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    height: "100%",
-  },
-});

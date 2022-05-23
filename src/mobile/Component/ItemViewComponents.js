@@ -7,10 +7,11 @@ import OwnedItemCard from "../Component/OwnedItemCard";
 import { Button, Provider } from "@ant-design/react-native";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
+import AppLoading from 'expo-app-loading'
 
 function showMyItemCards({ data: { loading, myItems, variables, refetch } }) {
   if (loading) {
-    return <Text>loading</Text>;
+    return <AppLoading />;
   } else {
     let communicatingItems = [];
     let findingItems = [];
