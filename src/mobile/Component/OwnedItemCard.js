@@ -172,6 +172,14 @@ export default class OwnedItemCard extends React.Component {
           <ModalDropdown
             options={this.state.group1}
             onSelect={(selected) => this.onChangeGroup1(selected)}
+            dropdownStyle={{
+              width: "40%",
+              marginLeft: "10%",
+            }}
+            dropdownTextStyle={{
+              fontFamily: "Pretendard",
+              fontSize: 15,
+            }}
           >
             <View style={styles.dropdown}>
               <Text>
@@ -185,6 +193,14 @@ export default class OwnedItemCard extends React.Component {
           <ModalDropdown
             options={this.state.group2}
             onSelect={(selected) => this.onChangeGroup2(selected)}
+            dropdownStyle={{
+              width: "40%",
+              marginLeft: "10%",
+            }}
+            dropdownTextStyle={{
+              fontFamily: "Pretendard",
+              fontSize: 15,
+            }}
           >
             <View style={styles.dropdown}>
               <Text>
@@ -198,6 +214,14 @@ export default class OwnedItemCard extends React.Component {
           <ModalDropdown
             options={this.state.group3}
             onSelect={(selected) => this.onChangeGroup3(selected)}
+            dropdownStyle={{
+              width: "40%",
+              marginLeft: "10%",
+            }}
+            dropdownTextStyle={{
+              fontFamily: "Pretendard",
+              fontSize: 15,
+            }}
           >
             <View style={styles.dropdown}>
               <Text>
