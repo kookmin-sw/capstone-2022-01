@@ -3,28 +3,26 @@ import { View } from "react-native";
 import { graphql } from "react-apollo";
 import { gql } from "graphql-tag";
 
-function uploadImage({ mutate, file, uploaded, finishUpload }) {
-  let name = null;
-  if (file !== null && !uploaded) {
+function updateMyImage({ mutate, imageUrl, uploaded, finishUpdate }) {
+  if (imageUrl !== null && uploaded) {
     mutate()
       .then((result) => {
-        if (result.data.upload) {
-          name = result.data.upload.name;
-        }
+        console.log(result);
       })
       .catch((error) => {
         console.error(error);
       })
-      .then(() => finishUpload(name));
+      .then(() => finishUpdate());
   }
   return <View />;
 }
 
 export default graphql(
   gql`
-    mutation ($file: Upload!) {
-      upload: singleUpload(file: $file) {
-        name
+    mutation ($imageUrl: String!) {
+      update: updateMyImageurl(imageUrl: $imageUrl) {
+        id
+        imageUrl
       }
     }
   `,
@@ -32,10 +30,10 @@ export default graphql(
     options: (props) => {
       return {
         variables: {
-          file: props.file,
+          imageUrl: props.imageUrl,
           uploaded: props.uploaded,
         },
       };
     },
   }
-)(uploadImage);
+)(updateMyImage);
