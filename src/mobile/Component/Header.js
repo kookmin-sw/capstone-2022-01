@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Platform,
+} from "react-native";
 import { defaultFontText as Text } from "./Text";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -19,11 +25,11 @@ export default class Header extends React.Component {
               })
             }
           >
-            <Icon name="compass-outline" size={30} />
+            <Icon name="compass-outline" size={30} color={"black"} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-            <Icon name="arrow-back-outline" size={30} />
+            <Icon name="arrow-back-outline" size={30} color={"black"} />
           </TouchableOpacity>
         )}
         {this.props.title ? (
@@ -31,14 +37,13 @@ export default class Header extends React.Component {
         ) : (
           <Image source={require("../assets/logo.png")} style={styles.logo} />
         )}
-
         {this.props.isMain ? (
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("Alarm");
             }}
           >
-            <Icon name="notifications-outline" size={30} />
+            <Icon name="notifications-outline" size={30} color={"black"} />
           </TouchableOpacity>
         ) : (
           <View style={{ width: 30 }} />
@@ -54,12 +59,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: "12%",
-    paddingLeft: "3%",
-    paddingRight: "3%",
-    paddingBottom: "1%",
-    borderBottomWidth: 1,
-    borderBottomColor: "grey",
+    paddingTop: Platform.OS === "ios" ? 0 : "2%",
+    paddingLeft: "4%",
+    paddingRight: "4%",
+    paddingBottom: "2%",
+    backgroundColor: "white",
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#DDDDDD",
   },
   logo: {
     margin: 5,

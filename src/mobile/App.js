@@ -4,13 +4,17 @@ import SigninNavigator from "./SigninNavigator";
 import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-client";
 // import { createHttpLink } from "apollo-link-http";
-import { createUploadLink } from 'apollo-upload-client'
+import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import SERVER_URI from "./constants/SERVER_URI";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
-import { Text } from "react-native";
+import { Text, StatusBar, View, Platform } from "react-native";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const httpLink = createUploadLink({
   uri: SERVER_URI,
@@ -26,8 +30,21 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-let fonts = {
+const fonts = {
   Pretendard: require("./assets/fonts/Pretendard-Light.otf"),
+};
+
+const CustomStatusBar = ({ backgroundColor, barStyle = "dark-content" }) => {
+  const insets = useSafeAreaInsets();
+  return (
+    <View style={{ height: insets.top, backgroundColor }}>
+      <StatusBar
+        animated={true}
+        backgroundColor={backgroundColor}
+        barStyle={barStyle}
+      />
+    </View>
+  );
 };
 
 export default class App extends React.Component {
@@ -97,15 +114,25 @@ export default class App extends React.Component {
     }
     return (
       <ApolloProvider client={this.state.client}>
-        {this.state.token ? (
-          <AppNavigator screenProps={{ onSignout: this.onSignout }} />
-        ) : (
-          <SigninNavigator
-            screenProps={{
-              onSignin: this.onSignin,
+        <SafeAreaProvider>
+          <CustomStatusBar backgroundColor="white" />
+          <View
+            style={{
+              height: "100%",
+              paddingBottom: Platform.OS === "ios" ? 30 : 0,
             }}
-          />
-        )}
+          >
+            {this.state.token ? (
+              <AppNavigator screenProps={{ onSignout: this.onSignout }} />
+            ) : (
+              <SigninNavigator
+                screenProps={{
+                  onSignin: this.onSignin,
+                }}
+              />
+            )}
+          </View>
+        </SafeAreaProvider>
       </ApolloProvider>
     );
   }
