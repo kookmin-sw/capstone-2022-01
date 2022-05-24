@@ -1,4 +1,5 @@
-# O.LaF (Open platform for Lost and Found)
+<img src="https://user-images.githubusercontent.com/28584063/169951425-5d63408d-dee4-4a76-9ac7-e791036a1735.png" alt="O.LAF" width="500"/>
+
 
 팀페이지 주소: https://kookmin-sw.github.io/capstone-2022-01/
 <br/><br/>
