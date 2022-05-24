@@ -34,10 +34,12 @@
 <br/><br/>
 
 ### 주요 기능
+<br/>
 
 ![주요기능](https://user-images.githubusercontent.com/28584063/169952463-1afb8830-6533-43c6-bf1b-49002aaf0c22.png)
 
 ### 시연 동영상
+<br/>
 
 [![시연동영상](https://img.youtube.com/vi/ZPfA90zRsQ8/0.jpg)](https://youtu.be/ZPfA90zRsQ8)
 
