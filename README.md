@@ -33,6 +33,14 @@
   - 지하철 및 버스 관리실, 경찰서, 대형마트 등 수많은 분실물을 관리하는 곳에서 저희 플랫폼에 등록된 물건들이 있다면 이를 스캔해서 보다 빠르게 분실물을 반환할 수 있을 것입니다.
 <br/><br/>
 
+### 주요 기능
+
+![주요기능](https://user-images.githubusercontent.com/28584063/169952463-1afb8830-6533-43c6-bf1b-49002aaf0c22.png)
+
+### 시연 동영상
+
+[![시연동영상](https://img.youtube.com/vi/ZPfA90zRsQ8/0.jpg)](https://youtu.be/ZPfA90zRsQ8)
+
 ## 2. 관련 문서
 ### [중간보고서](docs/팀1-중간보고서.pdf)
 ### [중간발표자료](docs/팀1-중간발표자료.pdf)
