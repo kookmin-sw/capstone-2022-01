@@ -36,20 +36,31 @@
 ### 주요 기능
 <br/>
 
-![주요기능](https://user-images.githubusercontent.com/28584063/169952463-1afb8830-6533-43c6-bf1b-49002aaf0c22.png)
+<img src="https://user-images.githubusercontent.com/28584063/169952463-1afb8830-6533-43c6-bf1b-49002aaf0c22.png" alt="주요기능" width="700"/>
+
+<br/><br/>
 
 ### 시연 동영상
 <br/>
 
 [![시연동영상](https://img.youtube.com/vi/ZPfA90zRsQ8/0.jpg)](https://youtu.be/ZPfA90zRsQ8)
 
+<br/><br/>
+
 ### Abstract
 It is not easy to find your precious item when someone loses it. Also, it is difficult to find the owner when someone picks up the item. However, it can increase the possibility of personal information leakage to leave a phone number on every item. And AirTag of Apple and Galaxy SmartTag of Samsung are too expensive and too large to put on the many items. So, we propose O.LaF, Open platform of Lost And Found, which applies a tag using QR codes. With QR codes, people can tag many items for very little price and don't have to be concerned with the risk of personal information leakage. If the user who acquired the item scans the QR code, our system contacts to the owner. Those people can chat using our platform and item will be delievered to the owner. We expect that people will no longer lose their valuable items through our platform, O.LaF
-
+<br/><br/>
 
 ## 2. 관련 문서
-### [중간보고서](docs/팀1-중간보고서.pdf)
-### [중간발표자료](docs/팀1-중간발표자료.pdf)
+### 중간 발표
+#### [중간 보고서](docs/팀1-중간보고서.pdf)
+#### [중간 발표 자료](docs/팀1-중간발표자료.pdf)
+
+### 최종 발표
+#### [시연 동영상](docs/팀1-시연동영상.mp4)
+#### [최종 발표 자료](docs/팀1-최종발표자료.pdf)
+#### [수행결과 보고서](docs/팀1-수행결과보고서.pdf)
+#### [포스터](docs/팀1-포스터.pdf)
 <br/><br/>
 
 ## 3. 팀 소개
