@@ -5,8 +5,7 @@ import Header from "../Component/Header";
 import gql from "graphql-tag";
 import AlarmCard from "../Component/AlarmCard";
 import { Provider } from "@ant-design/react-native";
-import AppLoading from 'expo-app-loading'
-
+import AppLoading from "expo-app-loading";
 
 function showAlarm({ data: { loading, alarms, variables } }) {
   if (loading) {

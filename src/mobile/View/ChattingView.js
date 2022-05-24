@@ -6,6 +6,7 @@ import SendMessage from "../Component/SendMessage";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import { GiftedChat } from "react-native-gifted-chat";
+import AppLoading from "expo-app-loading";
 
 function showChattingView({ data: { loading, chatting, variables, refetch } }) {
   if (loading) {
@@ -25,11 +26,11 @@ function showChattingView({ data: { loading, chatting, variables, refetch } }) {
             user: {
               _id: message.fromUserId,
               name:
-                message.fromUserId === chatting.host.id
+                message.fromUserId === parseInt(chatting.host.id)
                   ? chatting.host.name
                   : chatting.participant.name,
               avatar:
-                message.fromUserId === chatting.host.id
+                message.fromUserId === parseInt(chatting.host.id)
                   ? chatting.host.imageUrl
                   : chatting.participant.imageUrl,
             },

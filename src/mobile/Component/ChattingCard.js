@@ -61,7 +61,15 @@ export default class ChattingCard extends React.Component {
                     style={styles.icon}
                   />
                 ) : (
-                  <Image source={{ uri: this.state.opponentImage }} />
+                  <Image
+                    source={{ uri: this.state.opponentImage }}
+                    style={{
+                      width: 70,
+                      height: 70,
+                      borderRadius: 35,
+                      marginLeft: 10,
+                    }}
+                  />
                 )}
               </Flex.Item>
               <Flex.Item flex={2}>

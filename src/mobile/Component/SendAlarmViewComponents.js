@@ -6,7 +6,7 @@ import { graphql } from "react-apollo";
 import { WhiteSpace } from "@ant-design/react-native";
 import SendAlarmButton from "./SendAlarmButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AppLoading from 'expo-app-loading'
+import AppLoading from "expo-app-loading";
 
 function showSendAlarmView({ data: { loading, stuff, variables } }) {
   const [userName, setUserName] = useState("");
@@ -22,7 +22,7 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
     return <AppLoading />;
   } else if (stuff.postedBy.id === variables.userId) {
     return (
-      <View>
+      <View style={styles.container}>
         <WhiteSpace style={{ height: "20%" }} />
         <Text style={styles.info}>
           {"해당 물건은 고객님의 " + stuff.title + "입니다."}
@@ -32,7 +32,7 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
     );
   } else if (stuff.status !== "Finding") {
     return (
-      <View>
+      <View style={styles.container}>
         <WhiteSpace style={{ height: "50%" }} />
         <Text style={styles.info}>
           {"해당 물건은 현재 분실 신고가 된 물건이 아닙니다."}
@@ -41,8 +41,8 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
     );
   } else {
     return (
-      <ScrollView style={styles.container}>
-        <WhiteSpace style={{ height: "20%" }} />
+      <View style={styles.container}>
+        <WhiteSpace style={{ height: "7%" }} />
         <Text style={styles.info}>
           {"해당 물건은 " +
             stuff.postedBy.name +
@@ -66,7 +66,7 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
             stuff.reward.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
             " 원"}
         </Text>
-        <WhiteSpace style={{ height: "10%" }} />
+        <WhiteSpace style={{ height: "5%" }} />
         <SendAlarmButton
           text={
             userName +
@@ -78,7 +78,7 @@ function showSendAlarmView({ data: { loading, stuff, variables } }) {
           targetUserId={parseInt(stuff.postedBy.id)}
           finishSendAlarm={finishSendAlarm}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
