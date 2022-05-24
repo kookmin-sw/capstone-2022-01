@@ -1,6 +1,6 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = "mysql://MYSQL_ACOUNT_NAME:MYSQL_PASSWORD@AWS_ADDRESS:AWS_PORT/DATABASE"
 }
 
 generator client {
