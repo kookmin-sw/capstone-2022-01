@@ -1,41 +1,62 @@
-# Server
+# Using Git
 
-## 1. Git clone
+### git clone
 
     git clone https://github.com/kookmin-sw/capstone-2022-01.git
 
-## 2. Install all dependency packages
+### Install all dependency packages
 
     cd capstone-2022-01/src/server/
     npm install
 
-## 3. Prisma build
+### Prisma build
 
     npx prisma migrate dev --name "demo"
     npx prisma generate	
 
-## 4. Server start
+### Server start
     
     node ./src/index.js
 
 
-## 5. Playground
+### Playground
 
     localhost:4000
     http://52.79.153.136:4000/
 
 
-## 6. Get Images
+# Using Dockerfile
 
-    localhost:4000/FILENAME
-    # FILENAME : type File의 name. 
+### Dockerfile
+```dockerfile
+FROM ubuntu:latest
+  
+RUN apt-get update
+RUN apt-get install -y git
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
+RUN git clone https://github.com/kookmin-sw/capstone-2022-01.git
 
-## 6. Get QRCodes
+RUN cd capstone-2022-01/src/server/
+WORKDIR capstone-2022-01/src/server
+RUN npm install
 
-    localhost:4000/FILENAME
-    # FILENAME : type Stuff의 qrcodeUrl. 
-    QRCode의 내용은 stuffId가 들어감
+RUN npx prisma migrate dev --name "canary"
+RUN npx prisma generate
 
-## 7. 테스트 가능한 schema
-    
-    capstone-2022-01/src/server/src/schema.graphql을 참고하세요.
+EXPOSE 4000
+
+ENTRYPOINT node ./src/index.js
+```
+
+### docker build
+
+```text
+docker build -f Dockerfile -t capstone01:canary .
+```
+
+### docker run
+
+```text
+docker run -itd --ipc=host -p 4000:4000 --name capstone-server capstone01:canary
+```
