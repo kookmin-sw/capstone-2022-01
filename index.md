@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/28584063/169951425-5d63408d-dee4-4a76-9ac7-e791036a1735.png" alt="O.LAF" width="500"/>
+<img src="https://user-images.githubusercontent.com/28584063/169951425-5d63408d-dee4-4a76-9ac7-e791036a1735.png" alt="O.LaF" width="500"/>
 
 GitHub 주소: https://github.com/kookmin-sw/capstone-2022-01
 <br/><br/>
@@ -44,7 +44,7 @@ GitHub 주소: https://github.com/kookmin-sw/capstone-2022-01
 
 
 ### Abstract
-It is not easy to find your precious item when someone loses it. Also, it is difficult to find the owner when someone picks up the item. However, it can increase the possibility of personal information leakage to leave a phone number on every item. And AirTag of Apple and Galaxy SmartTag of Samsung are too expensive and too large to put on the many items. So, we propose O.LAF, Open platform of Lost And Found, which applies a tag using QR codes. With QR codes, people can tag many items for very little price and don't have to be concerned with the risk of personal information leakage. If the user who acquired the item scans the QR code, our system contacts to the owner. Those people can chat using our platform and item will be delievered to the owner. We expect that people will no longer lose their valuable items through our platform, O.LAF
+It is not easy to find your precious item when someone loses it. Also, it is difficult to find the owner when someone picks up the item. However, it can increase the possibility of personal information leakage to leave a phone number on every item. And AirTag of Apple and Galaxy SmartTag of Samsung are too expensive and too large to put on the many items. So, we propose O.LaF, Open platform of Lost And Found, which applies a tag using QR codes. With QR codes, people can tag many items for very little price and don't have to be concerned with the risk of personal information leakage. If the user who acquired the item scans the QR code, our system contacts to the owner. Those people can chat using our platform and item will be delievered to the owner. We expect that people will no longer lose their valuable items through our platform, O.LaF
 
 ## 2. 관련 문서
 ### [중간보고서](docs/팀1-중간보고서.pdf)
